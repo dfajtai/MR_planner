@@ -87,13 +87,13 @@ if (!isset($_SESSION['ews_token'])) {
             </div>
 
 
-            <div class="form d-flex flex-column" id="searchParamsForm">
+            <form class="form d-flex flex-column" id="searchParamsForm">
 
                 <div class="row mb-2">
                     <label for="examTypeSelect" class="col-sm-6 col-form-label">Examination protocol</label>
                     <div class="col-sm-6">
-                        <select name="examType" id="examTypeSelect" class="form-select">
-                            <option selected disabled>Select examination protocol...</option>
+                        <select name="examType" id="examTypeSelect" class="form-select" required>
+                            <option selected disabled value = "">Select examination protocol...</option>
                         </select>
                     </div>
                 </div>
@@ -114,8 +114,8 @@ if (!isset($_SESSION['ews_token'])) {
                                     <label class="col-sm-6 col-form-label" for="sourceCalendarSelect">
                                         Source calendar name</label>
                                     <div class="col-sm-6">
-                                        <select name="sourceCalendar" id="sourceCalendarSelect" class="form-select">
-                                            <option selected disabled>Select source calendar...</option>
+                                        <select name="sourceCalendar" id="sourceCalendarSelect" class="form-select" required>
+                                            <option selected disabled value = "">Select source calendar...</option>
                                         </select>
                                     </div>
 
@@ -125,8 +125,8 @@ if (!isset($_SESSION['ews_token'])) {
                                     <label class="col-sm-6 col-form-label" for="maskingCalendarSelect">Masking calendar
                                         name</label>
                                     <div class="col-sm-6">
-                                        <select name="maskingCalendar" id="maskingCalendarSelect" class="form-select">
-                                            <option selected disabled>Select masking calendar...</option>
+                                        <select name="maskingCalendar" id="maskingCalendarSelect" class="form-select" required>
+                                            <option selected disabled value = "">Select masking calendar...</option>
                                         </select>
                                     </div>
 
@@ -145,21 +145,18 @@ if (!isset($_SESSION['ews_token'])) {
 
                                     <div class="col-sm-6 d-flex" id="showCountBlock">
                                         <div class="flex-fill pe-1">
-                                            <input type="radio" class="btn-check" name="showCount" id="show3"
-                                                autocomplete="off">
+                                            <input type="radio" class="btn-check" name="showCount" id="show3" value="3">
                                             <label class="btn btn-outline-primary w-100" for="show3">First 3</label>
                                         </div>
 
                                         <div class="flex-fill pe-1">
-                                            <input type="radio" class="btn-check" name="showCount" id="show10"
-                                                autocomplete="off" checked>
+                                            <input type="radio" class="btn-check" name="showCount" id="show10" value = "10" checked>
                                             <label class="btn btn-outline-primary w-100" for="show10">First
                                                 10</label>
                                         </div>
 
                                         <div class="flex-fill">
-                                            <input type="radio" class="btn-check" name="showCount" id="showAll"
-                                                autocomplete="off">
+                                            <input type="radio" class="btn-check" name="showCount" id="showAll" value = "all">
                                             <label class="btn btn-outline-primary w-100" for="showAll">All</label>
                                         </div>
                                     </div>
@@ -171,11 +168,11 @@ if (!isset($_SESSION['ews_token'])) {
                     </div>
 
                     <div class="py-2">
-                        <button class="btn btn-outline-primary w-100" id="searchTimeWindowBtn">Search free time
+                        <button class="btn btn-outline-primary w-100" id="searchTimeWindowBtn" type="button">Search free time
                             windows</button>
                     </div>
                 </div>
-            </div>
+            </form>
 
         </div>
 
@@ -204,13 +201,17 @@ if (!isset($_SESSION['ews_token'])) {
     var start_time = Object();
     var session_max_duration = moment.duration(30, "minutes");
 
+    var search_params_form =Object();
+
     $(document).ready(function () {
 
         protocol_select = $("#examTypeSelect");
         calendar_select = $("#sourceCalendarSelect");
         mask_calendar_select = $("#maskingCalendarSelect");
-
+        
         session_countdown = $("#sessionCountdown");
+
+        search_params_form = $("#searchParamsForm");
 
         start_time = moment(<?php echo '"' . $_SESSION['AUTH_DATETIME'] . '"'; ?>);
 
@@ -266,6 +267,7 @@ if (!isset($_SESSION['ews_token'])) {
             LockPlugin: {
                 minDate: new Date(),
                 minDays: 1,
+                maxDays: 30,
             },
             AmpPlugin: {
                 resetButton: true,
@@ -276,8 +278,44 @@ if (!isset($_SESSION['ews_token'])) {
         picker.setStartDate(moment().add(1, 'days').format("YYYY-MM-DD"));
         picker.setEndDate(moment().add(14, 'days').format("YYYY-MM-DD"));
 
-        $("#searchTimeWindowBtn").on("click", function () {
+        $("#searchTimeWindowBtn").on("click",function(){
+            if (! $(search_params_form)[0].checkValidity()) {    
+                $(search_params_form)[0].reportValidity();
+            }
+            else{
+                search_params_form.trigger("submit",true);
+            }
+        })
 
+        search_params_form.on('submit',function(e){
+            e.preventDefault();
+            var values = {};
+            $.each($(this).serializeArray(),function(index,field){
+                // values[field.name] = parse_val(field.value==""?null:field.value);
+                values[field.name] = field.value;
+            })
+            console.log(values);
+
+            if(values["date"]){
+                var dates = values["date"].split(' - ');
+                var start_date = dates[0];
+                var end_date =  dates[1];
+            }
+            else{
+                var start_date = null;
+                var end_date = null;
+            }
+            
+        
+            $.ajax({
+                type: "GET",
+                url: 'php/get_calendar_data.php',
+                dataType: "json",
+                data: ({ source_calendar: values["sourceCalendar"], mask_calendar: values["maskingCalendar"], start_date:start_date,end_date: end_date }),
+                success: function (result) {
+                    console.log(result);
+                }
+            })
         })
 
         setInterval(function () {

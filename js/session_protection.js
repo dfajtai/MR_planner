@@ -53,7 +53,7 @@ function inactivityLogout() {
 function start_session_check_timer(){
     if(serversideProtectionInterval!=null)  clearInterval(serversideProtectionInterval);
 
-    serversideProtectionInterval = setInterval(session_check, 5*1000); // 1 minute
+    serversideProtectionInterval = setInterval(session_check, 60*1000); // 1 minute
 
 }
 

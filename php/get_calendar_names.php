@@ -15,6 +15,8 @@ use garethp\ews\API\NTLMSoapClient;
 if(isset($_SESSION['ews_token'])) {
     $api = getEwsApi();
 
+    session_protection(true);
+
     if (!$api) {
         echo json_encode(['error' => 'Failed to get valid EWS API instance']);
         exit;
