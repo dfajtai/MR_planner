@@ -1,0 +1,37 @@
+{
+	"name": "garethp/php-ews",
+	"license": "BSD-3-Clause",
+	"description": "A PHP Library to interact with the Exchange SOAP service",
+	"require": {
+		"garethp/http-playback": "^2.0",
+		"ext-curl": "*",
+		"ext-soap": "*",
+		"ext-libxml": "*",
+		"ext-dom": "*",
+		"ext-simplexml": "*"
+	},
+	"scripts": {
+		"cs": "./vendor/bin/phpcs --standard=ruleset.xml -np src/ tests/ examples/",
+		"cbf": "./vendor/bin/phpcbf --standard=ruleset.xml -np src/ tests/ examples/",
+		"generate": "php bin/generateModels.php && composer cbf"
+	},
+	"autoload": {
+		"psr-4": {
+			"garethp\\ews\\": "src/",
+			"garethp\\ews\\Test\\": "tests/src"
+		},
+		"files": [
+			"src/Utilities/ensureIsArray.php",
+			"src/Utilities/ensureIsDateTime.php",
+			"src/Utilities/cloneValue.php",
+			"src/Utilities/getFolderIds.php"
+		]
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~9.5",
+		"squizlabs/php_codesniffer": "~3.6.0",
+		"mockery/mockery": "^1.4",
+		"goetas/xsd2php": "^2.1",
+		"goetas/xsd-reader": "^2.0-dev"
+	}
+}

@@ -1,0 +1,15 @@
+{
+    "name": "fajtai/mr_elojegyzes",
+    "require": {
+        "garethp/php-ews": "^0.10.1",
+        "guzzlehttp/guzzle": "^7.8",
+        "amirsanni/php-ews-wrapper": "^1.1",
+        "php-ews/php-ews": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "Daniel Fajtai",
+            "email": "daniel.fajtai@gmail.com"
+        }
+    ]
+}
