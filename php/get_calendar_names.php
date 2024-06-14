@@ -37,5 +37,6 @@ if(isset($_SESSION['ews_token'])) {
     foreach($cf as $f) {
         array_push($calendar_names, $f-> getDisplayName());
     }
+
     echo json_encode($calendar_names);
 }

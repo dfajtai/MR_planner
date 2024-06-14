@@ -66,7 +66,7 @@ if(isset($_COOKIE['email'])){
             </div>
 
             <div class="flex-row">
-                <button type="submit" class="btn btn-primary md-me-2 w-100">Login</button>
+                <button type="submit" class="btn btn-dark md-me-2 w-100">Login</button>
             </div>
         </form>
 

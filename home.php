@@ -18,7 +18,7 @@ if (!isset($_SESSION['ews_token'])) {
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
@@ -50,7 +50,8 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/additional_functions.js"></script>
 
     <script defer src="js/session_protection.js"></script>
-    <script defer src="js/event_creation_gui.js"></script>
+    <script defer src="js/search_time_window.js"></script>
+    <script defer src="js/event_creation_modal.js"></script>
 
 </head>
 
@@ -146,18 +147,18 @@ if (!isset($_SESSION['ews_token'])) {
                                     <div class="col-sm-6 d-flex" id="showCountBlock">
                                         <div class="flex-fill pe-1">
                                             <input type="radio" class="btn-check" name="showCount" id="show3" value="3">
-                                            <label class="btn btn-outline-primary w-100" for="show3">First 3</label>
+                                            <label class="btn btn-outline-dark w-100" for="show3">First 3</label>
                                         </div>
 
                                         <div class="flex-fill pe-1">
                                             <input type="radio" class="btn-check" name="showCount" id="show10" value = "10" checked>
-                                            <label class="btn btn-outline-primary w-100" for="show10">First
+                                            <label class="btn btn-outline-dark w-100" for="show10">First
                                                 10</label>
                                         </div>
 
                                         <div class="flex-fill">
                                             <input type="radio" class="btn-check" name="showCount" id="showAll" value = "all">
-                                            <label class="btn btn-outline-primary w-100" for="showAll">All</label>
+                                            <label class="btn btn-outline-dark w-100" for="showAll">All</label>
                                         </div>
                                     </div>
 
@@ -168,7 +169,7 @@ if (!isset($_SESSION['ews_token'])) {
                     </div>
 
                     <div class="py-2">
-                        <button class="btn btn-outline-primary w-100" id="searchTimeWindowBtn" type="button">Search free time
+                        <button class="btn btn-outline-dark w-100" id="searchTimeWindowBtn" type="button">Search free time
                             windows</button>
                     </div>
                 </div>
@@ -187,7 +188,7 @@ if (!isset($_SESSION['ews_token'])) {
     var picker = Object();
 
     var protocols_path = "protocols/mr_protocols.csv";
-    var protocols = Object();
+    var protocols = [];
 
     var default_mask_calendar_name = "MR előjegyzés maszk";
     var default_calendar_name = "MR előjegyzés";
@@ -271,7 +272,7 @@ if (!isset($_SESSION['ews_token'])) {
             },
             AmpPlugin: {
                 resetButton: true,
-                primaryMode: false
+                darkMode: false
             }
         });
 
@@ -294,7 +295,7 @@ if (!isset($_SESSION['ews_token'])) {
                 // values[field.name] = parse_val(field.value==""?null:field.value);
                 values[field.name] = field.value;
             })
-            console.log(values);
+            // console.log(values);
 
             if(values["date"]){
                 var dates = values["date"].split(' - ');
@@ -306,6 +307,7 @@ if (!isset($_SESSION['ews_token'])) {
                 var end_date = null;
             }
             
+            var event_length = getEntryFieldWhere(protocols,"protocol_name",values["examType"],"protocol_duration");
         
             $.ajax({
                 type: "GET",
@@ -313,7 +315,11 @@ if (!isset($_SESSION['ews_token'])) {
                 dataType: "json",
                 data: ({ source_calendar: values["sourceCalendar"], mask_calendar: values["maskingCalendar"], start_date:start_date,end_date: end_date }),
                 success: function (result) {
-                    console.log(result);
+                    var events =result["events"];
+                    var masks =result["masks"];
+                    var windows = search_free_time_windows(events,masks,values["showCount"],event_length);
+                    // console.log(windows);
+                    show_event_creation_modal($("#modalContainer"),windows,values["examType"],event_length);
                 }
             })
         })

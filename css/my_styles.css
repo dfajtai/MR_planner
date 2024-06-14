@@ -1,3 +1,13 @@
 .accordion-button{
     padding: .5rem .6rem .5rem .75rem;
 }
+
+.listbox-custom {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.list-group-item {
+    border: none; /* Remove border */
+}
+

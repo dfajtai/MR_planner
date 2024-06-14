@@ -37,7 +37,7 @@ if(isset($_SESSION['ews_token'])) {
 
         if (isset($_GET['end_date']) && !empty($_GET['end_date'])) {
             $dateString = $_GET['end_date'];
-            $end = DateTime::createFromFormat('Y-m-d H:i:s', $dateString . ' 00:00:00');
+            $end = DateTime::createFromFormat('Y-m-d H:i:s', $dateString . ' 23:59:59');
             unset($_GET['end_date']);
         
         } else {
@@ -51,23 +51,33 @@ if(isset($_SESSION['ews_token'])) {
         $source_items = $source_calendar->getCalendarItems($start, $end);
         $mask_items = $mask_calendar->getCalendarItems($start, $end);
 
+
         $source_events = [];
-        if($source_items["totalItemsInView"]>0){
-            $items = $source_items["items"];
-            if(is_array($items["calendarItem"])){
-                foreach ($items["calendarItem"] as $event){
+        foreach($source_items as $event){
 
-                }
-            }
-            else{
-                $event = $items["calendarItem"];
-            }
-
+            array_push($source_events,
+                       (object) ['name'=>$event->getSubject(), 
+                        'start' => $event->getStart(),
+                        'end'=>$event->getEnd(),
+                        'timezone'=>$event->getTimeZone()]);
+  
         }
+        
+        $mask_events = [];
+        foreach($mask_items as $event){
 
-
+            array_push($mask_events,
+                       (object) ['name'=>$event->getSubject(), 
+                        'start' => $event->getStart(),
+                        'end'=>$event->getEnd(),
+                        'timezone'=>$event->getTimeZone()]);
+  
+        }
+        
         unset($_GET["source_calendar"]);
         unset($_GET["mask_calendar"]);
+
+        echo json_encode(['events'=>$source_events, 'masks' => $mask_events]);
 
     }
 }
