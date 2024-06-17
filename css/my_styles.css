@@ -3,7 +3,7 @@
 }
 
 .listbox-custom {
-    max-height: 200px;
+    max-height: 230px;
     overflow-y: auto;
 }
 
@@ -11,3 +11,130 @@
     border: none; /* Remove border */
 }
 
+
+
+
+.slider-styled,
+.slider-styled .noUi-handle {
+    box-shadow: none;
+}
+
+/* Hide markers on slider handles */
+.slider-styled .noUi-handle::before,
+.slider-styled .noUi-handle::after {
+    display: none;
+}
+
+.slider-styled .noUi-connect {
+    background: darkseagreen;
+}
+
+.slider-styled .noUi-handle .noUi-touch-area {
+    border: 1px solid transparent;
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    width: auto;
+    height: auto;
+}
+
+
+
+/* Show a border when hovering the area the handle responds to */
+.slider-styled .noUi-handle:hover .noUi-touch-area {
+    border: 1px dashed #7f7f7f;
+}
+
+
+.slider-box-handle {
+    border-radius: 0;
+}
+
+.slider-box-handle .noUi-handle {
+    border-radius: 0;
+    background: black;
+    height: 18px;
+    width: 4px;
+    top: -1px;
+    right: -2px;
+}
+
+
+.slider-hide .noUi-tooltip {
+    display: none;
+}
+
+.slider-hide .noUi-active .noUi-tooltip {
+    display: block;
+}
+
+
+.slider-no-handle .noUi-handle {
+    visibility: hidden;
+}
+
+
+
+.slider-styled .noUi-value-horizontal {
+    -webkit-transform: translate(-50%, 25px);
+    transform: translate(-50%, 25px);
+    writing-mode: vertical-lr;
+}
+
+.active-pip {
+    font-weight: bold;
+    color: black;
+}
+
+.noUi-pips-horizontal {
+    margin-top: -6pt;
+}
+
+.noUi-value-large {
+    font-size: small;
+    margin-top: -6pt;
+}
+
+.noUi-value-sub {
+    font-size: x-small;
+}
+
+
+.accordion-button {
+    background-color: transparent;
+    color: #343a40; /* Dark text */
+    border: 2px solid #343a40; /* Dark border */
+    font-weight: bold;
+    /* text-transform: uppercase; */
+
+}
+.accordion-button:not(.collapsed) {
+    color: #f8f9fa; /* Light text */
+    background-color: #343a40; /* Dark background */
+    border-color: #343a40; /* Dark border */
+}
+.accordion-button::after {
+    display: none; /* Remove default caret */
+}
+.accordion-header .badge {
+    background-color: #dc3545; /* Danger color */
+    color: #f8f9fa;
+    font-size: 0.8em;
+    margin-left: 10px;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+}
+.accordion-body {
+    background-color: rgba(248, 249, 250, 0.8); /* Light background with transparency */
+    color: #343a40; /* Dark text */
+    border: 1px solid #343a40; /* Dark border */
+}
+.accordion-item {
+    border: none; /* Remove default border */
+    margin-bottom: 1rem;
+}
+.nested-accordion .accordion-body {
+    background-color: rgba(248, 249, 250, 0.8); /* Slightly darker background for nested accordions */
+}
