@@ -252,8 +252,8 @@ if (!isset($_SESSION['ews_token'])) {
                                 </div>
 
                                 <div class="py-2">
-                                        <button class="btn btn-outline-dark w-100" id="printScheduleBtn"
-                                            type="button">Print schedules</button>
+                                    <button class="btn btn-outline-dark w-100" id="printScheduleBtn" type="button">Print
+                                        schedules</button>
                                 </div>
 
                             </form>
@@ -284,8 +284,8 @@ if (!isset($_SESSION['ews_token'])) {
     var available_calendars = [];
 
     // read protocols from csv
-	$.get(protocols_path, function (CSVdata) {
-		protocols = $.csv.toObjects(CSVdata);
+    $.get(protocols_path, function (CSVdata) {
+        protocols = $.csv.toObjects(CSVdata);
 
         // populate calendar selection
         $.ajax({
@@ -294,15 +294,15 @@ if (!isset($_SESSION['ews_token'])) {
             dataType: "json",
             data: {},
             success: function (calendar_names) {
-                available_calendars =calendar_names;
+                available_calendars = calendar_names;
                 handle_event_creation_gui();
                 handle_schedule_printing_gui();
             },
         });
 
-	});
+    });
 
-    
+
     $(document).ready(function () {
         session_countdown = $("#sessionCountdown");
         start_time = moment(<?php echo '"' . $_SESSION['AUTH_DATETIME'] . '"'; ?>);

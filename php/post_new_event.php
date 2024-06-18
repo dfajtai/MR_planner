@@ -45,7 +45,7 @@ if (isset($_SESSION['ews_token'])) {
             )
         );
 
-        $createdItemIds = $api->createItems($event,$options);
+        $createdItemIds = $api->createItems($event, $options);
 
         unset($_POST["source_calendar"]);
         unset($_POST["event_data"]);
