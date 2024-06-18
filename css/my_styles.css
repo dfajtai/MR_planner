@@ -4,14 +4,13 @@
 
 .listbox-custom {
     max-height: 230px;
+    min-height: 230px;
     overflow-y: auto;
 }
 
 .list-group-item {
     border: none; /* Remove border */
 }
-
-
 
 .table td.fit, 
 .table th.fit {
@@ -81,8 +80,6 @@
 .slider-no-handle .noUi-handle {
     visibility: hidden;
 }
-
-
 
 .slider-styled .noUi-value-horizontal {
     -webkit-transform: translate(-50%, 25px);

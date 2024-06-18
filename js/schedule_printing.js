@@ -72,6 +72,7 @@ function handle_schedule_printing_gui() {
             resetButton: true,
             darkMode: false,
         },
+        zIndex:10000
     });
 
     picker.setStartDate(moment().format("YYYY-MM-DD"));

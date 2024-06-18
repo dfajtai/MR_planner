@@ -82,9 +82,11 @@ function show_event_creation_modal(
   // lets define the form....
   var form_content = $("<div/>").addClass("row pb-2");
 
+  // timing block
+
   // time window selection
-  var time_window_block = $("<div/>").addClass("col-md-6 p-2");
-  time_window_block.append(
+  var timing_block = $("<div/>").addClass("col-md-6 p-2");
+  timing_block.append(
     $("<label/>")
       .addClass("form-label")
       .html("Available time window(s):")
@@ -92,7 +94,7 @@ function show_event_creation_modal(
   );
   var time_windows_listbox_container = $("<div/>")
     .attr("id", "timeWindows")
-    .addClass("listbox-custom");
+    .addClass("listbox-custom card");
   var time_windows_listbox = $("<ul/>").addClass("list-group list-group-flush");
 
   $.each(time_windows, function (index, window) {
@@ -134,33 +136,12 @@ function show_event_creation_modal(
   });
 
   time_windows_listbox_container.append(time_windows_listbox);
-  time_window_block.append(time_windows_listbox_container);
+  timing_block.append(time_windows_listbox_container);
 
-  // adjusting further params
-  var params_block = $("<div/>").addClass("col-md-6 p-2");
+  form_content.append(timing_block);
 
-  // patient name block
-
-  var patient_name_block = $("<div/>").addClass("row pb-2");
-  patient_name_block.append(
-    $("<label/>")
-      .addClass("col-form-label col-sm-6")
-      .html("Patient name:")
-      .attr("for", "patient_name_input")
-  );
-  var patient_name_input_block = $("<div/>").addClass("col-sm-6");
-  var patient_name_input = $("<input/>")
-    .addClass("form-control")
-    .attr("id", "patient_name_input")
-    .attr("required", "true")
-    .attr("name", "patient_name");
-
-  patient_name_input_block.append(patient_name_input);
-  patient_name_block.append(patient_name_input_block);
-  params_block.append(patient_name_block);
 
   // protocol duration
-
   var protocol_duration_block = $("<div/>").addClass("row pb-2");
   protocol_duration_block.append(
     $("<label/>")
@@ -172,7 +153,7 @@ function show_event_creation_modal(
       .addClass("col-form-label col-sm-6 ps-4")
       .html(parseInt(protocol_length))
   );
-  params_block.append(protocol_duration_block);
+  timing_block.append(protocol_duration_block);
 
   // event duration
   var event_duration_block = $("<div/>").addClass("row pb-2");
@@ -196,11 +177,11 @@ function show_event_creation_modal(
     .val(protocol_length);
   event_duration_input_block.append(event_duration_input);
   event_duration_block.append(event_duration_input_block);
-  params_block.append(event_duration_block);
+  timing_block.append(event_duration_block);
 
   // time slider
-  var slider_block = $("<div/>");
-  slider_header_block = $("<div/>").addClass("row");
+  var slider_block = $("<div/>").addClass("card");
+  slider_header_block = $("<div/>").addClass("row px-2");
 
   slider_header_block.append(
     $("<label/>").addClass("col-form-label col-sm-3").html("Start time:")
@@ -220,11 +201,111 @@ function show_event_creation_modal(
   );
   slider_block.append(slider_header_block);
 
-  var slider_container = $("<div/>");
+  var slider_container = $("<div/>").css({"height":"65pt", "min-height":"65pt","max-height":"65pt"}).addClass("px-2");
   slider_block.append(slider_container);
-  params_block.append(slider_block);
+  timing_block.append(slider_block);
+  
 
-  form_content.append(time_window_block);
+  //optional params
+    // adjusting further params
+  var params_block = $("<div/>").addClass("col-md-6 p-2");
+
+  // patient name block
+
+  var patient_name_block = $("<div/>").addClass("row pb-2");
+  patient_name_block.append(
+    $("<label/>")
+      .addClass("col-form-label col-sm-3")
+      .html("Patient name:")
+      .attr("for", "patient_name_input")
+  );
+  var patient_name_input_block = $("<div/>").addClass("col-sm-9");
+  var patient_name_input = $("<input/>")
+    .addClass("form-control")
+    .attr("id", "patient_name_input")
+    .attr("required", "true")
+    .attr("name", "patient_name");
+
+  patient_name_input_block.append(patient_name_input);
+  patient_name_block.append(patient_name_input_block);
+  params_block.append(patient_name_block);
+
+  var patient_phone_block = $("<div/>").addClass("row pb-2");
+  patient_phone_block.append(
+    $("<label/>")
+      .addClass("col-form-label col-sm-3")
+      .html("Phone:")
+      .attr("for", "patient_phone_input")
+  );
+  var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
+  var patient_phone_input = $("<input/>")
+    .addClass("form-control")
+    .attr("id", "patient_phone_input")
+    .attr("name", "patient_phone");
+
+  patient_phone_input_block.append(patient_phone_input);
+  patient_phone_block.append(patient_phone_input_block);
+  params_block.append(patient_phone_block);
+
+
+  var comment_block = $("<div/>").addClass("row pb-2");
+  comment_block.append(
+    $("<label/>")
+      .addClass("col-form-label col-sm-3")
+      .html("Comment:")
+      .attr("for", "comment_input")
+  );
+  var comment_input_block = $("<div/>").addClass("col-sm-9");
+  var comment_input = $("<textarea/>")
+    .addClass("form-control")
+    .attr("id", "comment_input")
+    .attr("name", "comment").attr("rows",12).css('resize', 'none');
+
+  comment_input_block.append(comment_input);
+  comment_block.append(comment_input_block);
+  params_block.append(comment_block);
+
+
+  var paid_block = $("<div/>").addClass("row pb-2 mt-2");
+  paid_block.append(
+    $("<label/>")
+      .addClass("col-sm-3")
+      .html("Financing:")
+      .attr("for", "paid_input_block")
+  );
+  var paid_input_block = $("<div/>").addClass("form-check col-sm-9 ps-2").attr("id","paid_input_block");
+  var paid_input = $("<input/>")
+    .addClass("form-check-input ms-1").attr("type","checkbox")
+    .attr("id", "paid_input")
+    .attr("name", "paid").attr("checked",false);
+
+  paid_input_block.append(paid_input);
+  paid_input_block.append(
+    $("<label/>")
+      .addClass("form-check-label ps-1")
+      .html("Privately financed")
+      .attr("for", "paid_input")
+  );
+  paid_block.append(paid_input_block);
+  params_block.append(paid_block);
+
+  var reserved_at_block = $("<div/>").addClass("row pb-2");
+  reserved_at_block.append(
+    $("<label/>")
+      .addClass("col-form-label col-sm-3")
+      .html("Reserved at:")
+      .attr("for", "reserved_at_input")
+  );
+  var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
+  var reserved_at_input = $("<input/>")
+  .addClass("form-control")
+  .attr("id", "reserved_at_input")
+  .attr("name", "reserved_at");
+  
+  reserved_at_input_block.append(reserved_at_input);
+  reserved_at_block.append(reserved_at_input_block);
+  params_block.append(reserved_at_block);
+
   form_content.append(params_block);
   form.append(form_content);
 
@@ -239,6 +320,27 @@ function show_event_creation_modal(
 
   var modal = container.find("#" + modal_id);
   modal.modal("show");
+
+  picker = new easepick.create({
+    element: document.getElementById("reserved_at_input"),
+    css: ['css/easepicker.css',"https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"],
+
+    plugins: ["LockPlugin", "AmpPlugin",],
+
+    LockPlugin: {
+        minDate: new Date(),
+        minDays: 1,
+        maxDays: 1,
+    },
+    AmpPlugin: {
+        resetButton: true,
+        darkMode: false,
+    },
+    zIndex: 10000
+});
+
+
+
 
   function update_times(start, end) {
     $("#start_time_label").html(moment(start).format("HH:mm"));
@@ -378,7 +480,7 @@ function add_slider(
       min: start_diff,
       max: end_diff,
     },
-    step: 5,
+    step: 1,
 
     pips: {
       mode: "steps",

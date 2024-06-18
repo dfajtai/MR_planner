@@ -47,7 +47,8 @@ function handle_event_creation_gui() {
 
     picker = new easepick.create({
         element: document.getElementById("dateRangePicker"),
-        css: ["https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"],
+        css: ['css/easepicker.css',"https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"],
+
         plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],
 
         LockPlugin: {
@@ -59,10 +60,12 @@ function handle_event_creation_gui() {
             resetButton: true,
             darkMode: false,
         },
+        zIndex: 10000
     });
 
     picker.setStartDate(moment().add(1, "days").format("YYYY-MM-DD"));
     picker.setEndDate(moment().add(14, "days").format("YYYY-MM-DD"));
+
 
     $("#searchTimeWindowBtn").on("click", function () {
         if (!$(search_params_form)[0].checkValidity()) {

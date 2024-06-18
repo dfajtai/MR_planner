@@ -58,7 +58,7 @@ function search_free_time_windows(events, masks, count, searched_length){
             block_end = index;
         }
         // if the end is open...
-        if((block_end-block_start)>=searched_length-1){
+        if((block_end-block_start)>=searched_length-1 && window_array[block_end] == 0){
             blocks.push([block_start,block_end]);
         }
 
