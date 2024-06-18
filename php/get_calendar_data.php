@@ -13,6 +13,31 @@ use garethp\ews\API\Enumeration;
 use garethp\ews\API\Enumeration\ResponseClassType;
 
 
+function get_events($api,$calendar_name,$start,$end){
+    $events = [];
+
+    try {
+        $calendar =  $api->getCalendar($calendar_name);
+        $items = $calendar->getCalendarItems($start, $end);
+        
+        foreach($items as $event){
+            array_push($events,
+                        (object) ['name'=>$event->getSubject(), 
+                        'start' => $event->getStart(),
+                        'end'=>$event->getEnd(),
+                        'timezone'=>$event->getTimeZone(),
+                        'text'=>$event->getSubject()
+                    ]);
+
+        }
+    } catch (\Throwable $th) {
+        //throw $th;
+    }
+
+    return $events;
+}
+
+
 if(isset($_SESSION['ews_token'])) {
     $api = getEwsApi();
 
@@ -44,35 +69,10 @@ if(isset($_SESSION['ews_token'])) {
             $end = new DateTime('today + 90 day');
         }
 
-
-        $source_calendar = $api->getCalendar($source_name);
-        $mask_calendar = $api->getCalendar($mask_name);
-
-        $source_items = $source_calendar->getCalendarItems($start, $end);
-        $mask_items = $mask_calendar->getCalendarItems($start, $end);
-
-
-        $source_events = [];
-        foreach($source_items as $event){
-
-            array_push($source_events,
-                       (object) ['name'=>$event->getSubject(), 
-                        'start' => $event->getStart(),
-                        'end'=>$event->getEnd(),
-                        'timezone'=>$event->getTimeZone()]);
-  
-        }
         
-        $mask_events = [];
-        foreach($mask_items as $event){
-
-            array_push($mask_events,
-                       (object) ['name'=>$event->getSubject(), 
-                        'start' => $event->getStart(),
-                        'end'=>$event->getEnd(),
-                        'timezone'=>$event->getTimeZone()]);
-  
-        }
+        $source_events = get_events($api,$source_name,$start,$end);
+        
+        $mask_events = get_events($api,$mask_name,$start,$end);
         
         unset($_GET["source_calendar"]);
         unset($_GET["mask_calendar"]);

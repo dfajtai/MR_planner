@@ -71,7 +71,7 @@ if (!isset($_SESSION['ews_token'])) {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">MR plan</a>
+            <a class="navbar-brand" href="#">MR examination planner</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -234,7 +234,7 @@ if (!isset($_SESSION['ews_token'])) {
                                     <label class="col-sm-6 col-form-label" for="printCalendarSelect">
                                         Source calendar name</label>
                                     <div class="col-sm-6">
-                                        <select name="printCalendar" id="printCalendarSelect" class="form-select"
+                                        <select name="sourceCalendar" id="printCalendarSelect" class="form-select"
                                             required>
                                             <option selected disabled value="">Select source calendar...
                                             </option>
@@ -251,6 +251,11 @@ if (!isset($_SESSION['ews_token'])) {
                                     </div>
                                 </div>
 
+                                <div class="py-2">
+                                        <button class="btn btn-outline-dark w-100" id="printScheduleBtn"
+                                            type="button">Print schedules</button>
+                                </div>
+
                             </form>
 
                         </div>
@@ -260,6 +265,7 @@ if (!isset($_SESSION['ews_token'])) {
         </div>
     </container>
     <div id="modalContainer"> </div>
+    <div id="tableContainer" class="d-none"> </div>
 
     </container>
 
@@ -275,11 +281,28 @@ if (!isset($_SESSION['ews_token'])) {
     var session_countdown = Object();
 
 
-    $(document).ready(function () {
-        handle_event_creation_gui();
-        handle_schedule_printing_gui();
+    var available_calendars = [];
 
-    })
+    // read protocols from csv
+	$.get(protocols_path, function (CSVdata) {
+		protocols = $.csv.toObjects(CSVdata);
+
+        // populate calendar selection
+        $.ajax({
+            type: "GET",
+            url: "php/get_calendar_names.php",
+            dataType: "json",
+            data: {},
+            success: function (calendar_names) {
+                available_calendars =calendar_names;
+                handle_event_creation_gui();
+                handle_schedule_printing_gui();
+            },
+        });
+
+	});
+
+    
     $(document).ready(function () {
         session_countdown = $("#sessionCountdown");
         start_time = moment(<?php echo '"' . $_SESSION['AUTH_DATETIME'] . '"'; ?>);

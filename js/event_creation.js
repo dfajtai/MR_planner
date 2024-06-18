@@ -2,9 +2,6 @@ function handle_event_creation_gui() {
     //event creation
     var picker = Object();
 
-    var protocols_path = "protocols/mr_protocols.csv";
-    var protocols = [];
-
     var default_mask_calendar_name = "MR előjegyzés maszk";
     var default_calendar_name = "MR előjegyzés";
 
@@ -22,48 +19,31 @@ function handle_event_creation_gui() {
 
     search_params_form = $("#searchParamsForm");
 
-	// read protocols from csv
-	$.get(protocols_path, function (CSVdata) {
-		protocols = $.csv.toObjects(CSVdata);
+	$.each(protocols, function (index, protocol_info) {
+		var opt = $("<option/>").html(protocol_info["protocol_name"]).attr("value", protocol_info["protocol_name"]);
+		protocol_select.append(opt);
+	})
 
+	$.each(available_calendars, function (index, calendar_name) {
+		var calendar_opt = $("<option/>")
+			.html(calendar_name)
+			.attr("value", calendar_name);
+		calendar_select.append(calendar_opt);
 
-		$.each(protocols, function (index, protocol_info) {
-			var opt = $("<option/>").html(protocol_info["protocol_name"]).attr("value", protocol_info["protocol_name"]);
-			protocol_select.append(opt);
-		})
+		var mask_opt = $("<option/>")
+			.html(calendar_name)
+			.attr("value", calendar_name);
+		mask_calendar_select.append(mask_opt);
 	});
 
-    // populate calendar selection
-    $.ajax({
-        type: "GET",
-        url: "php/get_calendar_names.php",
-        dataType: "json",
-        data: {},
-        success: function (calendar_names) {
-            var server_message = server_response_message_parser(calendar_names);
-            if (server_message) logout_with_message(server_message);
+	if (available_calendars.includes(default_calendar_name)) {
+		calendar_select.val(default_calendar_name);
+	}
 
-            $.each(calendar_names, function (index, calendar_name) {
-                var calendar_opt = $("<option/>")
-                    .html(calendar_name)
-                    .attr("value", calendar_name);
-                calendar_select.append(calendar_opt);
+	if (available_calendars.includes(default_mask_calendar_name)) {
+		mask_calendar_select.val(default_mask_calendar_name);
+	}
 
-                var mask_opt = $("<option/>")
-                    .html(calendar_name)
-                    .attr("value", calendar_name);
-                mask_calendar_select.append(mask_opt);
-            });
-
-            if (calendar_names.includes(default_calendar_name)) {
-                calendar_select.val(default_calendar_name);
-            }
-
-            if (calendar_names.includes(default_mask_calendar_name)) {
-                mask_calendar_select.val(default_mask_calendar_name);
-            }
-        },
-    });
 
     picker = new easepick.create({
         element: document.getElementById("dateRangePicker"),

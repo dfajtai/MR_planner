@@ -13,6 +13,13 @@
 
 
 
+.table td.fit, 
+.table th.fit {
+   white-space: nowrap;
+   width: 1%;
+}
+
+
 
 .slider-styled,
 .slider-styled .noUi-handle {
