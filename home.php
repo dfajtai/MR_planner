@@ -16,50 +16,50 @@ if (!isset($_SESSION['ews_token'])) {
     <meta charset="UTF-8">
     <title>MR elojegyzes</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.css"
-        integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="libs/css/font-awesome-all.min.css">
+    <link rel="stylesheet" href="libs/css/bootstrap.min.css">
+    <link rel="stylesheet" href="libs/css/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="libs/css/jquery.flexdatalist.css" />
+    <link rel="stylesheet" href="libs/css/nouislider.css" />
 
     <link rel="stylesheet" href="css/my_styles.css">
 
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.13.6/underscore-min.js"></script>
+    <script src="libs/js/jquery-3.7.1.min.js"></script>
+    <script src="libs/js/underscore-min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <!-- <script src="libs/js/popper.min.js"></script>
+    <script src="libs/js/bootstrap.min.js"></script> -->
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+    <script src="libs/js/bootstrap.bundle.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/additional-methods.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.0/bootbox.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+    <script src="libs/js/moment.min.js"></script>
+    <script src="libs/js/moment-with-locales.min.js"></script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
-        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="libs/js/jquery.flexdatalist.min.js"></script>
+    <script src="libs/js/jquery.validate.min.js"></script>
+    <script src="libs/js/jquery.validate.additional-methods.min.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="libs/js/bootbox.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/polyfills.umd.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="libs/js/index.umd.min.js"></script>
 
+
+    <script src="libs/js/jquery.csv.min.js"></script>
+
+    <script src="libs/js/wNumb.min.js"></script>
+    <script src="libs/js/nouislider.min.js"></script>
+
+    <script src="libs/js/jspdf.umd.min.js"></script>
+    <script src="libs/js/polyfills.umd.js"></script>
+    <script src="libs/js/jspdf.plugin.autotable.min.js"></script>
+
+    <script defer src="js/config.js"></script>
 
     <script defer src="js/additional_functions.js"></script>
-
     <script defer src="js/session_protection.js"></script>
     <script defer src="js/search_time_window.js"></script>
     <script defer src="js/event_creation_modal.js"></script>
@@ -112,15 +112,33 @@ if (!isset($_SESSION['ews_token'])) {
 
                             <form class="form d-flex flex-column needs-validation" id="searchParamsForm">
 
-                                <div class="row mb-2">
-                                    <label for="examTypeSelect" class="col-sm-6 col-form-label">Examination
+                                <div class="row mb-2 ">
+                                    <label for="protocolSelect" class="col-sm-3 col-form-label">Examination
                                         protocol</label>
-                                    <div class="col-sm-6">
-                                        <select name="examType" id="examTypeSelect" class="form-select" required>
-                                            <option selected disabled value="">Select examination protocol...</option>
+                                    <div class="col-sm-9">
+                                        <input name="protocol_index" id="protocolSelect"
+                                            class="form-control flexdatalist" required
+                                            placeholder="Select examination protocol..." type="text"> </input>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-2">
+                                    <label for="contingentSelect" class="col-sm-3 col-form-label">Contingent</label>
+                                    <div class="col-sm-9">
+                                        <select name="contingent" id="contingentSelect" class="form-select" required>
+                                            <option selected disabled value="">Select contingent...</option>
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="row pb-2">
+                                    <label class="col-sm-3 col-form-label" for="dateRangePicker">Search
+                                        range</label>
+                                    <div class="col-sm-9">
+                                        <input name="date" id="dateRangePicker" class="form-control"></input>
+                                    </div>
+                                </div>
+
 
                                 <div class="accordion" id="accordionContainer">
 
@@ -135,9 +153,9 @@ if (!isset($_SESSION['ews_token'])) {
                                         <div class="accordion-collapse collapse" id="searchParams">
                                             <div class="accordion-body nested-accordion">
                                                 <div class="row pb-2">
-                                                    <label class="col-sm-6 col-form-label" for="sourceCalendarSelect">
+                                                    <label class="col-sm-3 col-form-label" for="sourceCalendarSelect">
                                                         Source calendar name</label>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-9">
                                                         <select name="sourceCalendar" id="sourceCalendarSelect"
                                                             class="form-select" required>
                                                             <option selected disabled value="">Select source calendar...
@@ -148,10 +166,10 @@ if (!isset($_SESSION['ews_token'])) {
                                                 </div>
 
                                                 <div class="row pb-2">
-                                                    <label class="col-sm-6 col-form-label"
+                                                    <label class="col-sm-3 col-form-label"
                                                         for="maskingCalendarSelect">Masking calendar
                                                         name</label>
-                                                    <div class="col-sm-6">
+                                                    <div class="col-sm-9">
                                                         <select name="maskingCalendar" id="maskingCalendarSelect"
                                                             class="form-select" required>
                                                             <option selected disabled value="">Select masking
@@ -161,21 +179,12 @@ if (!isset($_SESSION['ews_token'])) {
 
                                                 </div>
 
-                                                <div class="row pb-2">
-                                                    <label class="col-sm-6 col-form-label" for="dateRangePicker">Search
-                                                        range</label>
-                                                    <div class="col-sm-6">
-                                                        <input name="date" id="dateRangePicker"
-                                                            class="form-control"></input>
-                                                    </div>
-                                                </div>
-
                                                 <div class="row">
-                                                    <label for="showCountBlock" class="col-sm-6 col-form-label">Number
+                                                    <label for="showCountBlock" class="col-sm-3 col-form-label">Number
                                                         of
                                                         results</label>
 
-                                                    <div class="col-sm-6 d-flex" id="showCountBlock">
+                                                    <div class="col-sm-9 d-flex" id="showCountBlock">
                                                         <div class="flex-fill pe-1">
                                                             <input type="radio" class="btn-check" name="showCount"
                                                                 id="show5" value="5" checked>
@@ -231,9 +240,9 @@ if (!isset($_SESSION['ews_token'])) {
                         <div class="accordion-body">
                             <form class="form d-flex flex-column needs-validation" id="printParamsForm">
                                 <div class="row pb-2">
-                                    <label class="col-sm-6 col-form-label" for="printCalendarSelect">
+                                    <label class="col-sm-3 col-form-label" for="printCalendarSelect">
                                         Source calendar name</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-9">
                                         <select name="sourceCalendar" id="printCalendarSelect" class="form-select"
                                             required>
                                             <option selected disabled value="">Select source calendar...
@@ -244,9 +253,9 @@ if (!isset($_SESSION['ews_token'])) {
 
                                 </div>
                                 <div class="row pb-2">
-                                    <label class="col-sm-6 col-form-label" for="printDateRangePicker">Print date
+                                    <label class="col-sm-3 col-form-label" for="printDateRangePicker">Print date
                                         range</label>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-9">
                                         <input name="date" id="printDateRangePicker" class="form-control"></input>
                                     </div>
                                 </div>
@@ -272,36 +281,26 @@ if (!isset($_SESSION['ews_token'])) {
 </body>
 <script nonce="<?php echo $_SESSION['nonce']; ?>">
 
+    $(document).ready(function () {
+        // read protocols from csv
+        $.get(protocols_path, function (CSVdata) {
+            protocols = $.csv.toObjects(CSVdata);
 
-    var protocols_path = "protocols/mr_protocols.csv";
-    var protocols = [];
+            // populate calendar selection
+            $.ajax({
+                type: "GET",
+                url: "php/get_calendar_names.php",
+                dataType: "json",
+                data: {},
+                success: function (calendar_names) {
+                    available_calendars = calendar_names;
+                    handle_event_creation_gui();
+                    handle_schedule_printing_gui();
+                },
+            });
 
-    var start_time = Object();
-    var session_max_duration = moment.duration(30, "minutes");
-    var session_countdown = Object();
-
-
-    var available_calendars = [];
-
-    // read protocols from csv
-    $.get(protocols_path, function (CSVdata) {
-        protocols = $.csv.toObjects(CSVdata);
-
-        // populate calendar selection
-        $.ajax({
-            type: "GET",
-            url: "php/get_calendar_names.php",
-            dataType: "json",
-            data: {},
-            success: function (calendar_names) {
-                available_calendars = calendar_names;
-                handle_event_creation_gui();
-                handle_schedule_printing_gui();
-            },
         });
-
-    });
-
+    })
 
     $(document).ready(function () {
         session_countdown = $("#sessionCountdown");

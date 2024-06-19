@@ -6,6 +6,9 @@ session_start();
 require_once (__DIR__ . '/../vendor/autoload.php');
 use garethp\ews\API;
 use garethp\ews\API\Type;
+use garethp\ews\API\Type\CalendarItemType;
+use garethp\ews\API\Type\BodyType;
+use garethp\ews\API\Enumeration\BodyTypeType;
 use garethp\ews\API\Type\DistinguishedFolderIdNameType;
 use garethp\ews\API\ExchangeWebServices;
 use garethp\ews\API\NTLMSoapClient;
@@ -29,13 +32,23 @@ if (isset($_SESSION['ews_token'])) {
 
         $source_calendar = $api->getCalendar($source_name);
 
+        $data = "No structured data";
+        if (isset($event_data['data'])) {
+            $data = $event_data['data'];
+        }
+
         $event = array(
             'CalendarItem' => array(
                 'Start' => (new \DateTime($event_data['start']))->format('c'),
                 'End' => (new \DateTime($event_data['end']))->format('c'),
-                'Subject' => $event_data['text']
+                'Subject' => $event_data['subject'],
+                'Body' => array(
+                    'BodyType' => Enumeration\BodyTypeType::TEXT,
+                    '_value' => $data
+                ),
             )
         );
+
 
         //Set our options
         $options = array(

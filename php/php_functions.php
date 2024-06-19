@@ -3,7 +3,7 @@
 require_once (__DIR__ . '/../vendor/autoload.php');
 use garethp\ews\API;
 
-require_once('session_protection.php');
+require_once ('session_protection.php');
 
 function myUrlEncode($string)
 {
@@ -79,7 +79,12 @@ function getEwsApi()
     // to avoid session fixation ...
     solve_session_fixation();
 
-    return API::withUsernameAndPassword($ews_address, $username, $password);
+    return API::withUsernameAndPassword(
+      $ews_address,
+      $username,
+      $password,
+      // ['impersonation' => $_SESSION['ews_api']['email']]
+    );
   }
   return null;
 }

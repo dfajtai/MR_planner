@@ -1,4 +1,67 @@
-protocol_name,protocol_duration
-default,30
-short,10
-long,45
+protocol_index,protocol_name,protocol_duration,modality
+0,Koponya MR (natív),20,MR
+1,Koponya + belső hallójárat MR,25,MR
+2,Koponya MR (natív + kontrasztos),25,MR
+3,Koponya MR (natív) + intrakraniális MR angio,25,MR
+4,Koponya MR (natív és kontraszt) + intrakraniális MR angio,35,MR
+5,Stroke protokoll,35,MR
+6,Koponya MR + vénás MR angio,35,MR
+7,3T EPI (natív epilepsia protokoll),25,MR
+8,Sella MR,25,MR
+9,Koponya + orbita MR,35,MR
+10,Arckoponya MR,25,MR
+11,Koponya MR + 1 gerinc régió MR (natív),40,MR
+12,Koponya MR + 1 gerinc régió MR (natív + kontrasztos),50,MR
+13,Koponya MR + teljes gerinc MR,60,MR
+14,Nyaki gerinc MR (natív),20,MR
+15,Nyaki gerinc MR (natív + kontrasztos),25,MR
+16,Háti gerinc MR (natív),20,MR
+17,Háti gerinc MR (natív + kontrasztos),25,MR
+18,Lumbális gerinc MR (natív),20,MR
+19,Lumbális gerinc MR (natív + kontrasztos),25,MR
+20,Nyaki és háti gerinc MR (2 régió),35,MR
+21,Nyaki és lumbális gerinc MR (2 régió),35,MR
+22,Háti és lumbális gerinc MR (2 régió),35,MR
+23,"Teljes gerinc MR (natív, 3 régió)",45,MR
+24,"Teljes gerinc MR (natív + kontrasztos, 3 régió)",55,MR
+25,Nyaki lágyrész MR (natív + kontrasztos),25,MR
+26,Máj MR (natív + kontrasztos),40,MR
+27,Pancreas MR + MRCP (natív + kontrasztos),45,MR
+28,MRCP (natív),30,MR
+29,MRCP (natív + kontrasztos),45,MR
+30,Vese MR (natív + kontrasztos),40,MR
+31,MR urográfia (natív + kontrasztos),45,MR
+32,Kismedence MR (natív + kontrasztos),25,MR
+33,Rectum MR,25,MR
+34,3TP (natív prostata),25,MR
+35,3TPP (Perfúziós prostata),35,MR
+36,Kismedence MR (Fistula protokoll),30,MR
+37,Kismedence MR (Endometriosis protokoll),30,MR
+38,Has és kismedence (natív + kontrasztos),60,MR
+39,Felhas MR (natív áttekintő),25,MR
+40,Tervezés (MR),20,MR
+41,Emlő MR (natív),25,MR
+42,Emlő MR (natív + kontraszt),35,MR
+43,"Végtag - natív (csont, lágyrész) ",40,MR
+44,"Végtag - natív+kontrasztos (csont, lágyrész) ",50,MR
+45,Plexus brachialis MR (natív),25,MR
+46,Váll MR,20,MR
+47,Könyök MR,20,MR
+48,Csukló MR,20,MR
+49,Kézfej MR,20,MR
+50,Csípő MR,20,MR
+51,Térd MR,20,MR
+52,Boka MR,20,MR
+53,Láb MR,20,MR
+54,SI izület/Sacrum MR,20,MR
+55,"Koponya MR - spektroszkópia, perfúzió",55,MR
+56,fMRI ,60,MR
+57,Epilepsia_FDG,90,PET
+58,Agy_DOPA,60,PET
+59,Agy_FDG,30,PET
+60,Pancreas_ FDG,50,PET
+61,MPM_KOLIN,90,PET
+62,Kismedence_FDG,30,PET
+63,Prostata_KOLIN,40,PET
+64,WB_FDG,60,PET
+65,WB+Leg_FDG,90,PET

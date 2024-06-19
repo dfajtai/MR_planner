@@ -1,4 +1,4 @@
-.accordion-button{
+.accordion-button {
     padding: .5rem .6rem .5rem .75rem;
 }
 
@@ -9,13 +9,14 @@
 }
 
 .list-group-item {
-    border: none; /* Remove border */
+    border: none;
+    /* Remove border */
 }
 
-.table td.fit, 
+.table td.fit,
 .table th.fit {
-   white-space: nowrap;
-   width: 1%;
+    white-space: nowrap;
+    width: 1%;
 }
 
 
@@ -108,37 +109,56 @@
 
 .accordion-button {
     background-color: transparent;
-    color: #343a40; /* Dark text */
-    border: 2px solid #343a40; /* Dark border */
+    color: #343a40;
+    /* Dark text */
+    border: 1px solid #343a40;
+    /* Dark border */
     font-weight: bold;
     /* text-transform: uppercase; */
 
 }
+
 .accordion-button:not(.collapsed) {
-    color: #f8f9fa; /* Light text */
-    background-color: #343a40; /* Dark background */
-    border-color: #343a40; /* Dark border */
+    color: #f8f9fa;
+    /* Light text */
+    background-color: #343a40;
+    /* Dark background */
+    border-color: #343a40;
+    /* Dark border */
+    box-shadow: none;
 }
+
 .accordion-button::after {
-    display: none; /* Remove default caret */
+    display: none;
+    /* Remove default caret */
 }
+
 .accordion-header .badge {
-    background-color: #dc3545; /* Danger color */
+    background-color: #dc3545;
+    /* Danger color */
     color: #f8f9fa;
     font-size: 0.8em;
     margin-left: 10px;
     padding: 0.5em 1em;
     border-radius: 0.5em;
 }
+
 .accordion-body {
-    background-color: rgba(248, 249, 250, 0.8); /* Light background with transparency */
-    color: #343a40; /* Dark text */
-    border: 1px solid #343a40; /* Dark border */
+    background-color: rgba(248, 249, 250, 0.8);
+    /* Light background with transparency */
+    color: #343a40;
+    /* Dark text */
+    border: 1px solid #343a40;
+    /* Dark border */
 }
+
 .accordion-item {
-    border: none; /* Remove default border */
+    border: none;
+    /* Remove default border */
     margin-bottom: 1rem;
 }
+
 .nested-accordion .accordion-body {
-    background-color: rgba(248, 249, 250, 0.8); /* Slightly darker background for nested accordions */
+    background-color: rgba(248, 249, 250, 0.8);
+    /* Slightly darker background for nested accordions */
 }

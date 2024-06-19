@@ -1,68 +1,9 @@
 var slider = null;
 
-function show_event_creation_modal(container, time_windows, protocol_length, submit_callback = null) {
-	if (time_windows.length == 0) {
-		bootbox.alert({
-			message: "There is no free time window matching the search parameters.",
-			buttons: {
-				ok: {
-					label: "Ok",
-					className: "btn-outline-dark",
-				},
-			},
-		});
-		return;
-	}
+function timing_param_controls(container, time_windows, protocol_length, timing_update_callback = null) {
 	container.empty();
 
-	var start_time = null;
-	var end_time = null;
-
-	var modal_id = "event_creation_modal";
-
-	var modal_root = $("<div/>").addClass("modal fade").attr("id", modal_id).attr("tabindex", "-1");
-	var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl");
-	var modal_content = $("<div/>").addClass("modal-content");
-
-	var modal_header = $("<div/>").addClass("modal-header");
-	modal_header.append($("<h5/>").addClass("modal-title display-3 fs-3").html("Create event"));
-	modal_header.append($("<button/>").addClass("btn-close").attr("data-bs-dismiss", "modal").attr("aria-label", "Close"));
-
-	var modal_body = $("<div/>").addClass("modal-body");
-
-	var modal_footer = $("<div/>").addClass("modal-footer");
-	modal_footer.append(
-		$("<button/>")
-			.addClass("btn btn-outline-dark")
-			.attr("id", "clear_form")
-			.attr("aria-label", "Clear")
-			.html($("<i/>").addClass("fa fa-eraser me-2").attr("aria-hidden", "true"))
-			.append("Clear")
-	);
-	modal_footer.append($("<button/>").addClass("btn btn-outline-dark").attr("data-bs-dismiss", "modal").attr("aria-label", "Close").html("Close"));
-
-	modal_content.append(modal_header);
-	modal_content.append(modal_body);
-	modal_content.append(modal_footer);
-
-	modal_dialog.html(modal_content);
-	modal_root.html(modal_dialog);
-
-	var form = $("<form/>").attr("id", "event_creation_form").addClass("needs-validation").addClass("d-flex flex-column");
-	modal_body.append(form);
-
-	modal_footer.find("#clear_form").on("click", function () {
-		$(form).reset();
-	});
-
-	// lets define the form....
-	var form_content = $("<div/>").addClass("row pb-2");
-
-	// timing block
-
-	// time window selection
-	var timing_block = $("<div/>").addClass("col-md-6 p-2");
-	timing_block.append($("<label/>").addClass("form-label").html("Available time window(s):").attr("for", "#timeWindows"));
+	container.append($("<label/>").addClass("form-label").html("Available time window(s):").attr("for", "#timeWindows"));
 	var time_windows_listbox_container = $("<div/>").attr("id", "timeWindows").addClass("listbox-custom card");
 	var time_windows_listbox = $("<ul/>").addClass("list-group list-group-flush");
 
@@ -99,15 +40,13 @@ function show_event_creation_modal(container, time_windows, protocol_length, sub
 	});
 
 	time_windows_listbox_container.append(time_windows_listbox);
-	timing_block.append(time_windows_listbox_container);
-
-	form_content.append(timing_block);
+	container.append(time_windows_listbox_container);
 
 	// protocol duration
 	var protocol_duration_block = $("<div/>").addClass("row pb-2");
 	protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Protocol duration [min]:"));
 	protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6 ps-4").html(parseInt(protocol_length)));
-	timing_block.append(protocol_duration_block);
+	container.append(protocol_duration_block);
 
 	// event duration
 	var event_duration_block = $("<div/>").addClass("row pb-2");
@@ -118,7 +57,7 @@ function show_event_creation_modal(container, time_windows, protocol_length, sub
 	event_duration_input.attr("min", "5").attr("max", "120").attr("step", "1").attr("required", "true").val(protocol_length);
 	event_duration_input_block.append(event_duration_input);
 	event_duration_block.append(event_duration_input_block);
-	timing_block.append(event_duration_block);
+	container.append(event_duration_block);
 
 	// time slider
 	var slider_block = $("<div/>").addClass("card");
@@ -130,101 +69,16 @@ function show_event_creation_modal(container, time_windows, protocol_length, sub
 	slider_header_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("id", "end_time_label"));
 	slider_block.append(slider_header_block);
 
-	var slider_container = $("<div/>").css({ height: "65pt", "min-height": "65pt", "max-height": "65pt" }).addClass("px-2");
+	var slider_container = $("<div/>").css({ height: "68pt", "min-height": "68pt", "max-height": "68pt" }).addClass("px-2");
 	slider_block.append(slider_container);
-	timing_block.append(slider_block);
-
-	//optional params
-	// adjusting further params
-	var params_block = $("<div/>").addClass("col-md-6 p-2");
-
-	// patient name block
-
-	var patient_name_block = $("<div/>").addClass("row pb-2");
-	patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name:").attr("for", "patient_name_input"));
-	var patient_name_input_block = $("<div/>").addClass("col-sm-9");
-	var patient_name_input = $("<input/>").addClass("form-control").attr("id", "patient_name_input").attr("required", "true").attr("name", "patient_name");
-
-	patient_name_input_block.append(patient_name_input);
-	patient_name_block.append(patient_name_input_block);
-	params_block.append(patient_name_block);
-
-	var patient_phone_block = $("<div/>").addClass("row pb-2");
-	patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone:").attr("for", "patient_phone_input"));
-	var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
-	var patient_phone_input = $("<input/>").addClass("form-control").attr("id", "patient_phone_input").attr("name", "patient_phone");
-
-	patient_phone_input_block.append(patient_phone_input);
-	patient_phone_block.append(patient_phone_input_block);
-	params_block.append(patient_phone_block);
-
-	var comment_block = $("<div/>").addClass("row pb-2");
-	comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment:").attr("for", "comment_input"));
-	var comment_input_block = $("<div/>").addClass("col-sm-9");
-	var comment_input = $("<textarea/>").addClass("form-control").attr("id", "comment_input").attr("name", "comment").attr("rows", 12).css("resize", "none");
-
-	comment_input_block.append(comment_input);
-	comment_block.append(comment_input_block);
-	params_block.append(comment_block);
-
-	var paid_block = $("<div/>").addClass("row pb-2 mt-2");
-	paid_block.append($("<label/>").addClass("col-sm-3").html("Financing:").attr("for", "paid_input_block"));
-	var paid_input_block = $("<div/>").addClass("form-check col-sm-9 ps-2").attr("id", "paid_input_block");
-	var paid_input = $("<input/>")
-		.addClass("form-check-input ms-1")
-		.attr("type", "checkbox")
-		.attr("id", "paid_input")
-		.attr("name", "paid")
-		.attr("checked", false);
-
-	paid_input_block.append(paid_input);
-	paid_input_block.append($("<label/>").addClass("form-check-label ps-1").html("Privately financed").attr("for", "paid_input"));
-	paid_block.append(paid_input_block);
-	params_block.append(paid_block);
-
-	var reserved_at_block = $("<div/>").addClass("row pb-2");
-	reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at:").attr("for", "reserved_at_input"));
-	var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
-	var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at");
-
-	reserved_at_input_block.append(reserved_at_input);
-	reserved_at_block.append(reserved_at_input_block);
-	params_block.append(reserved_at_block);
-
-	form_content.append(params_block);
-	form.append(form_content);
-
-	var submit_btn = $("<button/>").addClass("btn btn-outline-dark").attr("id", "addEventButton").attr("type", "button").html("Create event");
-	form.append(submit_btn);
-
-	container.append(modal_root);
-
-	var modal = container.find("#" + modal_id);
-	modal.modal("show");
-
-	picker = new easepick.create({
-		element: document.getElementById("reserved_at_input"),
-		css: ["css/easepicker.css", "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"],
-
-		plugins: ["LockPlugin", "AmpPlugin"],
-
-		LockPlugin: {
-			minDate: new Date(),
-			minDays: 1,
-			maxDays: 1,
-		},
-		AmpPlugin: {
-			resetButton: true,
-			darkMode: false,
-		},
-		zIndex: 10000,
-	});
+	container.append(slider_block);
 
 	function update_times(start, end) {
 		$("#start_time_label").html(moment(start).format("HH:mm"));
 		$("#end_time_label").html(moment(end).format("HH:mm"));
-		start_time = start;
-		end_time = end;
+		if (timing_update_callback) {
+			timing_update_callback(start, end);
+		}
 	}
 
 	$(time_windows_listbox_container)
@@ -261,6 +115,218 @@ function show_event_creation_modal(container, time_windows, protocol_length, sub
 			$(this).removeClass("bg-danger text-dark");
 		}
 	});
+}
+
+function administration_param_controls(container, contingent = null) {
+	container.empty();
+
+	// patient n
+	var patient_name_block = $("<div/>").addClass("row pb-2");
+	patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name:").attr("for", "patient_name_input"));
+	var patient_name_input_block = $("<div/>").addClass("col-sm-9");
+	var patient_name_input = $("<input/>").addClass("form-control").attr("id", "patient_name_input").attr("required", "true").attr("name", "patient_name");
+
+	patient_name_input_block.append(patient_name_input);
+	patient_name_block.append(patient_name_input_block);
+	container.append(patient_name_block);
+
+	// phone
+	var patient_phone_block = $("<div/>").addClass("row pb-2");
+	patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone:").attr("for", "patient_phone_input"));
+	var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
+	var patient_phone_input = $("<input/>").addClass("form-control").attr("id", "patient_phone_input").attr("name", "patient_phone");
+
+	patient_phone_input_block.append(patient_phone_input);
+	patient_phone_block.append(patient_phone_input_block);
+	container.append(patient_phone_block);
+
+	// comment
+	var comment_block = $("<div/>").addClass("row pb-2");
+	comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment:").attr("for", "comment_input"));
+	var comment_input_block = $("<div/>").addClass("col-sm-9");
+	var comment_input = $("<textarea/>").addClass("form-control").attr("id", "comment_input").attr("name", "comment").attr("rows", 5).css("resize", "none");
+
+	comment_input_block.append(comment_input);
+	comment_block.append(comment_input_block);
+	container.append(comment_block);
+
+	// var paid_block = $("<div/>").addClass("row pb-2 mt-2");
+	// paid_block.append($("<label/>").addClass("col-sm-3").html("Financing:").attr("for", "paid_input_block"));
+	// var paid_input_block = $("<div/>").addClass("form-check col-sm-9 ps-2").attr("id", "paid_input_block");
+	// var paid_input = $("<input/>")
+	// 	.addClass("form-check-input ms-1")
+	// 	.attr("type", "checkbox")
+	// 	.attr("id", "paid_input")
+	// 	.attr("name", "paid")
+	// 	.attr("checked", false);
+
+	// paid_input_block.append(paid_input);
+	// paid_input_block.append($("<label/>").addClass("form-check-label ps-1").html("Privately financed").attr("for", "paid_input"));
+	// paid_block.append(paid_input_block);
+	// container.append(paid_block);
+
+	// referring physician
+	var referring_physician_block = $("<div/>").addClass("row pb-2");
+	referring_physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Referring physician:").attr("for", "referring_physician_input"));
+	var referring_physician_input_block = $("<div/>").addClass("col-sm-9");
+	var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "referring_physician_input").attr("name", "referring_physician");
+
+	referring_physician_input_block.append(referring_physician_input);
+	referring_physician_block.append(referring_physician_input_block);
+	container.append(referring_physician_block);
+
+	// reserved at
+	var reserved_at_block = $("<div/>").addClass("row pb-2");
+	reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at:").attr("for", "reserved_at_input"));
+	var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
+	var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at");
+
+	reserved_at_input_block.append(reserved_at_input);
+	reserved_at_block.append(reserved_at_input_block);
+	container.append(reserved_at_block);
+
+	// reserved by
+	var reserved_by_block = $("<div/>").addClass("row pb-2");
+	reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved by:").attr("for", "reserved_by_input"));
+	var reserved_by_input_block = $("<div/>").addClass("col-sm-9");
+	var reserved_by_input = $("<input/>").addClass("form-control").attr("id", "reserved_by_input").attr("name", "reserved_by").attr("required", "true");
+
+	reserved_by_input_block.append(reserved_by_input);
+	reserved_by_block.append(reserved_by_input_block);
+	container.append(reserved_by_block);
+
+	// contingent block
+	var contingent_settings = $("<div/>").addClass("card flex-column w-100 p-2");
+
+	// allow override
+	var allow_override_block = $("<div/>").addClass("form-check pb-2");
+	var allow_override_input = $("<input/>").addClass("form-check-input").attr("type", "checkbox").attr("id", "allow_override_input").attr("checked", false);
+	allow_override_block.append($("<label/>").addClass("form-check-label").html("Set/override contingent").attr("for", "allow_override_input"));
+	allow_override_block.append(allow_override_input);
+	contingent_settings.append(allow_override_block);
+
+	// contingent
+	var contingent_select = $("<div/>").attr("id", "contingent_select").addClass("d-flex");
+
+	$.each(contingents, function (index, _contingent) {
+		var _select_div = $("<div/>").addClass("flex-fill");
+		if (index + 1 < contingents.length) _select_div.addClass("pe-2");
+		var _id = _contingent + "_contingent";
+		var select_btn = $("<input>")
+			.attr("id", _id)
+			.addClass("btn-check")
+			.attr("type", "radio")
+			.attr("name", "contingent")
+			.attr("value", _contingent)
+			.attr("required", true);
+		var select_label = $("<label/>").addClass("btn btn-outline-dark w-100").attr("for", _id).html(_contingent);
+
+		_select_div.append(select_btn);
+		_select_div.append(select_label);
+		contingent_select.append(_select_div);
+	});
+	contingent_settings.append(contingent_select);
+
+	container.append(contingent_settings);
+}
+
+function show_event_creation_modal(container, title, time_windows, protocol_length, contingent = null, submit_callback = null) {
+	if (time_windows.length == 0) {
+		bootbox.alert({
+			message: "There is no free time window matching the search parameters.",
+			buttons: {
+				ok: {
+					label: "Ok",
+					className: "btn-outline-dark",
+				},
+			},
+		});
+		return;
+	}
+	container.empty();
+
+	var start_time = null;
+	var end_time = null;
+
+	var modal_id = "event_creation_modal";
+
+	var modal_root = $("<div/>").addClass("modal fade").attr("id", modal_id).attr("tabindex", "-1");
+	var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl");
+	var modal_content = $("<div/>").addClass("modal-content");
+
+	var modal_header = $("<div/>").addClass("modal-header");
+	modal_header.append($("<h5/>").addClass("modal-title display-3 fs-3").html(title));
+	modal_header.append($("<button/>").addClass("btn-close").attr("data-bs-dismiss", "modal").attr("aria-label", "Close"));
+
+	var modal_body = $("<div/>").addClass("modal-body");
+
+	var modal_footer = $("<div/>").addClass("modal-footer");
+	modal_footer.append(
+		$("<button/>")
+			.addClass("btn btn-outline-dark")
+			.attr("id", "clear_form")
+			.attr("aria-label", "Clear")
+			.html($("<i/>").addClass("fa fa-eraser me-2").attr("aria-hidden", "true"))
+			.append("Clear")
+	);
+	modal_footer.append($("<button/>").addClass("btn btn-outline-dark").attr("data-bs-dismiss", "modal").attr("aria-label", "Close").html("Close"));
+
+	modal_content.append(modal_header);
+	modal_content.append(modal_body);
+	modal_content.append(modal_footer);
+
+	modal_dialog.html(modal_content);
+	modal_root.html(modal_dialog);
+
+	var form = $("<form/>").attr("id", "event_creation_form").addClass("needs-validation").addClass("d-flex flex-column");
+	modal_body.append(form);
+
+	modal_footer.find("#clear_form").on("click", function () {
+		$(form).reset();
+	});
+
+	// lets define the form....
+	var form_content = $("<div/>").addClass("row pb-2");
+
+	// timing
+	var timing_block = $("<div/>").addClass("col-md-6 p-2");
+	timing_param_controls(timing_block, time_windows, protocol_length, function (start, end) {
+		(start_time = start), (end_time = end);
+	});
+	form_content.append(timing_block);
+
+	// administration
+	var administration_block = $("<div/>").addClass("col-md-6 p-2");
+	administration_param_controls(administration_block, contingent);
+	form_content.append(administration_block);
+
+	form.append(form_content);
+
+	var submit_btn = $("<button/>").addClass("btn btn-outline-dark").attr("id", "addEventButton").attr("type", "button").html(title);
+	form.append(submit_btn);
+
+	container.append(modal_root);
+
+	var modal = container.find("#" + modal_id);
+	modal.modal("show");
+
+	picker = new easepick.create({
+		element: document.getElementById("reserved_at_input"),
+		css: ["css/easepicker.css", "libs/css/easepick-index.css"],
+
+		plugins: ["LockPlugin", "AmpPlugin"],
+
+		LockPlugin: {
+			minDate: new Date(),
+			minDays: 1,
+			maxDays: 1,
+		},
+		AmpPlugin: {
+			resetButton: true,
+			darkMode: false,
+		},
+		zIndex: 10000,
+	});
 
 	submit_btn.on("click", function () {
 		if (!$(form)[0].checkValidity()) {
@@ -291,7 +357,7 @@ function add_slider(container, slider_name, start_time, end_time, duration, upda
 	if (document.getElementById(slider_name)) document.getElementById(slider_name).remove();
 
 	var slider_element = $("<div/>").addClass("slider-box-handle slider-styled slider-hide").attr("id", slider_name);
-	container.append($("<div/>").append(slider_element).css("height", "65pt"));
+	container.append($("<div/>").append(slider_element).css("height", "68pt"));
 
 	slider = document.getElementById(slider_name);
 

@@ -1,4 +1,4 @@
-function search_free_time_windows(events, masks, count, searched_length) {
+function search_free_time_windows_inside_mask(events, masks, count, searched_length, mask_name = null) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
