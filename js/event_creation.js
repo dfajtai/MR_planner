@@ -6,14 +6,14 @@ function handle_event_creation_gui() {
 	var default_calendar_name = "MR előjegyzés";
 
 	var protocol_select = Object();
-	var contingent_select = Object();
+	var search_logic_select = Object();
 	var calendar_select = Object();
 	var mask_calendar_select = Object();
 
 	var search_params_form = Object();
 
 	protocol_select = $("#protocolSelect");
-	contingent_select = $("#contingentSelect");
+	search_logic_select = $("#searchLogicSelect");
 
 	calendar_select = $("#sourceCalendarSelect");
 	mask_calendar_select = $("#maskingCalendarSelect");
@@ -33,17 +33,19 @@ function handle_event_creation_gui() {
 		limitOfValues: 1,
 	});
 
+	// handle bugged validation popup location
 	var val_dummy = $($(protocol_select).parent().find(".flexdatalist-set")[0]);
 	var list_dummy = $($(protocol_select).parent().find(".flexdatalist-alias")[0]);
-
 	val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
 
 	$.each(contingents, function (index, contingent) {
-		var _opt = $("<option/>").html(contingent).attr("value", contingent);
-		contingent_select.append(_opt);
+		var _opt = $("<option/>")
+			.html(contingent)
+			.attr("value", "CONTINGENT#" + contingent);
+		search_logic_select.append(_opt);
 	});
-	contingent_select.append($("<option/>").html("Inside all contingent time window").attr("value", "all"));
-	contingent_select.append($("<option/>").html("Any free time").attr("value", "any"));
+	search_logic_select.append($("<option/>").html("[LOGIC] Inside all contingent time window").attr("value", "LOGIC#all"));
+	search_logic_select.append($("<option/>").html("[LOGIC] Any free time").attr("value", "LOGIC#any"));
 
 	$.each(available_calendars, function (index, calendar_name) {
 		var calendar_opt = $("<option/>").html(calendar_name).attr("value", calendar_name);
@@ -110,6 +112,11 @@ function handle_event_creation_gui() {
 		var protocol_index = values["protocol_index"];
 		var protocol = getEntryWhere(protocols, "protocol_index", protocol_index);
 
+		var search_logic = values["search_logic"].split("#");
+		var search_type = search_logic[0];
+		var search_role = search_logic[1];
+		var search_by_contingent = search_type == "CONTINGENT";
+
 		$.ajax({
 			type: "GET",
 			url: "php/get_calendar_data.php",
@@ -122,38 +129,34 @@ function handle_event_creation_gui() {
 				retrieve_body: true,
 			},
 			success: function (result) {
-				var events = result["events"];
-				var masks = result["masks"];
-				var windows = search_free_time_windows_inside_mask(events, masks, values["showCount"], protocol["protocol_duration"]);
-				// console.log(windows);
-				show_event_creation_modal(
-					$("#modalContainer"),
-					"Create event",
-					windows,
-					protocol["protocol_duration"],
-					null,
-					function (start, end, name, success_callback = null) {
-						$.ajax({
-							type: "POST",
-							url: "php/post_new_event.php",
-							dataType: "json",
-							data: {
-								source_calendar: values["sourceCalendar"],
-								event_data: {
-									start: new Date(start).toISOString(),
-									end: new Date(end).toISOString(),
-									subject: moment(start).format("HH:mm") + ": " + name + " (" + protocol["protocol_name"] + ")",
-									data: JSON.stringify(values),
-								},
-							},
-							success: function (result) {
-								if (success_callback) {
-									success_callback();
-								}
-							},
-						});
+				var parsed_data = MR_Calendar_Event.parse_from_calendar_data(result);
+				var events = parsed_data.events;
+				var masks = parsed_data.masks;
+
+				if (search_by_contingent) {
+					var windows = search_free_time_windows_using_masks(events, masks, values["showCount"], protocol["protocol_duration"], search_role);
+				} else {
+					// search inside all
+					if (search_role == "all") {
+						var windows = search_free_time_windows_using_masks(events, masks, values["showCount"], protocol["protocol_duration"], null);
+					} else {
 					}
-				);
+				}
+
+				// console.log(windows);
+				show_event_creation_modal($("#modalContainer"), "Create event", windows, protocol, null, function (event, success_callback = null) {
+					$.ajax({
+						type: "POST",
+						url: "php/post_new_event.php",
+						dataType: "json",
+						data: { source_calendar: values["sourceCalendar"], event_data: event.to_PHP_event_data() },
+						success: function (result) {
+							if (success_callback) {
+								success_callback();
+							}
+						},
+					});
+				});
 			},
 		});
 	});

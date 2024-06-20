@@ -17,7 +17,7 @@ $ews_address = '10.10.1.113/EWS/Exchange.asmx';
 
 global $api;
 
-function authenticateUser($username, $password, $email)
+function authenticateUser($username, $password)
 {
     global $ews_address;
 
@@ -34,9 +34,9 @@ function authenticateUser($username, $password, $email)
                 'ParentFolderIds' => [
                     'DistinguishedFolderId' => [
                         'id' => 'calendar',
-                        'Mailbox' => [
-                            'EmailAddress' => $email
-                        ]
+                        // 'Mailbox' => [
+                        //     'EmailAddress' => $email
+                        // ]
                     ]
                 ]
             ]
@@ -46,7 +46,7 @@ function authenticateUser($username, $password, $email)
         $api_info = [
             'ews_url' => $ews_address,
             'uname' => $username,
-            'email' => $email,
+            // 'email' => $email,
             'pwd' => encryptString($password, $key)
         ];
 
@@ -64,11 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['uname']) && isset($_PO
 
     $username = $_POST['uname'];
     $password = $_POST['pass'];
-    $email = $_POST['email'];
+    // $email = $_POST['email'];
 
-    $data = "uname=" . $username . "&email=" . $email;
+    // $data = "uname=" . $username . "&email=" . $email;
+    $data = "uname=" . $username;
 
-    if (authenticateUser($username, $password, $email)) {
+    if (authenticateUser($username, $password)) {
         // Redirect to a secure page, e.g., dashboard
 
         kill_session_if_too_old(); // to inti auth datetime
@@ -76,7 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['uname']) && isset($_PO
         header('Location: ../home.php?');
         exit();
     } else {
-        $em = "Incorect user name, e-mail or password";
+        $em = "Incorect user name or password";
+        // $em = "Incorect user name, e-mail or password";
         header("Location: ../index.php?error=$em&$data");
         exit;
     }

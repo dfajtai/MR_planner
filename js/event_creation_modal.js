@@ -167,9 +167,9 @@ function administration_param_controls(container, contingent = null) {
 
 	// referring physician
 	var referring_physician_block = $("<div/>").addClass("row pb-2");
-	referring_physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Referring physician:").attr("for", "referring_physician_input"));
+	referring_physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Referring physician:").attr("for", "physician_input"));
 	var referring_physician_input_block = $("<div/>").addClass("col-sm-9");
-	var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "referring_physician_input").attr("name", "referring_physician");
+	var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physican");
 
 	referring_physician_input_block.append(referring_physician_input);
 	referring_physician_block.append(referring_physician_input_block);
@@ -214,7 +214,7 @@ function administration_param_controls(container, contingent = null) {
 		var _id = _contingent + "_contingent";
 		var select_btn = $("<input>")
 			.attr("id", _id)
-			.addClass("btn-check")
+			.addClass("btn-check contingent-btn")
 			.attr("type", "radio")
 			.attr("name", "contingent")
 			.attr("value", _contingent)
@@ -224,13 +224,29 @@ function administration_param_controls(container, contingent = null) {
 		_select_div.append(select_btn);
 		_select_div.append(select_label);
 		contingent_select.append(_select_div);
+		if (_contingent == contingent) select_btn.attr("checked", "true");
 	});
 	contingent_settings.append(contingent_select);
+
+	$(allow_override_input).change(function () {
+		if (this.checked) {
+			$(contingent_select).find(".contingent-btn").prop("disabled", false);
+		} else {
+			$(contingent_select).find(".contingent-btn").prop("disabled", true);
+		}
+	});
+
+	if (!contingent) {
+		allow_override_input.prop("checked", true).prop("disabled", true);
+		$(contingent_select).find(".contingent-btn").prop("disabled", false);
+	} else {
+		allow_override_input.prop("checked", false);
+	}
 
 	container.append(contingent_settings);
 }
 
-function show_event_creation_modal(container, title, time_windows, protocol_length, contingent = null, submit_callback = null) {
+function show_event_creation_modal(container, title, time_windows, protocol, contingent = null, submit_callback = null) {
 	if (time_windows.length == 0) {
 		bootbox.alert({
 			message: "There is no free time window matching the search parameters.",
@@ -260,20 +276,20 @@ function show_event_creation_modal(container, title, time_windows, protocol_leng
 
 	var modal_body = $("<div/>").addClass("modal-body");
 
-	var modal_footer = $("<div/>").addClass("modal-footer");
-	modal_footer.append(
-		$("<button/>")
-			.addClass("btn btn-outline-dark")
-			.attr("id", "clear_form")
-			.attr("aria-label", "Clear")
-			.html($("<i/>").addClass("fa fa-eraser me-2").attr("aria-hidden", "true"))
-			.append("Clear")
-	);
-	modal_footer.append($("<button/>").addClass("btn btn-outline-dark").attr("data-bs-dismiss", "modal").attr("aria-label", "Close").html("Close"));
+	// var modal_footer = $("<div/>").addClass("modal-footer");
+	// modal_footer.append(
+	// 	$("<button/>")
+	// 		.addClass("btn btn-outline-dark")
+	// 		.attr("id", "clear_form")
+	// 		.attr("aria-label", "Clear")
+	// 		.html($("<i/>").addClass("fa fa-eraser me-2").attr("aria-hidden", "true"))
+	// 		.append("Clear")
+	// );
+	// modal_footer.append($("<button/>").addClass("btn btn-outline-dark").attr("data-bs-dismiss", "modal").attr("aria-label", "Close").html("Close"));
 
 	modal_content.append(modal_header);
 	modal_content.append(modal_body);
-	modal_content.append(modal_footer);
+	// modal_content.append(modal_footer);
 
 	modal_dialog.html(modal_content);
 	modal_root.html(modal_dialog);
@@ -281,16 +297,16 @@ function show_event_creation_modal(container, title, time_windows, protocol_leng
 	var form = $("<form/>").attr("id", "event_creation_form").addClass("needs-validation").addClass("d-flex flex-column");
 	modal_body.append(form);
 
-	modal_footer.find("#clear_form").on("click", function () {
-		$(form).reset();
-	});
+	// modal_footer.find("#clear_form").on("click", function () {
+	// 	$(form)[0].reset();
+	// });
 
 	// lets define the form....
 	var form_content = $("<div/>").addClass("row pb-2");
 
 	// timing
 	var timing_block = $("<div/>").addClass("col-md-6 p-2");
-	timing_param_controls(timing_block, time_windows, protocol_length, function (start, end) {
+	timing_param_controls(timing_block, time_windows, protocol.protocol_duration, function (start, end) {
 		(start_time = start), (end_time = end);
 	});
 	form_content.append(timing_block);
@@ -327,6 +343,7 @@ function show_event_creation_modal(container, title, time_windows, protocol_leng
 		},
 		zIndex: 10000,
 	});
+	picker.setDate(moment().format("YYYY-MM-DD"));
 
 	submit_btn.on("click", function () {
 		if (!$(form)[0].checkValidity()) {
@@ -338,13 +355,11 @@ function show_event_creation_modal(container, title, time_windows, protocol_leng
 
 	form.on("submit", function (e) {
 		e.preventDefault();
-		var values = {};
-		$.each($(this).serializeArray(), function (index, field) {
-			values[field.name] = field.value;
-		});
+
+		var event = MR_Calendar_Event.parse_from_form(form, { start: start_time, end: end_time, protocol: protocol });
 
 		if (submit_callback) {
-			submit_callback(start_time, end_time, values["patient_name"], function () {
+			submit_callback(event, function () {
 				modal.modal("hide");
 			});
 		}

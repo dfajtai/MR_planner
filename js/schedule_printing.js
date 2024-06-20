@@ -169,7 +169,15 @@ function handle_schedule_printing_gui() {
 							1: { cellWidth: 40, halign: "center", valign: "middle" },
 							2: { cellWidth: 100, halign: "left", valign: "middle", cellPadding: 3 },
 						},
-						headStyles: { valign: "middle", halign: "center", fillColor: [128, 128, 128], padding: 2, minCellHeight: 10, lineColor: [0, 0, 0], lineWidth: 0.5 },
+						headStyles: {
+							valign: "middle",
+							halign: "center",
+							fillColor: [128, 128, 128],
+							padding: 2,
+							minCellHeight: 10,
+							lineColor: [0, 0, 0],
+							lineWidth: 0.5,
+						},
 						bodyStyles: { minCellHeight: 12, lineColor: [0, 0, 0], lineWidth: 0.5 },
 					});
 					doc.save("schedule-" + date.split(".").join("-") + " .pdf");

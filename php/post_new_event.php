@@ -33,9 +33,16 @@ if (isset($_SESSION['ews_token'])) {
         $source_calendar = $api->getCalendar($source_name);
 
         $data = "No structured data";
+
         if (isset($event_data['data'])) {
             $data = $event_data['data'];
+
         }
+        $category = null;
+        if (isset($event_data['category'])) {
+            $category = $event_data['category'];
+        }
+
 
         $event = array(
             'CalendarItem' => array(
@@ -43,9 +50,10 @@ if (isset($_SESSION['ews_token'])) {
                 'End' => (new \DateTime($event_data['end']))->format('c'),
                 'Subject' => $event_data['subject'],
                 'Body' => array(
-                    'BodyType' => Enumeration\BodyTypeType::TEXT,
+                    'BodyType' => Enumeration\BodyTypeType::HTML,
                     '_value' => $data
                 ),
+                'Categories' => array($category)
             )
         );
 

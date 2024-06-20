@@ -7,9 +7,9 @@ if (isset($_COOKIE['uname'])) {
     $_GET['uname'] = $_COOKIE['uname'];
 }
 
-if (isset($_COOKIE['email'])) {
-    $_GET['email'] = $_COOKIE['email'];
-}
+// if (isset($_COOKIE['email'])) {
+//     $_GET['email'] = $_COOKIE['email'];
+// }
 ?>
 
 <!DOCTYPE html>
@@ -53,11 +53,11 @@ if (isset($_COOKIE['email'])) {
                     value="<?php echo (isset($_GET['uname'])) ? $_GET['uname'] : "" ?>" required>
             </div>
 
-            <div class="form-group mb-3">
+            <!-- <div class="form-group mb-3">
                 <label for="emailInput">E-mail</label>
                 <input type="email" class="form-control" id="email" placeholder="e-mail address" name="email"
                     value="<?php echo (isset($_GET['email'])) ? $_GET['email'] : "" ?>" required>
-            </div>
+            </div> -->
             <div class="form-group mb-3">
                 <label for="passwordInput">Password</label>
                 <input type="password" class="form-control" id="password" placeholder="Password" name="pass">

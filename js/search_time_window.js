@@ -1,4 +1,4 @@
-function search_free_time_windows_inside_mask(events, masks, count, searched_length, mask_name = null) {
+function search_free_time_windows_using_masks(events, masks, count, searched_length, contingent = null) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
@@ -6,23 +6,24 @@ function search_free_time_windows_inside_mask(events, masks, count, searched_len
 	if (!count) count = 999999;
 
 	$.each(masks, function (mask_index, mask) {
-		var timezone = " " + mask["timezone"].match("[-+][0-9]+:[0-9]+")[0].replace(":", "");
+		var mask_start = mask.start;
+		var mask_end = mask.end;
 
-		var mask_start = new Date(mask["start"]);
-		var mask_end = new Date(mask["end"]);
+		if (contingent) {
+			if (mask.contingent != contingent) {
+				return true;
+			}
+		}
 
-		var mask_start_string = mask_start.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
-		var mask_end_string = mask_end.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
-
-		var window_length = moment(mask_end).diff(moment(mask_start), "minutes");
+		var window_length = mask.duration;
 		if (window_length < searched_length) {
 			return true;
 		}
 
 		var window_array = new Array(window_length).fill(0);
 		$.each(events, function (event_index, event) {
-			var event_start = new Date(event["start"]);
-			var event_end = new Date(event["end"]);
+			var event_start = event.start;
+			var event_end = event.end;
 
 			var event_start_index = moment(event_start).diff(moment(mask_start), "minutes");
 			var event_end_index = moment(event_end).diff(moment(mask_start), "minutes");

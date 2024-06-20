@@ -7,6 +7,7 @@ require_once (__DIR__ . '/../vendor/autoload.php');
 use garethp\ews\API;
 use garethp\ews\API\Type;
 use garethp\ews\API\Type\ItemIdType;
+use garethp\ews\API\Type\boolean;
 use garethp\ews\API\Type\DistinguishedFolderIdNameType;
 use garethp\ews\API\ExchangeWebServices;
 use garethp\ews\API\NTLMSoapClient;
@@ -52,7 +53,7 @@ function get_event_body($api, $event)
     $response = $api->getClient()->GetItem($request);
     $body = $response->getBody();
 
-    return json_decode($body->_);
+    return $body->_;
 }
 
 function get_events($api, $calendar_name, $start, $end, $retrieve_body = false)
@@ -77,8 +78,9 @@ function get_events($api, $calendar_name, $start, $end, $retrieve_body = false)
                     'end' => $event->getEnd(),
                     'timezone' => $event->getTimeZone(),
                     'subject' => $event->getSubject(),
-                    'body' => json_encode($body),
-                    'categories' => json_encode(get_categories($event))
+                    'body' => $body,
+                    'categories' => json_encode(get_categories($event)),
+                    'id' => $event->getItemId()->getId()
                 ]
             );
 

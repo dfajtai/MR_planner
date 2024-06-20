@@ -65,6 +65,7 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/event_creation_modal.js"></script>
     <script defer src="js/event_creation.js"></script>
     <script defer src="js/schedule_printing.js"></script>
+    <script defer src="js/event_parsing.js"></script>
 
 </head>
 
@@ -123,10 +124,12 @@ if (!isset($_SESSION['ews_token'])) {
                                 </div>
 
                                 <div class="row mb-2">
-                                    <label for="contingentSelect" class="col-sm-3 col-form-label">Contingent</label>
+                                    <label for="searchLogicSelect"
+                                        class="col-sm-3 col-form-label">Contingent/Logic</label>
                                     <div class="col-sm-9">
-                                        <select name="contingent" id="contingentSelect" class="form-select" required>
-                                            <option selected disabled value="">Select contingent...</option>
+                                        <select name="search_logic" id="searchLogicSelect" class="form-select" required>
+                                            <option selected disabled value="">Select contingent or search logic...
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
