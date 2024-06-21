@@ -1,9 +1,14 @@
+class MR_Event_Creation {
+	constructor(container) {
+		this.container = container;
+
+		this.form = Object();
+	}
+}
+
 function handle_event_creation_gui() {
 	//event creation
 	var picker = Object();
-
-	var default_mask_calendar_name = "MR előjegyzés maszk";
-	var default_calendar_name = "MR előjegyzés";
 
 	var protocol_select = Object();
 	var search_logic_select = Object();
