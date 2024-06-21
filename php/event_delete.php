@@ -1,7 +1,6 @@
 <?php
 
-require 'php_functions.php';
-require 'ews_api_extension.php';
+require_once 'php_functions.php';
 
 session_start();
 

@@ -1,6 +1,6 @@
 <?php
 require_once ('vendor/autoload.php');
-require 'php/php_functions.php';
+require_once 'php/php_functions.php';
 
 
 session_start();
@@ -59,13 +59,29 @@ if (!isset($_SESSION['ews_token'])) {
 
     <script defer src="js/config.js"></script>
 
-    <script defer src="js/additional_functions.js"></script>
-    <script defer src="js/session_protection.js"></script>
-    <script defer src="js/search_time_window.js"></script>
-    <script defer src="js/event_creation_modal.js"></script>
-    <script defer src="js/event_creation.js"></script>
-    <script defer src="js/schedule_printing.js"></script>
-    <script defer src="js/event_parsing.js"></script>
+    <!-- CORE -->
+    <script defer src="js/core/additional_functions.js"></script>
+    <script defer src="js/core/session_protection.js"></script>
+    <script defer src="js/core/event_parsing.js"></script>
+    <script defer src="js/core/search_time_window.js"></script>
+
+    <!-- OPERATION -->
+    <script defer src="js/operation/event_creation.js"></script>
+    <script defer src="js/operation/event_editing.js"></script>
+    <script defer src="js/operation/schedule_printing.js"></script>
+
+
+    <!-- GUI -->
+    <script defer src="js/gui/event_search_gui.js"></script>
+    <script defer src="js/gui/schedule_print_gui.js"></script>
+    <script defer src="js/gui/free_window_searching_gui.js"></script>
+
+    <!-- MODALS -->
+    <script defer src="js/modals/event_creation_modal.js"></script>
+    <script defer src="js/modals/event_modify_modal.js"></script>
+
+
+
 
 </head>
 
@@ -109,121 +125,7 @@ if (!isset($_SESSION['ews_token'])) {
                         </button>
                     </h2>
                     <div class="accordion-collapse collapse show" id="plan_content" data-bs-parent="#main_accordion">
-                        <div class="accordion-body">
-
-                            <form class="form d-flex flex-column needs-validation" id="searchParamsForm">
-
-                                <div class="row mb-2 ">
-                                    <label for="protocolSelect" class="col-sm-3 col-form-label">Examination
-                                        protocol</label>
-                                    <div class="col-sm-9">
-                                        <input name="protocol_index" id="protocolSelect"
-                                            class="form-control flexdatalist" required
-                                            placeholder="Select examination protocol..." type="text"> </input>
-                                    </div>
-                                </div>
-
-                                <div class="row mb-2">
-                                    <label for="searchLogicSelect"
-                                        class="col-sm-3 col-form-label">Contingent/Logic</label>
-                                    <div class="col-sm-9">
-                                        <select name="search_logic" id="searchLogicSelect" class="form-select" required>
-                                            <option selected disabled value="">Select contingent or search logic...
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row pb-2">
-                                    <label class="col-sm-3 col-form-label" for="dateRangePicker">Search
-                                        range</label>
-                                    <div class="col-sm-9">
-                                        <input name="date" id="dateRangePicker" class="form-control"></input>
-                                    </div>
-                                </div>
-
-
-                                <div class="accordion" id="accordionContainer">
-
-                                    <div class="accordion-item">
-
-                                        <h2 class="accordion-header " id="searchParamsHeader">
-                                            <button class="accordion-button collapsed" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#searchParams">
-                                                Adjust search parameters
-                                            </button>
-                                        </h2>
-                                        <div class="accordion-collapse collapse" id="searchParams">
-                                            <div class="accordion-body nested-accordion">
-                                                <div class="row pb-2">
-                                                    <label class="col-sm-3 col-form-label" for="sourceCalendarSelect">
-                                                        Source calendar name</label>
-                                                    <div class="col-sm-9">
-                                                        <select name="sourceCalendar" id="sourceCalendarSelect"
-                                                            class="form-select" required>
-                                                            <option selected disabled value="">Select source calendar...
-                                                            </option>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row pb-2">
-                                                    <label class="col-sm-3 col-form-label"
-                                                        for="maskingCalendarSelect">Masking calendar
-                                                        name</label>
-                                                    <div class="col-sm-9">
-                                                        <select name="maskingCalendar" id="maskingCalendarSelect"
-                                                            class="form-select" required>
-                                                            <option selected disabled value="">Select masking
-                                                                calendar...</option>
-                                                        </select>
-                                                    </div>
-
-                                                </div>
-
-                                                <div class="row">
-                                                    <label for="showCountBlock" class="col-sm-3 col-form-label">Number
-                                                        of
-                                                        results</label>
-
-                                                    <div class="col-sm-9 d-flex" id="showCountBlock">
-                                                        <div class="flex-fill pe-1">
-                                                            <input type="radio" class="btn-check" name="showCount"
-                                                                id="show5" value="5" checked>
-                                                            <label class="btn btn-outline-dark w-100" for="show5">First
-                                                                5</label>
-                                                        </div>
-
-                                                        <div class="flex-fill pe-1">
-                                                            <input type="radio" class="btn-check" name="showCount"
-                                                                id="show10" value="10">
-                                                            <label class="btn btn-outline-dark w-100" for="show10">First
-                                                                10</label>
-                                                        </div>
-
-                                                        <div class="flex-fill">
-                                                            <input type="radio" class="btn-check" name="showCount"
-                                                                id="showAll" value="all">
-                                                            <label class="btn btn-outline-dark w-100"
-                                                                for="showAll">All</label>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="py-2">
-                                        <button class="btn btn-outline-dark w-100" id="searchTimeWindowBtn"
-                                            type="button">Search free time windows</button>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
+                        <div class="accordion-body" id="planning_form_container"> </div>
                     </div>
                 </div>
 
@@ -285,6 +187,8 @@ if (!isset($_SESSION['ews_token'])) {
 <script nonce="<?php echo $_SESSION['nonce']; ?>">
 
     $(document).ready(function () {
+        var main_free_window_search = null;
+
         // read protocols from csv
         $.get(protocols_path, function (CSVdata) {
             protocols = $.csv.toObjects(CSVdata);
@@ -297,8 +201,11 @@ if (!isset($_SESSION['ews_token'])) {
                 data: {},
                 success: function (calendar_names) {
                     available_calendars = calendar_names;
-                    handle_event_creation_gui();
-                    handle_schedule_printing_gui();
+
+                    main_free_window_search = new free_window_searching_gui($("#planning_form_container"));
+                    main_free_window_search.create_gui();
+                    // handle_event_creation_gui();
+                    // handle_schedule_printing_gui();
                 },
             });
 

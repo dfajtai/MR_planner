@@ -1,13 +1,12 @@
-function search_free_time_windows_using_masks(events, masks, count, searched_length, contingent = null) {
+function search_free_time_windows_using_masks(events, masks, searched_length, contingent = null, count = null) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
 	var count = parse_val(count);
-	if (!count) count = 999999;
+	count = count || 999;
 
 	$.each(masks, function (mask_index, mask) {
 		var mask_start = mask.start;
-		var mask_end = mask.end;
 
 		if (contingent) {
 			if (mask.contingent != contingent) {
@@ -74,6 +73,26 @@ function search_free_time_windows_using_masks(events, masks, count, searched_len
 			return false;
 		}
 	});
+
+	return free_windows;
+}
+
+function search_free_time_windows_outside_masks(events, masks, start_date, end_date, day_start, day_end, allowed_days, searched_length, count = null) {
+	var free_windows = [];
+
+	var searched_length = parseInt(searched_length);
+	var count = parse_val(count);
+	count = count || 999;
+
+	return free_windows;
+}
+
+function search_free_time_windows(events, start_date, end_date, day_start, day_end, allowed_days, searched_length, count = null) {
+	var free_windows = [];
+
+	var searched_length = parseInt(searched_length);
+	var count = parse_val(count);
+	count = count || 999;
 
 	return free_windows;
 }

@@ -5,6 +5,9 @@ var start_time = Object();
 var session_max_duration = moment.duration(30, "minutes");
 var session_countdown = Object();
 
+var default_mask_calendar_name = "MR előjegyzés maszk";
+var default_calendar_name = "MR előjegyzés";
+
 var modalities = ["MR", "PET/MR"];
 
 var available_calendars = [];

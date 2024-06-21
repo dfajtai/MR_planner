@@ -1,6 +1,6 @@
 <?php
 
-require 'php_functions.php';
+require_once 'php_functions.php';
 session_start();
 
 require_once (__DIR__ . '/../vendor/autoload.php');

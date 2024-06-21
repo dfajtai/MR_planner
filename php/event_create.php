@@ -1,7 +1,7 @@
 <?php
 
-require 'php_functions.php';
-require 'ews_api_extension.php';
+require_once 'php_functions.php';
+
 
 session_start();
 
@@ -16,12 +16,12 @@ if (isset($_SESSION['ews_token'])) {
         exit;
     }
 
-    if (isset($_POST["source_calendar"]) && isset($_POST["event_data"])) {
-        $source_name = $_POST["source_calendar"];
+    if (isset($_POST["calendar_name"]) && isset($_POST["event_data"])) {
+        $calendar_name = $_POST["calendar_name"];
         $event_data = $_POST["event_data"];
 
-        $source_calendar = $api->getCalendar($source_name);
-        $calendar_id = $source_calendar->getFolderId()->getId();
+        $calendar = $api->getCalendar($calendar_name);
+        $calendar_id = $calendar->getFolderId()->getId();
 
         $body = "No structured data";
         if (isset($event_data['body'])) {
@@ -40,7 +40,7 @@ if (isset($_SESSION['ews_token'])) {
         $createdItemIds = create_event($api, $calendar_id, $start, $end, $subject, $body, $category);
 
 
-        unset($_POST["source_calendar"]);
+        unset($_POST["calendar_name"]);
         unset($_POST["event_data"]);
 
         echo json_encode($createdItemIds);

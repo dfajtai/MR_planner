@@ -1,6 +1,6 @@
 <?php
 
-require 'php/session_init.php';
+require_once 'php/session_init.php';
 
 
 if (isset($_COOKIE['uname'])) {

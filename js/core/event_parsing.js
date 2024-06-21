@@ -130,20 +130,15 @@ class MR_Calendar_Event {
 					$("<td/>")
 						.html("<strong><b>" + label.trim() + "</b></strong>")
 						.css({ "background-color": "lightgray", border: "1px solid black", "border-left": "none", "white-space": "nowrap" })
-						.attr("data-key", key)
+					// .attr("data-key", key)
 				);
 				// stored value
 				if (key == "comment") {
-					value = value || "\n\n\n\n\n";
-					row.append(
-						$("<td/>")
-							.html("<pre>" + value + "</pre>")
-							.attr("data-key", key)
-						// .css({ "white-space": "preserve" })
-					);
-					row.css({ height: "50pt", border: "1px solid black" });
+					if (value) row.append($("<td/>").append($("<pre>/").html(value)));
+					else row.append($("<td/>").html(value));
+					row.css({ border: "1px solid black" });
 				} else {
-					row.append($("<td/>").html(value).attr("data-key", key).css({ border: "1px solid black" }));
+					row.append($("<td/>").html(value).css({ border: "1px solid black" }));
 				}
 			}
 			return row;
