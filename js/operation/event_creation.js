@@ -134,6 +134,7 @@ function handle_event_creation_gui() {
 				var masks = parsed_data.masks;
 
 				if (search_by_contingent) {
+					// search inside masks  of a given contingent
 					var windows = search_free_time_windows_using_masks(events, masks, values["showCount"], protocol["protocol_duration"], search_role);
 				} else {
 					// search inside all
@@ -147,9 +148,9 @@ function handle_event_creation_gui() {
 				show_event_creation_modal($("#modalContainer"), "Create event", windows, protocol, null, function (event, success_callback = null) {
 					$.ajax({
 						type: "POST",
-						url: "php/post_new_event.php",
+						url: "php/event_create.php",
 						dataType: "json",
-						data: { source_calendar: values["sourceCalendar"], event_data: event.to_PHP_event_data() },
+						data: { calendar_name: values["sourceCalendar"], event_data: event.to_PHP_event_data() },
 						success: function (result) {
 							if (success_callback) {
 								success_callback();

@@ -169,7 +169,7 @@ function administration_param_controls(container, contingent = null) {
 	var referring_physician_block = $("<div/>").addClass("row pb-2");
 	referring_physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Referring physician:").attr("for", "physician_input"));
 	var referring_physician_input_block = $("<div/>").addClass("col-sm-9");
-	var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physican");
+	var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physician");
 
 	referring_physician_input_block.append(referring_physician_input);
 	referring_physician_block.append(referring_physician_input_block);

@@ -1,5 +1,5 @@
 class MR_Calendar_Event {
-	static param_keys = ["comment", "patient_name", "patient_phone", "physican", "reserved_at", "reserved_by", "protocol"];
+	static param_keys = ["comment", "patient_name", "patient_phone", "physician", "reserved_at", "reserved_by", "protocol"];
 	static response_keys = ["start", "end", "timezone", "subject", "body", "categories", "id"];
 
 	static parse_from_PHP(response_row) {
@@ -49,7 +49,9 @@ class MR_Calendar_Event {
 					var sanitized_val = clean_text(stripHtml(val));
 					params[sanitized_key] = sanitized_val == "" ? null : sanitized_val;
 				} else {
-					var sanitized_val = stripHtml(val);
+					const tempDiv = document.createElement("div");
+					tempDiv.innerHTML = val;
+					var sanitized_val = tempDiv.innerText || tempDiv.textContent;
 					params[sanitized_key] = sanitized_val == "" ? null : sanitized_val;
 				}
 			}
@@ -94,7 +96,7 @@ class MR_Calendar_Event {
 
 	to_stored_html() {
 		var styles =
-			"table { width: 100%; } table, th, td {  border: 1px solid black;  border-collapse: collapse;} table th { background-color: Black; color: White; font-weight:bold } td { white-space:pre }";
+			"table { width: 100%; } table, th {  border: 1px solid black;  border-collapse: collapse;} th { background-color: Black; color: White; font-weight:bold } td { border-collapse: collapse; }";
 		var template = "<html><head><style>" + styles + "</style></head><body>#CONTENT#</body></html>";
 
 		var container = $("<div/>");
@@ -112,20 +114,36 @@ class MR_Calendar_Event {
 
 				row.append($("<th/>").html("<strong><b>" + value + "</b></strong>"));
 			} else {
-				row.append($("<td/>").html(key).css({ "background-color": "black", "font-style": "italic", "font-size": "0%", color: "black" }));
-
+				// hidden key
+				row.append(
+					$("<td/>").html(key).css({
+						"background-color": "lightgray",
+						"font-size": "0%",
+						color: "lightgray",
+						border: "1px solid black",
+						"border-right": "none",
+						"white-space": "nowrap",
+					})
+				);
+				// visible label
 				row.append(
 					$("<td/>")
-						.html("<strong><b>" + label + "</b></strong>")
-						.css({ "background-color": "lightgray" })
+						.html("<strong><b>" + label.trim() + "</b></strong>")
+						.css({ "background-color": "lightgray", border: "1px solid black", "border-left": "none", "white-space": "nowrap" })
+						.attr("data-key", key)
 				);
-
+				// stored value
 				if (key == "comment") {
-					var formatted_row = value.split("\r\n").join("<br>");
-					row.append($("<td/>").html(formatted_row).attr("data-key", key));
-					row.css({ height: "50pt" });
+					value = value || "\n\n\n\n\n";
+					row.append(
+						$("<td/>")
+							.html("<pre>" + value + "</pre>")
+							.attr("data-key", key)
+						// .css({ "white-space": "preserve" })
+					);
+					row.css({ height: "50pt", border: "1px solid black" });
 				} else {
-					row.append($("<td/>").html(value).attr("data-key", key));
+					row.append($("<td/>").html(value).attr("data-key", key).css({ border: "1px solid black" }));
 				}
 			}
 			return row;
@@ -136,7 +154,7 @@ class MR_Calendar_Event {
 		table.append(to_row("Protocol", this.params.protocol, "protocol"));
 		table.append(to_row("Contingent", this.contingent, "contingent"));
 		table.append(to_row("Phone number", this.params.patient_phone, "patient_phone"));
-		table.append(to_row("Referring physican", this.params.physican, "physican"));
+		table.append(to_row("Referring physician", this.params.physician, "physician"));
 		table.append(to_row("Reserved at", this.params.reserved_at, "reserved_at"));
 		table.append(to_row("Reserved by", this.params.reserved_by, "reserved_by"));
 		table.append(to_row("Comment", this.params.comment, "comment"));
@@ -152,7 +170,7 @@ class MR_Calendar_Event {
 			start: new Date(this.start).toISOString(),
 			end: new Date(this.end).toISOString(),
 			subject: this.params.patient_name + " (" + this.params.protocol + ")",
-			data: this.to_stored_html(),
+			body: this.to_stored_html(),
 			category: this.contingent,
 		};
 		return php_event_data;
