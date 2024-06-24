@@ -13,3 +13,7 @@ var modalities = ["MR", "PET/MR"];
 var available_calendars = [];
 
 var contingents = ["idegseb.", "3TP", "FIZ", "PET/CT/MR"];
+
+// and some global variable
+var main_free_window_search = null;
+var main_event_creation = null;

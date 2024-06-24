@@ -219,7 +219,7 @@ class free_window_searching_gui {
 		// submit btn
 		var submit_btn = $("<button/>")
 			.addClass("btn btn-outline-dark w-100")
-			.html("Search free time windwos")
+			.html("Search free time windows")
 			.attr("id", "search_time_windows_btn")
 			.attr("type", "button");
 		form.append($("<div/>").addClass("py-2").append(submit_btn));
@@ -372,8 +372,8 @@ class free_window_searching_gui {
 						var masks = parsed_data.masks;
 
 						var window_parameters = params.window_parameters;
-
-						if (params.use_logic) {
+						var continget = null;
+						if (!params.use_logic) {
 							// search inside masks  of a given contingent
 							var windows = search_free_time_windows_using_masks(
 								events,
@@ -382,6 +382,7 @@ class free_window_searching_gui {
 								window_parameters.contingent,
 								window_parameters.show_count
 							);
+							continget = window_parameters.contingent;
 						} else {
 							// search inside all
 							if (window_parameters.logic == window_search_logic_options.inside_any_mask) {
@@ -422,20 +423,9 @@ class free_window_searching_gui {
 							}
 						}
 
-						// console.log(windows);
-						show_event_creation_modal($("#modalContainer"), "Create event", windows, protocol, null, function (event, success_callback = null) {
-							$.ajax({
-								type: "POST",
-								url: "php/event_create.php",
-								dataType: "json",
-								data: { calendar_name: values["sourceCalendar"], event_data: event.to_PHP_event_data() },
-								success: function (result) {
-									if (success_callback) {
-										success_callback();
-									}
-								},
-							});
-						});
+						main_event_creation = new MR_Event_Creation(params, continget);
+						var event_creation_form = main_event_creation.create_gui(windows);
+						main_event_creation.show_gui_as_modal($("#modalContainer"), event_creation_form);
 					},
 				});
 			}.bind(this)

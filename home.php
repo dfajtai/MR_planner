@@ -23,6 +23,7 @@ if (!isset($_SESSION['ews_token'])) {
 
     <link rel="stylesheet" href="libs/css/jquery.flexdatalist.css" />
     <link rel="stylesheet" href="libs/css/nouislider.css" />
+    <link rel="stylesheet" href="libs/css/jquery.timepicker.min.css" />
 
     <link rel="stylesheet" href="css/my_styles.css">
 
@@ -52,6 +53,7 @@ if (!isset($_SESSION['ews_token'])) {
 
     <script src="libs/js/wNumb.min.js"></script>
     <script src="libs/js/nouislider.min.js"></script>
+    <script src="libs/js/jquery.timepicker.min.js"></script>
 
     <script src="libs/js/jspdf.umd.min.js"></script>
     <script src="libs/js/polyfills.umd.js"></script>
@@ -65,6 +67,7 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/core/event_parsing.js"></script>
     <script defer src="js/core/search_time_window.js"></script>
 
+
     <!-- OPERATION -->
     <script defer src="js/operation/event_creation.js"></script>
     <script defer src="js/operation/event_editing.js"></script>
@@ -75,6 +78,7 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/gui/event_search_gui.js"></script>
     <script defer src="js/gui/schedule_print_gui.js"></script>
     <script defer src="js/gui/free_window_searching_gui.js"></script>
+    <script defer src="js/gui/time_input.js"></script>
 
     <!-- MODALS -->
     <script defer src="js/modals/event_creation_modal.js"></script>
@@ -187,8 +191,6 @@ if (!isset($_SESSION['ews_token'])) {
 <script nonce="<?php echo $_SESSION['nonce']; ?>">
 
     $(document).ready(function () {
-        var main_free_window_search = null;
-
         // read protocols from csv
         $.get(protocols_path, function (CSVdata) {
             protocols = $.csv.toObjects(CSVdata);
