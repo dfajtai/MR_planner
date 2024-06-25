@@ -25,44 +25,14 @@ class MR_event_creator {
 		this.slider = null;
 	}
 
-	#timing_parameters_gui(container, windows) {
+	#timing_parameters_gui(container) {
 		container.empty();
 
 		container.append($("<label/>").addClass("form-label").html("Available time window(s):").attr("for", "#timeWindows"));
 		var time_windows_listbox_container = $("<div/>").attr("id", "timeWindows").addClass("listbox-custom card");
 		var time_windows_listbox = $("<ul/>").addClass("list-group list-group-flush");
 
-		$.each(windows, function (index, window) {
-			var start_date_string = moment(window[0]).format("YYYY.MM.DD");
-			var end_date_string = moment(window[1]).format("YYYY.MM.DD");
-			var start_string = moment(window[0]).format("HH:mm");
-			var end_string = moment(window[1]).format("HH:mm");
-
-			if (end_date_string != start_date_string) {
-				var btn_text = start_date_string;
-			} else {
-				var btn_text = "[" + start_date_string + "] " + start_string + " - " + end_string;
-			}
-
-			var time_window_list_item = $("<li/>").addClass("list-group-item p-1");
-			var time_window_element = $("<div/>").addClass("flex-fill");
-			var btn_input = $("<input/>")
-				.addClass("window-select-btn btn-check")
-				.attr("id", "time_window" + index);
-			btn_input.attr("type", "radio").attr("name", "timeWindow").attr("value", index).attr("autocomplete", "off").attr("required", "true");
-
-			var btn_label = $("<label/>")
-				.addClass("btn btn-outline-dark w-100")
-				.attr("for", "time_window" + index)
-				.html(btn_text);
-
-			time_window_element.append(btn_input);
-			time_window_element.append(btn_label);
-
-			time_window_list_item.append(time_window_element);
-
-			time_windows_listbox.append(time_window_list_item);
-		});
+		this.gui.time_windows = time_windows_listbox;
 
 		time_windows_listbox_container.append(time_windows_listbox);
 		container.append(time_windows_listbox_container);
@@ -89,11 +59,11 @@ class MR_event_creator {
 		var slider_block = $("<div/>").addClass("card");
 		var slider_header_block = $("<div/>").addClass("row px-2");
 
-		var start_time_block = $("<div/>").addClass("col-md-6 row").attr("id", "start_time_div");
+		var start_time_block = $("<div/>").addClass("col-md-6 row my-1").attr("id", "start_time_div");
 		this.gui.start_time_block = start_time_block;
 		slider_header_block.append(start_time_block);
 
-		var end_time_block = $("<div/>").addClass("col-md-6 row").attr("id", "end_time_div");
+		var end_time_block = $("<div/>").addClass("col-md-6 row my-1").attr("id", "end_time_div");
 		this.gui.end_time_block = end_time_block;
 		slider_header_block.append(end_time_block);
 
@@ -149,50 +119,6 @@ class MR_event_creator {
 		$(end_time_block).find("input").addClass("d-none");
 		this.gui.end_time_block = end_time_block;
 
-		$(time_windows_listbox_container)
-			.find(".window-select-btn")
-			.on("change", function () {
-				var selected_index = $(this).val();
-				$(time_windows_listbox_container).trigger("window-selected", [selected_index]);
-			});
-
-		$(time_windows_listbox_container).on(
-			"window-selected",
-			function (e, selected_index) {
-				var window = this.windows[selected_index];
-				this.selected_window = window;
-				this.selected_window_start = moment(window[0]);
-				this.selected_window_end = moment(window[1]);
-
-				this.selected_window_duration = moment(window[1]).diff(moment(window[0]), "minutes");
-				$(event_duration_input).attr("max", this.selected_window_duration);
-				$(event_duration_input).attr("min", this.protocol.protocol_duration);
-
-				$(start_time_block).find("input").removeClass("d-none");
-				$(end_time_block).find("input").removeClass("d-none");
-
-				$($(start_time_block).find("input")[0]).data("TimePicker").options.minTime = moment(this.selected_window_start).format("HH:mm");
-				$($(start_time_block).find("input")[0]).data("TimePicker").options.startTime = moment(this.selected_window_start).format("HH:mm");
-				$($(start_time_block).find("input")[0]).data("TimePicker").options.maxTime = moment(this.selected_window_end).format("HH:mm");
-				$($(start_time_block).find("input")[0]).data("TimePicker").options.endTime = moment(this.selected_window_end).format("HH:mm");
-				$($(start_time_block).find("input")[0]).data("TimePicker").items = null;
-				$($(start_time_block).find("input")[0]).data("TimePicker").widget.instance = null;
-
-				$($(end_time_block).find("input")[0]).data("TimePicker").options.minTime = moment(this.selected_window_start).format("HH:mm");
-				$($(end_time_block).find("input")[0]).data("TimePicker").options.startTime = moment(this.selected_window_start).format("HH:mm");
-				$($(end_time_block).find("input")[0]).data("TimePicker").options.maxTime = moment(this.selected_window_end).format("HH:mm");
-				$($(end_time_block).find("input")[0]).data("TimePicker").options.endTime = moment(this.selected_window_end).format("HH:mm");
-				$($(end_time_block).find("input")[0]).data("TimePicker").items = null;
-				$($(end_time_block).find("input")[0]).data("TimePicker").widget.instance = null;
-
-				this.event_start = this.selected_window_start;
-				this.event_end = moment(this.selected_window_start).add(this.protocol.protocol_duration, "minutes");
-				this.event_duration = this.protocol.protocol_duration;
-
-				event_duration_input.val(this.event_duration).trigger("change");
-			}.bind(this)
-		);
-
 		$(event_duration_input).on(
 			"change",
 			function () {
@@ -207,6 +133,96 @@ class MR_event_creator {
 				} else {
 					$(event_duration_input).removeClass("bg-danger text-dark");
 				}
+			}.bind(this)
+		);
+	}
+
+	set_update_windows(windows) {
+		this.windows = windows;
+		if (!this.gui) {
+			return;
+		}
+
+		var container = this.gui.time_windows;
+		container.empty();
+
+		var start = this.gui.start_time_block;
+		var end = this.gui.end_time_block;
+		var duration = this.gui.event_duration_input;
+
+		$.each(windows, function (index, window) {
+			var start_date_string = moment(window[0]).format("YYYY.MM.DD");
+			var end_date_string = moment(window[1]).format("YYYY.MM.DD");
+			var start_string = moment(window[0]).format("HH:mm");
+			var end_string = moment(window[1]).format("HH:mm");
+
+			if (end_date_string != start_date_string) {
+				var btn_text = start_date_string;
+			} else {
+				var btn_text = "[" + start_date_string + "] " + start_string + " - " + end_string;
+			}
+
+			var time_window_list_item = $("<li/>").addClass("list-group-item p-1");
+			var time_window_element = $("<div/>").addClass("flex-fill");
+			var btn_input = $("<input/>")
+				.addClass("window-select-btn btn-check")
+				.attr("id", "time_window" + index);
+			btn_input.attr("type", "radio").attr("name", "timeWindow").attr("value", index).attr("autocomplete", "off").attr("required", "true");
+
+			var btn_label = $("<label/>")
+				.addClass("btn btn-outline-dark w-100")
+				.attr("for", "time_window" + index)
+				.html(btn_text);
+
+			time_window_element.append(btn_input);
+			time_window_element.append(btn_label);
+
+			time_window_list_item.append(time_window_element);
+
+			container.append(time_window_list_item);
+		});
+
+		$(container)
+			.find(".window-select-btn")
+			.on("change", function () {
+				var selected_index = $(this).val();
+				$(container).trigger("window-selected", [selected_index]);
+			});
+
+		$(container).on(
+			"window-selected",
+			function (e, selected_index) {
+				var window = this.windows[selected_index];
+				this.selected_window = window;
+				this.selected_window_start = moment(window[0]);
+				this.selected_window_end = moment(window[1]);
+
+				this.selected_window_duration = moment(window[1]).diff(moment(window[0]), "minutes");
+				$(duration).attr("max", this.selected_window_duration);
+				$(duration).attr("min", this.protocol.protocol_duration);
+
+				$(start).find("input").removeClass("d-none");
+				$(end).find("input").removeClass("d-none");
+
+				$($(start).find("input")[0]).data("TimePicker").options.minTime = moment(this.selected_window_start).format("HH:mm");
+				$($(start).find("input")[0]).data("TimePicker").options.startTime = moment(this.selected_window_start).format("HH:mm");
+				$($(start).find("input")[0]).data("TimePicker").options.maxTime = moment(this.selected_window_end).format("HH:mm");
+				$($(start).find("input")[0]).data("TimePicker").options.endTime = moment(this.selected_window_end).format("HH:mm");
+				$($(start).find("input")[0]).data("TimePicker").items = null;
+				$($(start).find("input")[0]).data("TimePicker").widget.instance = null;
+
+				$($(end).find("input")[0]).data("TimePicker").options.minTime = moment(this.selected_window_start).format("HH:mm");
+				$($(end).find("input")[0]).data("TimePicker").options.startTime = moment(this.selected_window_start).format("HH:mm");
+				$($(end).find("input")[0]).data("TimePicker").options.maxTime = moment(this.selected_window_end).format("HH:mm");
+				$($(end).find("input")[0]).data("TimePicker").options.endTime = moment(this.selected_window_end).format("HH:mm");
+				$($(end).find("input")[0]).data("TimePicker").items = null;
+				$($(end).find("input")[0]).data("TimePicker").widget.instance = null;
+
+				this.event_start = this.selected_window_start;
+				this.event_end = moment(this.selected_window_start).add(this.protocol.protocol_duration, "minutes");
+				this.event_duration = this.protocol.protocol_duration;
+
+				duration.val(this.event_duration).trigger("change");
 			}.bind(this)
 		);
 	}
@@ -504,19 +520,19 @@ class MR_event_creator {
 			$(contingent_select).find(".contingent-btn").prop("disabled", false);
 		} else {
 			allow_override_input.prop("checked", false);
+			$(contingent_select).find(".contingent-btn").prop("disabled", true);
 		}
 
 		container.append(contingent_settings);
 	}
 
-	create_gui(windows, create_on_subit = true, success_callback = null, submit_btn_text = "Book new examination") {
+	create_gui(windows = null, create_on_subit = true, success_callback = null, submit_btn_text = "Book new examination") {
 		var form = $("<form/>").attr("id", "event_creation_form").addClass("needs-validation").addClass("d-flex flex-column");
 		var form_content = $("<div/>").addClass("row pb-2");
 
 		// timing
 		var timing_block = $("<div/>").addClass("col-md-6 p-2");
-		this.#timing_parameters_gui(timing_block, windows);
-		this.windows = windows;
+		this.#timing_parameters_gui(timing_block);
 		form_content.append(timing_block);
 
 		// administration
@@ -526,7 +542,7 @@ class MR_event_creator {
 
 		form.append(form_content);
 
-		var submit_btn = $("<button/>").addClass("btn btn-outline-dark").attr("id", "addEventButton").attr("type", "button").html(submit_btn_text);
+		var submit_btn = $("<button/>").addClass("btn btn-outline-dark").attr("id", "create_event_btn").attr("type", "button").html(submit_btn_text);
 		form.append(submit_btn);
 		this.gui.submit_btn = submit_btn;
 
@@ -552,10 +568,15 @@ class MR_event_creator {
 			}.bind(this)
 		);
 
+		if (windows) {
+			this.set_update_windows(windows);
+		}
+
 		return this.form;
 	}
 
-	show_gui_as_modal(container, form, title = "Define new examination") {
+	show_gui_as_modal(container, form = null, title = "Define new examination") {
+		form = form || this.form;
 		var modal_id = "event_creation_modal";
 		var modal = container.find("#" + modal_id);
 		if (modal) {
@@ -576,8 +597,8 @@ class MR_event_creator {
 		modal_content.append(modal_header);
 		modal_content.append(modal_body);
 
-		modal_dialog.html(modal_content);
-		modal_root.html(modal_dialog);
+		modal_dialog.append(modal_content);
+		modal_root.append(modal_dialog);
 
 		this.modal = modal_root;
 

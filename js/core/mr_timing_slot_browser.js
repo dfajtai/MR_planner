@@ -1,5 +1,5 @@
 const window_search_logic_options = { inside_any_mask: "all", outside_all_mask: "none", any_free_time: "any" };
-
+const connection_options = { event_creator: "event_creator" };
 class MR_timing_slot_browser {
 	default_params = {
 		start_date: moment().add(1, "days").format("YYYY-MM-DD"),
@@ -13,6 +13,9 @@ class MR_timing_slot_browser {
 		this.container = container;
 
 		this.success_callback = success_callback;
+
+		// this.event_creator = null;
+		// this.event_editor = null;
 
 		this.gui = Object();
 		this.form = Object();
@@ -158,7 +161,7 @@ class MR_timing_slot_browser {
 		container.append(window_count_block);
 	}
 
-	create_gui() {
+	create_gui(submit_callback = null) {
 		this.container.empty();
 		var form = $("<form/>").addClass("form d-flex flex-column needs-validation").attr("id", "window_search_params_form");
 
@@ -359,6 +362,20 @@ class MR_timing_slot_browser {
 				e.preventDefault();
 
 				var params = this.parse_form_to_params();
+				this.retrieve_calendars(
+					params,
+					function () {
+						this.search_open_slot(
+							params,
+							this.calendar_data,
+							function (results) {
+								if (this.success_callback) {
+									this.success_callback(results);
+								}
+							}.bind(this)
+						);
+					}.bind(this)
+				);
 			}.bind(this)
 		);
 	}
@@ -443,6 +460,8 @@ class MR_timing_slot_browser {
 		if (!calendar_data) {
 			calendar_data = this.calendar_data || { masks: [], events: [] };
 		}
+		var events = calendar_data.events;
+		var masks = calendar_data.masks;
 
 		var window_parameters = params.window_parameters;
 		if (!window_parameters) {

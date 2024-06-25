@@ -14,6 +14,12 @@ var available_calendars = [];
 
 var contingents = ["idegseb.", "3TP", "FIZ", "PET/CT/MR"];
 
-// and some global variable
-var main_free_window_search = null;
-var main_event_creation = null;
+// dom id's
+var modal_container = "#modal_container";
+
+var main_window_search_container = "#main_window_search_container";
+
+var schedule_print_container = "#schedule_print_container";
+var table_container = "#table_container";
+
+var event_search_container = "#event_search_container";

@@ -125,14 +125,31 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Plan new examination</p>
                             </div>
-                            <!-- <span class="badge ms-auto">New</span> -->
+                            <span class="badge rounded-pill bg-success ms-auto">Development finished</span>
 
                         </button>
                     </h2>
                     <div class="accordion-collapse collapse show" id="plan_content" data-bs-parent="#main_accordion">
-                        <div class="accordion-body" id="planning_form_container"> </div>
+                        <div class="accordion-body" id="main_window_search_container"> </div>
                     </div>
                 </div>
+
+                <div class="accordion-item shadow">
+                    <h2 class="accordion-header" id="event_search_header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#event_search_content">
+                            <div class="d-flex align-items-center">
+                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Search booked examination</p>
+                            </div>
+                            <span class="badge rounded-pill bg-danger ms-auto">Not implemented</span>
+
+                        </button>
+                    </h2>
+                    <div class="accordion-collapse collapse" id="event_search_content" data-bs-parent="#main_accordion">
+                        <div class="accordion-body" id="event_search_container"> </div>
+                    </div>
+                </div>
+
 
                 <div class="accordion-item shadow">
                     <h2 class="accordion-header" id="print_schedule_header">
@@ -141,13 +158,15 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Print daily schedule</p>
                             </div>
-                            <!-- <span class="badge ms-auto">New</span> -->
+                            <span class="badge rounded-pill bg-warning ms-auto">Under development</span>
 
                         </button>
                     </h2>
                     <div class="accordion-collapse collapse" id="print_schedule_content"
                         data-bs-parent="#main_accordion">
-                        <div class="accordion-body">
+                        <div class="accordion-body" id="schedule_print_container">
+                            <!-- TODO kivenni -->
+
                             <form class="form d-flex flex-column needs-validation" id="printParamsForm">
                                 <div class="row pb-2">
                                     <label class="col-sm-3 col-form-label" for="printCalendarSelect">
@@ -180,11 +199,12 @@ if (!isset($_SESSION['ews_token'])) {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </container>
-    <div id="modalContainer"> </div>
-    <div id="tableContainer" class="d-none"> </div>
+    <div id="modal_container"> </div>
+    <div id="table_container" class="d-none"> </div>
 
     </container>
 
@@ -204,9 +224,35 @@ if (!isset($_SESSION['ews_token'])) {
                 data: {},
                 success: function (calendar_names) {
                     available_calendars = calendar_names;
+                    var event_creator = null;
+                    var main_mr_slot_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
+                        var success = results.success;
+                        var search_params = results.search_params;
+                        var contingent = results.contingent;
+                        var windows = results.windows;
+                        var events = results.events;
+                        var masks = results.masks;
 
-                    main_free_window_search = new free_window_searching_gui($("#planning_form_container"));
-                    main_free_window_search.create_gui();
+                        if (windows.length > 0) {
+                            event_creator = new MR_event_creator(search_params, contingent);
+                            event_creator.create_gui(windows);
+                            event_creator.show_gui_as_modal($(modal_container));
+                        }
+                        else {
+                            bootbox.alert({
+                                message: "There is no free time window matching the search parameters.",
+                                buttons: {
+                                    ok: {
+                                        label: "Ok",
+                                        className: "btn-outline-dark",
+                                    },
+                                },
+                            });
+                        }
+                    });
+
+                    main_mr_slot_browser.create_gui();
+
                     // handle_event_creation_gui();
                     // handle_schedule_printing_gui();
                 },
