@@ -66,10 +66,12 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/core/session_protection.js"></script>
     <script defer src="js/core/event_parsing.js"></script>
     <script defer src="js/core/search_time_window.js"></script>
+    <script defer src="js/core/mr_event_creator.js"></script>
+    <script defer src="js/core/mr_timing_slot_browser.js"></script>
+
 
 
     <!-- OPERATION -->
-    <script defer src="js/operation/event_creation.js"></script>
     <script defer src="js/operation/event_editing.js"></script>
     <script defer src="js/operation/schedule_printing.js"></script>
 
@@ -77,7 +79,6 @@ if (!isset($_SESSION['ews_token'])) {
     <!-- GUI -->
     <script defer src="js/gui/event_search_gui.js"></script>
     <script defer src="js/gui/schedule_print_gui.js"></script>
-    <script defer src="js/gui/free_window_searching_gui.js"></script>
     <script defer src="js/gui/time_input.js"></script>
 
     <!-- MODALS -->

@@ -1,6 +1,14 @@
 const window_search_logic_options = { inside_any_mask: "all", outside_all_mask: "none", any_free_time: "any" };
 
-class free_window_searching_gui {
+class MR_timing_slot_browser {
+	default_params = {
+		start_date: moment().add(1, "days").format("YYYY-MM-DD"),
+		end_date: moment().add(14, "days").format("YYYY-MM-DD"),
+		window_parameters: null,
+		source_calendar: default_calendar_name,
+		mask_calendar: default_mask_calendar_name,
+	};
+
 	constructor(container, success_callback = null) {
 		this.container = container;
 
@@ -9,6 +17,8 @@ class free_window_searching_gui {
 		this.gui = Object();
 		this.form = Object();
 		this.params = Object();
+
+		this.calendar_data = {};
 	}
 
 	#additional_window_search_options_gui(container) {
@@ -228,10 +238,10 @@ class free_window_searching_gui {
 		this.container.append(form);
 		this.form = form;
 
-		this.logic();
+		this.gui_logic();
 	}
 
-	logic() {
+	gui_logic() {
 		// protocol select
 		$(this.gui.protocol_select).flexdatalist({
 			minLength: 0,
@@ -343,96 +353,15 @@ class free_window_searching_gui {
 			}.bind(this)
 		);
 
-		this.submit();
-	}
-
-	submit() {
-		var success_callback = this.success_callback;
 		this.form.on(
 			"submit",
 			function (e) {
 				e.preventDefault();
 
 				var params = this.parse_form_to_params();
-
-				$.ajax({
-					type: "GET",
-					url: "php/get_calendar_data.php",
-					dataType: "json",
-					data: {
-						source_calendar: params.source_calendar,
-						mask_calendar: params.mask_calendar,
-						start_date: params.start_date,
-						end_date: params.end_date,
-						retrieve_body: false,
-					},
-					success: function (result) {
-						var parsed_data = MR_Calendar_Event.parse_from_calendar_data(result);
-						var events = parsed_data.events;
-						var masks = parsed_data.masks;
-
-						var window_parameters = params.window_parameters;
-						var continget = null;
-						if (!params.use_logic) {
-							// search inside masks  of a given contingent
-							var windows = search_free_time_windows_using_masks(
-								events,
-								masks,
-								params.protocol.protocol_duration,
-								window_parameters.contingent,
-								window_parameters.show_count
-							);
-							continget = window_parameters.contingent;
-						} else {
-							// search inside all
-							if (window_parameters.logic == window_search_logic_options.inside_any_mask) {
-								var windows = search_free_time_windows_using_masks(
-									events,
-									masks,
-									params.protocol.protocol_duration,
-									null,
-									window_parameters.show_count
-								);
-							}
-							// search outside all
-							if (window_parameters.logic == window_search_logic_options.outside_all_mask) {
-								var windows = search_free_time_windows_outside_masks(
-									events,
-									masks,
-									params.start_date,
-									params.end_date,
-									window_parameters.day_start,
-									window_parameters.day_end,
-									window_parameters.days,
-									params.protocol.protocol_duration,
-									window_parameters.show_count
-								);
-							}
-							// any free time
-							if (window_parameters.logic == window_search_logic_options.any_free_time) {
-								var windows = search_free_time_windows(
-									events,
-									params.start_date,
-									params.end_date,
-									window_parameters.day_start,
-									window_parameters.day_end,
-									window_parameters.days,
-									params.protocol.protocol_duration,
-									window_parameters.show_count
-								);
-							}
-						}
-
-						main_event_creation = new MR_Event_Creation(params, continget);
-						var event_creation_form = main_event_creation.create_gui(windows);
-						main_event_creation.show_gui_as_modal($("#modalContainer"), event_creation_form);
-					},
-				});
 			}.bind(this)
 		);
 	}
-
-	feed_form_with_params() {}
 
 	parse_form_to_params() {
 		var values = {};
@@ -484,5 +413,93 @@ class free_window_searching_gui {
 		};
 
 		return params;
+	}
+
+	feed_form_with_params() {}
+
+	retrieve_calendars(params = null, success_callback = null) {
+		if (!params) {
+			params = default_params;
+		}
+		$.ajax({
+			type: "GET",
+			url: "php/get_calendar_data.php",
+			dataType: "json",
+			data: {
+				source_calendar: params.source_calendar,
+				mask_calendar: params.mask_calendar,
+				start_date: params.start_date,
+				end_date: params.end_date,
+				retrieve_body: false,
+			},
+			success: function (results) {
+				this.calendar_data = MR_Calendar_Event.parse_from_calendar_data(results);
+				if (success_callback) success_callback();
+			}.bind(this),
+		});
+	}
+
+	search_open_slot(params, calendar_data = null, success_callback = null) {
+		if (!calendar_data) {
+			calendar_data = this.calendar_data || { masks: [], events: [] };
+		}
+
+		var window_parameters = params.window_parameters;
+		if (!window_parameters) {
+			return { search_params: params, windows: [], events: events, masks: masks, success: false };
+		}
+
+		var continget = null;
+		var windows = [];
+		if (!params.use_logic) {
+			// search inside masks  of a given contingent
+			var windows = search_free_time_windows_using_masks(
+				events,
+				masks,
+				params.protocol.protocol_duration,
+				window_parameters.contingent,
+				window_parameters.show_count
+			);
+			continget = window_parameters.contingent;
+		} else {
+			// search inside all
+			if (window_parameters.logic == window_search_logic_options.inside_any_mask) {
+				var windows = search_free_time_windows_using_masks(events, masks, params.protocol.protocol_duration, null, window_parameters.show_count);
+			}
+			// search outside all
+			if (window_parameters.logic == window_search_logic_options.outside_all_mask) {
+				var windows = search_free_time_windows_outside_masks(
+					events,
+					masks,
+					params.start_date,
+					params.end_date,
+					window_parameters.day_start,
+					window_parameters.day_end,
+					window_parameters.days,
+					params.protocol.protocol_duration,
+					window_parameters.show_count
+				);
+			}
+			// any free time
+			if (window_parameters.logic == window_search_logic_options.any_free_time) {
+				var windows = search_free_time_windows(
+					events,
+					params.start_date,
+					params.end_date,
+					window_parameters.day_start,
+					window_parameters.day_end,
+					window_parameters.days,
+					params.protocol.protocol_duration,
+					window_parameters.show_count
+				);
+			}
+		}
+
+		var slots = { search_params: params, contingent: continget, windows: windows, events: events, masks: masks, success: true };
+
+		if (success_callback) {
+			success_callback(slots);
+		}
+		return slots;
 	}
 }

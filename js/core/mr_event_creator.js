@@ -1,4 +1,4 @@
-class MR_Event_Creation {
+class MR_event_creator {
 	constructor(search_params, contingent = null) {
 		this.params = search_params;
 		this.protocol = this.params.protocol;
