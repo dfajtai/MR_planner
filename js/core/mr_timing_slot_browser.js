@@ -161,7 +161,7 @@ class MR_timing_slot_browser {
 		container.append(window_count_block);
 	}
 
-	create_gui(submit_callback = null) {
+	create_gui() {
 		this.container.empty();
 		var form = $("<form/>").addClass("form d-flex flex-column needs-validation").attr("id", "window_search_params_form");
 
@@ -450,7 +450,7 @@ class MR_timing_slot_browser {
 				retrieve_body: false,
 			},
 			success: function (results) {
-				this.calendar_data = MR_Calendar_Event.parse_from_calendar_data(results);
+				this.calendar_data = MR_calendar_event.parse_from_calendar_data(results);
 				if (success_callback) success_callback();
 			}.bind(this),
 		});

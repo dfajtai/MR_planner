@@ -1,6 +1,8 @@
 var protocols_path = "protocols/mr_protocols.csv";
 var protocols = [];
 
+var font_path = "fonts/crimson/TTF/Crimson-Roman.ttf";
+
 var start_time = Object();
 var session_max_duration = moment.duration(30, "minutes");
 var session_countdown = Object();

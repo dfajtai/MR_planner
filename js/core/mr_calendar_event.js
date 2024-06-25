@@ -1,4 +1,4 @@
-class MR_Calendar_Event {
+class MR_calendar_event {
 	static param_keys = ["comment", "patient_name", "patient_phone", "physician", "reserved_at", "reserved_by", "protocol"];
 	static response_keys = ["start", "end", "timezone", "subject", "body", "categories", "id"];
 
@@ -13,8 +13,8 @@ class MR_Calendar_Event {
 		});
 		var contingent = valid_categories[0] || null;
 
-		var params = MR_Calendar_Event.#parse_stored_data(response_row["body"]);
-		return new MR_Calendar_Event(start, end, params, contingent, response_row["id"]);
+		var params = MR_calendar_event.#parse_stored_data(response_row["body"]);
+		return new MR_calendar_event(start, end, params, contingent, response_row["id"]);
 	}
 
 	static #parse_stored_data(body) {
@@ -42,7 +42,7 @@ class MR_Calendar_Event {
 			var cells = $(row).find("td");
 			var key = $(cells[0]).html() || "";
 			var sanitized_key = clean_text(key);
-			if (MR_Calendar_Event.param_keys.includes(sanitized_key)) {
+			if (MR_calendar_event.param_keys.includes(sanitized_key)) {
 				var val = $(cells.last()).html() || "";
 				// lets be a littl less restrictive if it is the comment tag...
 				if (sanitized_key != "comment") {
@@ -64,24 +64,29 @@ class MR_Calendar_Event {
 		var event_params = {};
 		var contingent = null;
 		$.each($(form).serializeArray(), function (index, field) {
-			if (MR_Calendar_Event.param_keys.includes(field.name)) event_params[field.name] = field.value;
+			if (MR_calendar_event.param_keys.includes(field.name)) event_params[field.name] = field.value;
 			if (field.name == "contingent") contingent = field.value;
 		});
 		event_params["protocol"] = params.protocol.protocol_name;
 
-		var event = new MR_Calendar_Event(params.start, params.end, event_params, contingent);
+		var event = new MR_calendar_event(params.start, params.end, event_params, contingent);
 		return event;
 	}
 
 	static parse_from_calendar_data(calendar_data) {
 		var events = [];
-		$.each(calendar_data["events"], function (index, response_row) {
-			events.push(MR_Calendar_Event.parse_from_PHP(response_row));
-		});
+		if (calendar_data["events"]) {
+			$.each(calendar_data["events"], function (index, response_row) {
+				events.push(MR_calendar_event.parse_from_PHP(response_row));
+			});
+		}
+
 		var masks = [];
-		$.each(calendar_data["masks"], function (index, response_row) {
-			masks.push(MR_Calendar_Event.parse_from_PHP(response_row));
-		});
+		if (calendar_data["masks"]) {
+			$.each(calendar_data["masks"], function (index, response_row) {
+				masks.push(MR_calendar_event.parse_from_PHP(response_row));
+			});
+		}
 
 		return { events: events, masks: masks };
 	}
@@ -164,14 +169,48 @@ class MR_Calendar_Event {
 		var php_event_data = {
 			start: new Date(this.start).toISOString(),
 			end: new Date(this.end).toISOString(),
-			subject: this.params.patient_name + " (" + this.params.protocol + ")",
+			subject: this.stored_subject,
 			body: this.to_stored_html(),
 			category: this.contingent,
 		};
 		return php_event_data;
 	}
 
-	to_schedule_row() {}
+	to_schedule_row(printed_params) {
+		var row_dom = $("<tr/>");
+		$.each(
+			schedule_table_header,
+			function (idx, col) {
+				var key = col.prop;
+				var val = null;
+				if (key == "duration") val = this.start_to_end_string;
+				if (key == "subject") val = this.stored_subject;
+				if (key == "details") {
+					val = "";
+					$.each(
+						printed_params,
+						function (param_idx, param) {
+							var _val = null;
+							if (this[param.key]) _val = this[param.key];
+							else if (this.params[param.key]) _val = this.params[param.key];
+							_val = _val || "-";
+							var new_details = "<b> " + param.label + ": </b>" + _val.trim().replace(/\n/g, ". ");
+
+							val += val == "" ? new_details : "<br>" + new_details;
+						}.bind(this)
+					);
+				}
+				var td = $("<td/>")
+					.html("<pre>" + (val || "-") + "</pre>")
+					.addClass("border");
+				if (idx != schedule_table_header.length - 1) {
+					td.addClass("td.fit");
+				}
+				row_dom.append(td);
+			}.bind(this)
+		);
+		return row_dom;
+	}
 
 	get start_string() {
 		return this.start.toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
@@ -193,11 +232,19 @@ class MR_Calendar_Event {
 		return moment(this.end).format("HH:mm");
 	}
 
+	get start_to_end_string() {
+		return this.start_time_string + " - " + this.end_time_string;
+	}
+
 	get start_date_string() {
 		return moment(this.start).format("YYYY.MM.DD");
 	}
 
 	get end_date_string() {
 		return moment(this.end).format("YYYY.MM.DD");
+	}
+
+	get stored_subject() {
+		return this.params.patient_name + " (" + this.params.protocol + ")";
 	}
 }

@@ -61,13 +61,17 @@ if (!isset($_SESSION['ews_token'])) {
 
     <script defer src="js/config.js"></script>
 
+    <!-- FONT -->
+    <!-- <script defer src="libs/my_fonts/Crimson-Roman-normal.js"></script> -->
+
     <!-- CORE -->
     <script defer src="js/core/additional_functions.js"></script>
     <script defer src="js/core/session_protection.js"></script>
-    <script defer src="js/core/event_parsing.js"></script>
+    <script defer src="js/core/mr_calendar_event.js"></script>
     <script defer src="js/core/search_time_window.js"></script>
     <script defer src="js/core/mr_event_creator.js"></script>
     <script defer src="js/core/mr_timing_slot_browser.js"></script>
+    <script defer src="js/core/mr_schedule_printer.js"></script>
 
 
 
@@ -82,7 +86,6 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/gui/time_input.js"></script>
 
     <!-- MODALS -->
-    <script defer src="js/modals/event_creation_modal.js"></script>
     <script defer src="js/modals/event_modify_modal.js"></script>
 
 
@@ -166,36 +169,6 @@ if (!isset($_SESSION['ews_token'])) {
                         data-bs-parent="#main_accordion">
                         <div class="accordion-body" id="schedule_print_container">
                             <!-- TODO kivenni -->
-
-                            <form class="form d-flex flex-column needs-validation" id="printParamsForm">
-                                <div class="row pb-2">
-                                    <label class="col-sm-3 col-form-label" for="printCalendarSelect">
-                                        Source calendar name</label>
-                                    <div class="col-sm-9">
-                                        <select name="sourceCalendar" id="printCalendarSelect" class="form-select"
-                                            required>
-                                            <option selected disabled value="">Select source calendar...
-                                            </option>
-                                        </select>
-                                    </div>
-
-
-                                </div>
-                                <div class="row pb-2">
-                                    <label class="col-sm-3 col-form-label" for="printDateRangePicker">Print date
-                                        range</label>
-                                    <div class="col-sm-9">
-                                        <input name="date" id="printDateRangePicker" class="form-control"></input>
-                                    </div>
-                                </div>
-
-                                <div class="py-2">
-                                    <button class="btn btn-outline-dark w-100" id="printScheduleBtn" type="button">Print
-                                        schedules</button>
-                                </div>
-
-                            </form>
-
                         </div>
                     </div>
                 </div>
@@ -224,6 +197,8 @@ if (!isset($_SESSION['ews_token'])) {
                 data: {},
                 success: function (calendar_names) {
                     available_calendars = calendar_names;
+
+
                     var event_creator = null;
                     var main_mr_slot_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
                         var success = results.success;
@@ -253,8 +228,9 @@ if (!isset($_SESSION['ews_token'])) {
 
                     main_mr_slot_browser.create_gui();
 
-                    // handle_event_creation_gui();
-                    // handle_schedule_printing_gui();
+                    var schedule_printer = new MR_schedule_printer($(schedule_print_container));
+                    schedule_printer.create_gui();
+
                 },
             });
 

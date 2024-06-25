@@ -28,7 +28,7 @@ class MR_event_creator {
 	#timing_parameters_gui(container) {
 		container.empty();
 
-		container.append($("<label/>").addClass("form-label").html("Available time window(s):").attr("for", "#timeWindows"));
+		container.append($("<label/>").addClass("form-label").html("Available time window(s)").attr("for", "#timeWindows"));
 		var time_windows_listbox_container = $("<div/>").attr("id", "timeWindows").addClass("listbox-custom card");
 		var time_windows_listbox = $("<ul/>").addClass("list-group list-group-flush");
 
@@ -39,13 +39,13 @@ class MR_event_creator {
 
 		// protocol duration
 		var protocol_duration_block = $("<div/>").addClass("row pb-2");
-		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Protocol duration [min]:"));
+		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Protocol duration [min]"));
 		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6 ps-4").html(parseInt(this.protocol.protocol_duration)));
 		container.append(protocol_duration_block);
 
 		// event duration
 		var event_duration_block = $("<div/>").addClass("row pb-2");
-		event_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Event duration [min]:").attr("for", "event_duration_input"));
+		event_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Event duration [min]").attr("for", "event_duration_input"));
 
 		var event_duration_input_block = $("<div/>").addClass("col-sm-6");
 		var event_duration_input = $("<input/>").addClass("form-control").attr("id", "event_duration_input").attr("type", "number");
@@ -82,7 +82,7 @@ class MR_event_creator {
 		simple_dynamic_input_time(
 			start_time_block,
 			"start_time",
-			"Start time:",
+			"Start time",
 			10,
 			"05:00",
 			"22:00",
@@ -102,7 +102,7 @@ class MR_event_creator {
 		simple_dynamic_input_time(
 			end_time_block,
 			"end_time",
-			"End time:",
+			"End time",
 			10,
 			"05:00",
 			"22:00",
@@ -394,7 +394,7 @@ class MR_event_creator {
 
 		// patient n
 		var patient_name_block = $("<div/>").addClass("row pb-2");
-		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name:").attr("for", "patient_name_input"));
+		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name").attr("for", "patient_name_input"));
 		var patient_name_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_name_input = $("<input/>").addClass("form-control").attr("id", "patient_name_input").attr("required", "true").attr("name", "patient_name");
 
@@ -404,7 +404,7 @@ class MR_event_creator {
 
 		// phone
 		var patient_phone_block = $("<div/>").addClass("row pb-2");
-		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone:").attr("for", "patient_phone_input"));
+		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone").attr("for", "patient_phone_input"));
 		var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_phone_input = $("<input/>").addClass("form-control").attr("id", "patient_phone_input").attr("name", "patient_phone");
 
@@ -414,7 +414,7 @@ class MR_event_creator {
 
 		// comment
 		var comment_block = $("<div/>").addClass("row pb-2");
-		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment:").attr("for", "comment_input"));
+		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment").attr("for", "comment_input"));
 		var comment_input_block = $("<div/>").addClass("col-sm-9");
 		var comment_input = $("<textarea/>").addClass("form-control").attr("id", "comment_input").attr("name", "comment").attr("rows", 5).css("resize", "none");
 
@@ -422,34 +422,19 @@ class MR_event_creator {
 		comment_block.append(comment_input_block);
 		container.append(comment_block);
 
-		// var paid_block = $("<div/>").addClass("row pb-2 mt-2");
-		// paid_block.append($("<label/>").addClass("col-sm-3").html("Financing:").attr("for", "paid_input_block"));
-		// var paid_input_block = $("<div/>").addClass("form-check col-sm-9 ps-2").attr("id", "paid_input_block");
-		// var paid_input = $("<input/>")
-		// 	.addClass("form-check-input ms-1")
-		// 	.attr("type", "checkbox")
-		// 	.attr("id", "paid_input")
-		// 	.attr("name", "paid")
-		// 	.attr("checked", false);
+		// physician
+		var physician_block = $("<div/>").addClass("row pb-2");
+		physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Physician").attr("for", "physician_input"));
+		var physician_input_block = $("<div/>").addClass("col-sm-9");
+		var physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physician");
 
-		// paid_input_block.append(paid_input);
-		// paid_input_block.append($("<label/>").addClass("form-check-label ps-1").html("Privately financed").attr("for", "paid_input"));
-		// paid_block.append(paid_input_block);
-		// container.append(paid_block);
-
-		// referring physician
-		var referring_physician_block = $("<div/>").addClass("row pb-2");
-		referring_physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Referring physician:").attr("for", "physician_input"));
-		var referring_physician_input_block = $("<div/>").addClass("col-sm-9");
-		var referring_physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physician");
-
-		referring_physician_input_block.append(referring_physician_input);
-		referring_physician_block.append(referring_physician_input_block);
-		container.append(referring_physician_block);
+		physician_input_block.append(physician_input);
+		physician_block.append(physician_input_block);
+		container.append(physician_block);
 
 		// reserved at
 		var reserved_at_block = $("<div/>").addClass("row pb-2");
-		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at:").attr("for", "reserved_at_input"));
+		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at").attr("for", "reserved_at_input"));
 		var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at");
 
@@ -457,9 +442,29 @@ class MR_event_creator {
 		reserved_at_block.append(reserved_at_input_block);
 		container.append(reserved_at_block);
 
+		var picker = new easepick.create({
+			element: $(reserved_at_input)[0],
+			css: ["css/easepicker.css", "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"],
+			css: ["css/easepicker.css", "libs/css/easepick-index.css"],
+
+			plugins: ["LockPlugin", "AmpPlugin"],
+
+			LockPlugin: {
+				minDate: new Date(),
+				minDays: 1,
+				maxDays: 1,
+			},
+			AmpPlugin: {
+				resetButton: true,
+				darkMode: false,
+			},
+			zIndex: 10000,
+		});
+		picker.setDate(moment().format("YYYY-MM-DD"));
+
 		// reserved by
 		var reserved_by_block = $("<div/>").addClass("row pb-2");
-		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved by:").attr("for", "reserved_by_input"));
+		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved by").attr("for", "reserved_by_input"));
 		var reserved_by_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_by_input = $("<input/>").addClass("form-control").attr("id", "reserved_by_input").attr("name", "reserved_by").attr("required", "true");
 
@@ -560,7 +565,7 @@ class MR_event_creator {
 			"submit",
 			function (e) {
 				e.preventDefault();
-				var event = MR_Calendar_Event.parse_from_form(form, { start: this.event_start, end: this.event_end, protocol: this.protocol });
+				var event = MR_calendar_event.parse_from_form(form, { start: this.event_start, end: this.event_end, protocol: this.protocol });
 
 				if (create_on_subit) {
 					this.create_event(event, success_callback);
@@ -609,7 +614,7 @@ class MR_event_creator {
 	}
 
 	parse_form_to_event() {
-		return MR_Calendar_Event.parse_from_form(this.form, { start: this.event_start, end: this.event_end, protocol: this.protocol });
+		return MR_calendar_event.parse_from_form(this.form, { start: this.event_start, end: this.event_end, protocol: this.protocol });
 	}
 
 	create_event(parsed_event, success_callback) {

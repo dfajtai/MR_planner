@@ -1,0 +1,1 @@
+https://rawgit.com/MrRio/jsPDF/master/fontconverter/fontconverter.html
