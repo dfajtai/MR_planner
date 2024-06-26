@@ -33,4 +33,4 @@ var main_window_search_container = "#main_window_search_container";
 var schedule_print_container = "#schedule_print_container";
 var table_container = "#table_container";
 
-var event_search_container = "#event_search_container";
+var event_browser_container = "#event_browser_container";

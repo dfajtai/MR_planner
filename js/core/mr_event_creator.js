@@ -619,19 +619,18 @@ class MR_event_creator {
 	}
 
 	create_event(parsed_event, success_callback) {
-		$.ajax({
-			type: "POST",
-			url: "php/event_create.php",
-			dataType: "json",
-			data: { calendar_name: this.params.source_calendar, event_data: parsed_event.to_PHP_event_data() },
-			success: function (result) {
+		var calendar = this.params.source_calendar;
+
+		parsed_event.call_event_create(
+			calendar,
+			function () {
 				if (this.modal) {
 					this.modal.modal("hide");
 				}
 				if (success_callback) {
 					success_callback();
 				}
-			}.bind(this),
-		});
+			}.bind(this)
+		);
 	}
 }

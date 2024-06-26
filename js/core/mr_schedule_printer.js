@@ -157,6 +157,7 @@ class MR_schedule_printer {
 								}.bind(this)
 							);
 						else {
+							this.print_schedule(params);
 						}
 					}.bind(this)
 				);

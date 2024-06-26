@@ -177,6 +177,69 @@ class MR_calendar_event {
 		return php_event_data;
 	}
 
+	call_event_create(calendar_name, success_callback, return_ajax = false) {
+		var ajax = $.ajax({
+			type: "POST",
+			url: "php/event_create.php",
+			dataType: "json",
+			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			success: function (result) {
+				if (success_callback) {
+					success_callback();
+				}
+			}.bind(this),
+		});
+		if (return_ajax) return ajax;
+		$.when(ajax);
+	}
+
+	call_event_update(success_callback, return_ajax = false) {
+		var ajax = $.ajax({
+			type: "POST",
+			url: "php/event_create.php",
+			dataType: "json",
+			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			success: function (result) {
+				if (success_callback) {
+					success_callback();
+				}
+			}.bind(this),
+		});
+		if (return_ajax) return ajax;
+		$.when(ajax);
+	}
+	call_event_delete(success_callback, return_ajax = false) {
+		var ajax = $.ajax({
+			type: "POST",
+			url: "php/event_create.php",
+			dataType: "json",
+			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			success: function (result) {
+				if (success_callback) {
+					success_callback();
+				}
+			}.bind(this),
+		});
+		if (return_ajax) return ajax;
+		$.when(ajax);
+	}
+
+	update_event(success_callback, return_ajax = false) {
+		var ajax = $.ajax({
+			type: "POST",
+			url: "php/event_create.php",
+			dataType: "json",
+			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			success: function (result) {
+				if (success_callback) {
+					success_callback();
+				}
+			}.bind(this),
+		});
+		if (return_ajax) return ajax;
+		$.when(ajax);
+	}
+
 	to_schedule_row(printed_props) {
 		var row_dom = $("<tr/>");
 		$.each(

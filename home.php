@@ -72,6 +72,8 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/core/mr_event_creator.js"></script>
     <script defer src="js/core/mr_timing_slot_browser.js"></script>
     <script defer src="js/core/mr_schedule_printer.js"></script>
+    <script defer src="js/core/mr_event_browser.js"></script>
+    <script defer src="js/core/mr_event_editor.js"></script>
 
 
 
@@ -144,12 +146,12 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Search booked examination</p>
                             </div>
-                            <span class="badge rounded-pill bg-error ms-auto">Under development</span>
+                            <span class="badge rounded-pill bg-danger ms-auto">Under development</span>
 
                         </button>
                     </h2>
                     <div class="accordion-collapse collapse" id="event_search_content" data-bs-parent="#main_accordion">
-                        <div class="accordion-body" id="event_search_container"> </div>
+                        <div class="accordion-body" id="event_browser_container"> </div>
                     </div>
                 </div>
 
@@ -198,7 +200,7 @@ if (!isset($_SESSION['ews_token'])) {
                 success: function (calendar_names) {
                     available_calendars = calendar_names;
 
-
+                    // cerate
                     var event_creator = null;
                     var main_mr_slot_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
                         var success = results.success;
@@ -228,8 +230,16 @@ if (!isset($_SESSION['ews_token'])) {
 
                     main_mr_slot_browser.create_gui();
 
+                    // search & edit
+                    var event_browser = new MR_event_browser($(event_browser_container));
+                    event_browser.create_gui();
+
+                    // print
+
                     var schedule_printer = new MR_schedule_printer($(schedule_print_container));
                     schedule_printer.create_gui();
+
+
 
                 },
             });
