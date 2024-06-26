@@ -202,7 +202,7 @@ if (!isset($_SESSION['ews_token'])) {
 
                     // cerate
                     var event_creator = null;
-                    var main_mr_slot_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
+                    CORE.window_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
                         var success = results.success;
                         var search_params = results.search_params;
                         var contingent = results.contingent;
@@ -228,16 +228,16 @@ if (!isset($_SESSION['ews_token'])) {
                         }
                     });
 
-                    main_mr_slot_browser.create_gui();
+                    CORE.window_browser.create_gui();
 
                     // search & edit
-                    var event_browser = new MR_event_browser($(event_browser_container));
-                    event_browser.create_gui();
+                    CORE.event_browser = new MR_event_browser($(event_browser_container));
+                    CORE.event_browser.create_gui();
 
                     // print
 
-                    var schedule_printer = new MR_schedule_printer($(schedule_print_container));
-                    schedule_printer.create_gui();
+                    CORE.schedule_printer = new MR_schedule_printer($(schedule_print_container));
+                    CORE.schedule_printer.create_gui();
 
 
 

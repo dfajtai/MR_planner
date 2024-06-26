@@ -24,11 +24,23 @@ if (isset($_SESSION['ews_token'])) {
         // $calendar_id = $caledar->getFolderId()->getId();
 
 
+        $body = "No structured data";
+        if (isset($event_data['body'])) {
+            $body = $event_data['body'];
+
+        }
+        $category = null;
+        if (isset($event_data['category'])) {
+            $category = $event_data['category'];
+            if ($category == "")
+                $category = null;
+        }
+
         $start = (new \DateTime($event_data['start']))->format('c');
         $end = (new \DateTime($event_data['end']))->format('c');
+        $subject = $event_data['subject'];
 
-
-        $updated_items = update_event($api, $calendar_name, $event_id, $start, $end, $event_data);
+        $updated_items = update_event($api, $calendar_name, $event_id, $start, $end, $subject, $body, $category);
 
 
         unset($_POST["calendar_name"]);

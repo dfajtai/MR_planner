@@ -14,7 +14,7 @@ class MR_calendar_event {
 		var contingent = valid_categories[0] || null;
 
 		var params = MR_calendar_event.#parse_stored_data(response_row["body"]);
-		return new MR_calendar_event(start, end, params, contingent, response_row["id"], response_row["subject"]);
+		return new MR_calendar_event(start, end, params, contingent, response_row["id"], response_row["subject"], response_row["calendar_name"]);
 	}
 
 	static #parse_stored_data(body) {
@@ -91,13 +91,29 @@ class MR_calendar_event {
 		return { events: events, masks: masks };
 	}
 
-	constructor(start, end, params, contingent = null, id = null, stored_subject = null) {
+	constructor(start, end, params, contingent = null, id = null, stored_subject = null, calendar_name = null) {
 		this.start = start;
 		this.end = end;
 		this.params = params;
 		this.contingent = contingent;
 		this.id = id;
 		this._subject = stored_subject;
+
+		this._calendar_name = calendar_name;
+		this.exists = false;
+		// this.call_event_update();
+	}
+
+	update_from_instance(other_event) {
+		this.start = other_event.start;
+		this.end = other_event.end;
+		this.params = { ...other_event.params };
+		this.contingent = other_event.contingent;
+		this.id = other_event.id;
+		this._subject = other_event._subject;
+		if (other_event._calendar_name) {
+			this._calendar_name = other_event._calendar_name;
+		}
 	}
 
 	to_stored_html() {
@@ -177,7 +193,10 @@ class MR_calendar_event {
 		return php_event_data;
 	}
 
-	call_event_create(calendar_name, success_callback, return_ajax = false) {
+	call_event_create(calendar_name = null, success_callback = null, return_ajax = false) {
+		if (!calendar_name) {
+			calendar_name = this._calendar_name;
+		}
 		var ajax = $.ajax({
 			type: "POST",
 			url: "php/event_create.php",
@@ -187,6 +206,9 @@ class MR_calendar_event {
 				if (success_callback) {
 					success_callback();
 				}
+				this._calendar_name = calendar_name;
+				this.id = result;
+				// console.log(this.id);
 			}.bind(this),
 		});
 		if (return_ajax) return ajax;
@@ -194,26 +216,42 @@ class MR_calendar_event {
 	}
 
 	call_event_update(success_callback, return_ajax = false) {
-		var ajax = $.ajax({
-			type: "POST",
-			url: "php/event_create.php",
-			dataType: "json",
-			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
-			success: function (result) {
-				if (success_callback) {
-					success_callback();
-				}
-			}.bind(this),
-		});
-		if (return_ajax) return ajax;
-		$.when(ajax);
+		// this PHP function can not update the contingent...
+		// var ajax = $.ajax({
+		// 	type: "POST",
+		// 	url: "php/event_update.php",
+		// 	dataType: "json",
+		// 	data: { calendar_name: this._calendar_name, event_id: this.id, event_data: this.to_PHP_event_data() },
+		// 	success: function (result) {
+		// 		if (success_callback) {
+		// 			success_callback();
+		// 		}
+		// 	}.bind(this),
+		// });
+		// if (return_ajax) return ajax;
+		// $.when(ajax);
+
+		// console.log(this.id);
+
+		this.call_event_delete(
+			function () {
+				this.call_event_create(
+					this._calendar_name,
+					function () {
+						if (success_callback) {
+							success_callback();
+						}
+					}.bind(this)
+				);
+			}.bind(this)
+		);
 	}
 	call_event_delete(success_callback, return_ajax = false) {
 		var ajax = $.ajax({
 			type: "POST",
-			url: "php/event_create.php",
+			url: "php/event_delete.php",
 			dataType: "json",
-			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			data: { calendar_name: this._calendar_name, event_id: this.id },
 			success: function (result) {
 				if (success_callback) {
 					success_callback();
@@ -224,15 +262,36 @@ class MR_calendar_event {
 		$.when(ajax);
 	}
 
-	update_event(success_callback, return_ajax = false) {
+	pull_update(success_callback, retrieve_body = true, return_ajax = false) {
 		var ajax = $.ajax({
-			type: "POST",
-			url: "php/event_create.php",
+			type: "GET",
+			url: "php/event_retrieve.php",
 			dataType: "json",
-			data: { calendar_name: calendar_name, event_data: this.to_PHP_event_data() },
+			data: { event_id: this.id, retrieve_body: retrieve_body },
 			success: function (result) {
+				var new_version = MR_calendar_event.parse_from_PHP(result);
+				this.update_from_instance(new_version);
+
 				if (success_callback) {
 					success_callback();
+				}
+			}.bind(this),
+		});
+		if (return_ajax) return ajax;
+		$.when(ajax);
+	}
+
+	pull_current_version(success_callback, retrieve_body = true, return_ajax = false) {
+		var ajax = $.ajax({
+			type: "GET",
+			url: "php/event_retrieve.php",
+			dataType: "json",
+			data: { event_id: this.id, retrieve_body: retrieve_body },
+			success: function (result) {
+				var new_version = MR_calendar_event.parse_from_PHP(result);
+
+				if (success_callback) {
+					success_callback(new_version);
 				}
 			}.bind(this),
 		});

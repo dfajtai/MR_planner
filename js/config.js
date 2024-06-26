@@ -34,3 +34,7 @@ var schedule_print_container = "#schedule_print_container";
 var table_container = "#table_container";
 
 var event_browser_container = "#event_browser_container";
+
+// some globals for debugging
+
+var CORE = { window_browser: null, event_browser: null, schedule_printer: null };

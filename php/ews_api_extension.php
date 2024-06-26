@@ -60,7 +60,7 @@ function parse_event_body($event)
     return null;
 }
 
-function parse_event($event)
+function parse_event($event, $calendar_name = null)
 {
     $parsed_event = (object) [
         'start' => $event->getStart(),
@@ -71,6 +71,11 @@ function parse_event($event)
         'categories' => json_encode(parse_event_categories($event)),
         'id' => $event->getItemId()->getId()
     ];
+
+    if ($calendar_name) {
+        $parsed_event->calendar_name = $calendar_name;
+    }
+
     return $parsed_event;
 }
 
@@ -110,10 +115,10 @@ function get_parsed_events_within_range($api, $calendar_name, $start, $end, $ret
 
         foreach ($items as $event) {
             if ($retrieve_body) {
-                $parsed_event = parse_event(retrieve_event_body_for_event($api, $event));
+                $parsed_event = parse_event(retrieve_event_body_for_event($api, $event), $calendar_name);
 
             } else {
-                $parsed_event = parse_event($event);
+                $parsed_event = parse_event($event, $calendar_name);
             }
 
             array_push($events, $parsed_event);
@@ -160,25 +165,44 @@ function create_event($api, $calendar_id, $start, $end, $subject, $body = null, 
     );
     $createdItemIds = $api->createItems($event, $options);
 
-    return $createdItemIds;
+    return $createdItemIds->getId();
 }
 
 
-function update_event($api, $calendar_name, $event_id, $start, $end, $new_event_data)
+function update_event($api, $calendar_name, $event_id, $start, $end, $subject, $body = null, $category = null)
 {
-    $calendar = $api->getCalendar($calendar_name);
-    $data = (array) $new_event_data;
-    $data["Start"] = $start;
-    $data["End"] = $end;
+    //drops the category....
 
-    $updated_event = $calendar->updateCalendarItem($event_id, (array) $data);
+    $calendar = $api->getCalendar($calendar_name);
+
+    $itemId = new ItemIdType();
+    $itemId->setId($event_id);
+
+    $updated_data = array(
+        'Start' => $start,
+        'End' => $end,
+        'Subject' => $subject,
+        'Body' => array(
+            'BodyType' => Enumeration\BodyTypeType::HTML,
+            '_value' => $body
+        )
+    );
+    if ($category) {
+        $updated_data['Categories'] = $category;
+    }
+
+    $updated_event = $calendar->updateCalendarItem($itemId, (array) $updated_data);
     return $updated_event;
 }
 
 function delete_event($api, $calendar_name, $event_id)
 {
     $calendar = $api->getCalendar($calendar_name);
-    $response = $calendar->deleteCalendarItem($event_id);
+
+    $itemId = new ItemIdType();
+    $itemId->setId($event_id);
+
+    $response = $calendar->deleteCalendarItem($itemId);
     return $response;
 
 }

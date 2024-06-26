@@ -451,8 +451,6 @@ class MR_event_creator {
 
 			LockPlugin: {
 				minDate: new Date(),
-				minDays: 1,
-				maxDays: 1,
 			},
 			AmpPlugin: {
 				resetButton: true,
