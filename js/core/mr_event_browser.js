@@ -45,9 +45,9 @@ class MR_event_browser {
 		this.container.append(form);
 		this.form = form;
 
-		var control_div = $("<div/>").addClass("my-2 p-2").css({ border: "solid lightgray 1pt" });
+		var control_div = $("<div/>").addClass("my-2 p-2 d-none").css({ border: "solid lightgray 1pt" });
 
-		// protocol select
+		// event select
 		var event_select_block = $("<div/>").addClass("row");
 		event_select_block.append($("<label/>").attr("for", "event_select").addClass("col-sm-3 col-form-label").html("Select examination"));
 		var event_select_div = $("<div/>").addClass("col-sm-9");
@@ -62,7 +62,20 @@ class MR_event_browser {
 		event_select_block.append(event_select_div);
 		control_div.append(event_select_block);
 
+		// event info
+		var event_info_block = $("<div/>").addClass("d-flex py-2").attr("id", "selected_event_info");
+		this.gui.event_info = event_info_block;
+		control_div.append(event_info_block);
+
+		// event controls
+		var event_controls = $("<div/>").addClass("d-none d-flex pt-2");
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100 me-2").html("Edit").attr("id", "edit_selected_event"));
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100").html("Remove").attr("id", "delete_selected_event"));
+		control_div.append(event_controls);
+
 		this.gui.event_select = event_select;
+		this.gui.control_div = control_div;
+		this.gui.event_controls = event_controls;
 
 		this.container.append(control_div);
 
@@ -103,24 +116,6 @@ class MR_event_browser {
 			zIndex: 10000,
 		});
 
-		$(this.gui.protocol_select).flexdatalist({
-			minLength: 0,
-			selectionRequired: true,
-			toggleSelected: true,
-			searchIn: ["protocol_name", "modality"],
-			visibleProperties: ["protocol_name"],
-			valueProperty: "protocol_index",
-			textProperty: "[{modality}] {protocol_name} ({protocol_duration} min)",
-			searchContain: true,
-			data: protocols,
-			limitOfValues: 1,
-		});
-
-		// handle bugged validation popup location
-		var val_dummy = $($(this.gui.protocol_select).parent().find(".flexdatalist-set")[0]);
-		var list_dummy = $($(this.gui.protocol_select).parent().find(".flexdatalist-alias")[0]);
-		val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
-
 		picker.setStartDate(moment().add(1, "days").format("YYYY-MM-DD"));
 		picker.setEndDate(moment().add(14, "days").format("YYYY-MM-DD"));
 
@@ -142,9 +137,63 @@ class MR_event_browser {
 				e.preventDefault();
 
 				var params = this.parse_form_to_params();
-				this.retrieve_calendars(params, function () {}.bind(this));
+				this.retrieve_calendars(
+					params,
+					function () {
+						if (this.calendar_data.length == 0) {
+							bootbox.alert({
+								message: "There is no booked event matching the search parameters.",
+								buttons: {
+									ok: {
+										label: "Ok",
+										className: "btn-outline-dark",
+									},
+								},
+							});
+							$(this.gui.control_div).addClass("d-none");
+							return;
+						}
+
+						$(this.gui.event_controls).addClass("d-none");
+						$(this.gui.event_info).addClass("d-none");
+
+						$(this.gui.control_div).removeClass("d-none");
+
+						$(this.gui.event_select).flexdatalist({
+							minLength: 0,
+							selectionRequired: true,
+							searchIn: "_subject",
+							visibleProperties: ["_subject"],
+							valueProperty: "id",
+							textProperty: "[{start_date_string}: {start_to_end_string}] {_subject}",
+							searchContain: true,
+							data: this.calendar_data,
+							limitOfValues: 1,
+						});
+
+						// handle bugged validation popup location
+						var val_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-set")[0]);
+						var list_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-alias")[0]);
+						val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
+
+						$(this.gui.event_select).off("select:flexdatalist");
+						$(this.gui.event_select).on(
+							"select:flexdatalist",
+							function (e, selected, o) {
+								this.selected_event = selected;
+								$(this.gui.event_controls).removeClass("d-none");
+								selected.to_preview_table($(this.gui.event_info));
+								$(this.gui.event_info).removeClass("d-none");
+							}.bind(this)
+						);
+					}.bind(this)
+				);
 			}.bind(this)
 		);
+
+		$(this.gui.event_controls)
+			.find("#delete_selected_event")
+			.on("click", function () {});
 	}
 
 	parse_form_to_params() {

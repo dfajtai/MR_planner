@@ -182,6 +182,41 @@ class MR_calendar_event {
 		return html_text;
 	}
 
+	to_preview_table(container) {
+		$(container).empty();
+		var table = $("<table/>").addClass("w-100 preview-table");
+
+		function to_row(label, value, is_header = false) {
+			var row = $("<tr/>");
+			if (is_header) {
+				row.append($("<th/>").html(label).addClass("w-25"));
+
+				row.append($("<th/>").html(value));
+			} else {
+				row.append(
+					$("<td/>")
+						.html("<strong><b>" + label.trim() + "</b></strong>")
+						.css({ "background-color": "lightgray" })
+				);
+				row.append($("<td/>").html((value || "").trim().replace(/\n/g, "<br>")));
+			}
+			return row;
+		}
+
+		table.append(to_row("Property", "Stored data", true));
+		table.append(to_row("Date", this.start_date_string));
+		table.append(to_row("Duration", this.start_to_end_string));
+		table.append(to_row("Patient name", this.params.patient_name));
+		table.append(to_row("Protocol", this.params.protocol));
+		table.append(to_row("Contingent", this.contingent));
+		table.append(to_row("Phone number", this.params.patient_phone));
+		table.append(to_row("Referring physician", this.params.physician));
+		table.append(to_row("Reserved at", this.params.reserved_at));
+		table.append(to_row("Reserved by", this.params.reserved_by));
+		table.append(to_row("Comment", this.params.comment));
+		container.append(table);
+	}
+
 	to_PHP_event_data() {
 		var php_event_data = {
 			start: new Date(this.start).toISOString(),

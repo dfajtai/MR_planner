@@ -153,3 +153,16 @@
     background-color: rgba(248, 249, 250, 0.8);
     /* Slightly darker background for nested accordions */
 }
+
+.preview-table th,
+.preview-table td {
+    border: 1px solid black;
+    padding-left: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.preview-table th {
+    background-color: #343a40;
+    color: white;
+}
