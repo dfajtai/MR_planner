@@ -489,27 +489,28 @@ class MR_event_creator {
 		// contingent
 		var contingent_select = $("<div/>").attr("id", "contingent_select").addClass("d-flex");
 
-		$.each(
-			contingents,
-			function (index, _contingent) {
-				var _select_div = $("<div/>").addClass("flex-fill");
-				if (index + 1 < contingents.length) _select_div.addClass("pe-2");
-				var _id = _contingent + "_contingent";
-				var select_btn = $("<input>")
-					.attr("id", _id)
-					.addClass("btn-check contingent-btn")
-					.attr("type", "radio")
-					.attr("name", "contingent")
-					.attr("value", _contingent)
-					.attr("required", true);
-				var select_label = $("<label/>").addClass("btn btn-outline-dark w-100").attr("for", _id).html(_contingent);
+		var index = 0;
+		contingents.forEach((contingent_def) => {
+			var _select_div = $("<div/>").addClass("flex-fill");
+			if (index + 1 < contingents.length) _select_div.addClass("pe-2");
 
-				_select_div.append(select_btn);
-				_select_div.append(select_label);
-				contingent_select.append(_select_div);
-				if (_contingent == this.contingent) select_btn.attr("checked", "true");
-			}.bind(this)
-		);
+			var _id = contingent_def.label + "_contingent";
+			var select_btn = $("<input>")
+				.attr("id", _id)
+				.addClass("btn-check contingent-btn")
+				.attr("type", "radio")
+				.attr("name", "contingent")
+				.attr("value", contingent_def.category)
+				.attr("required", true);
+			var select_label = $("<label/>").addClass("btn btn-outline-dark w-100").attr("for", _id).html(contingent_def.label);
+
+			_select_div.append(select_btn);
+			_select_div.append(select_label);
+			contingent_select.append(_select_div);
+			if (contingent_def.category === this.contingent) select_btn.attr("checked", "true");
+			index += 1;
+		});
+
 		contingent_settings.append(contingent_select);
 
 		$(allow_override_input).change(function () {

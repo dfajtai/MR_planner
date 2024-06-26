@@ -31,6 +31,8 @@ if (isset($_SESSION['ews_token'])) {
         $category = null;
         if (isset($event_data['category'])) {
             $category = $event_data['category'];
+            if ($category == "")
+                $category = null;
         }
 
         $start = (new \DateTime($event_data['start']))->format('c');

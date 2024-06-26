@@ -135,6 +135,7 @@ function get_parsed_event($api, $event_id, $retrieve_body = true)
 
 function create_event($api, $calendar_id, $start, $end, $subject, $body = null, $category = null, )
 {
+
     $event = array(
         'CalendarItem' => array(
             'Start' => $start,
@@ -144,9 +145,11 @@ function create_event($api, $calendar_id, $start, $end, $subject, $body = null, 
                 'BodyType' => Enumeration\BodyTypeType::HTML,
                 '_value' => $body
             ),
-            'Categories' => array($category)
         )
     );
+    if ($category) {
+        $event['CalendarItem']['Categories'] = array($category);
+    }
 
     //Set our options
     $options = array(

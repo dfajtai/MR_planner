@@ -265,17 +265,17 @@ class MR_timing_slot_browser {
 		val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
 
 		// search logic
-		$.each(
-			contingents,
-			function (index, contingent) {
+		contingents.forEach((contingent_def) => {
+			if (contingent_def.category) {
 				var _opt = $("<option/>")
-					.html(contingent)
-					.attr("value", "CONTINGENT#" + contingent)
-					.attr("data-value", contingent)
+					.html(contingent_def.label)
+					.attr("value", "CONTINGENT#" + contingent_def.label)
+					.attr("data-value", contingent_def.category)
 					.attr("data-type", "contingent");
 				this.gui.logic_select.append(_opt);
-			}.bind(this)
-		);
+			}
+		});
+
 		this.gui.logic_select.append($("<option/>").html("-------------------- [LOGIC] --------------------").attr("value", "").attr("disabled", true));
 
 		this.gui.logic_select.append(

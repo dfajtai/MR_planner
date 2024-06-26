@@ -5,16 +5,16 @@ class MR_calendar_event {
 	static parse_from_PHP(response_row) {
 		var start = new Date(response_row["start"]);
 		var end = new Date(response_row["end"]);
-
 		var parsed_categories = JSON.parse(response_row["categories"]);
 		var valid_categories = [];
 		$.each(parsed_categories, function (idx, cat) {
-			if (contingents.includes(cat)) valid_categories.push(cat);
+			var matched_cat = getEntryFieldWhere(contingents, "category", cat, "category");
+			if (matched_cat) valid_categories.push(cat);
 		});
 		var contingent = valid_categories[0] || null;
 
 		var params = MR_calendar_event.#parse_stored_data(response_row["body"]);
-		return new MR_calendar_event(start, end, params, contingent, response_row["id"]);
+		return new MR_calendar_event(start, end, params, contingent, response_row["id"], response_row["subject"]);
 	}
 
 	static #parse_stored_data(body) {
@@ -91,12 +91,13 @@ class MR_calendar_event {
 		return { events: events, masks: masks };
 	}
 
-	constructor(start, end, params, contingent = null, id = null) {
+	constructor(start, end, params, contingent = null, id = null, stored_subject = null) {
 		this.start = start;
 		this.end = end;
 		this.params = params;
 		this.contingent = contingent;
 		this.id = id;
+		this._subject = stored_subject;
 	}
 
 	to_stored_html() {
@@ -176,7 +177,7 @@ class MR_calendar_event {
 		return php_event_data;
 	}
 
-	to_schedule_row(printed_params) {
+	to_schedule_row(printed_props) {
 		var row_dom = $("<tr/>");
 		$.each(
 			schedule_table_header,
@@ -187,21 +188,23 @@ class MR_calendar_event {
 				if (key == "subject") val = this.stored_subject;
 				if (key == "details") {
 					val = "";
-					$.each(
-						printed_params,
-						function (param_idx, param) {
-							var _val = null;
-							if (this[param.key]) _val = this[param.key];
-							else if (this.params[param.key]) _val = this.params[param.key];
-							_val = _val || "-";
-							var new_details = "<b> " + param.label + ": </b>" + _val.trim().replace(/\n/g, ". ");
+					// var temp_div = $("<div/>");
 
-							val += val == "" ? new_details : "<br>" + new_details;
-						}.bind(this)
-					);
+					printed_props.forEach((prop) => {
+						var _val = null;
+						if (this[prop.key]) _val = this[prop.key];
+						else if (this.params[prop.key]) _val = this.params[prop.key];
+						_val = _val || "-";
+						var new_details = "<b> " + prop.label + ": </b>" + _val.trim().replace(/\n/g, "<br>");
+						// temp_div.append($("<p/>").html(new_details).attr("data-prop", prop.key).attr("data-value", _val));
+						val += val == "" ? new_details : "<br>" + new_details;
+					});
+
+					// val = temp_div.prop("innerHTML");
 				}
 				var td = $("<td/>")
-					.html("<pre>" + (val || "-") + "</pre>")
+					// .html("<pre>" + (val || "-") + "</pre>")
+					.html(val || "-")
 					.addClass("border");
 				if (idx != schedule_table_header.length - 1) {
 					td.addClass("td.fit");
@@ -209,6 +212,7 @@ class MR_calendar_event {
 				row_dom.append(td);
 			}.bind(this)
 		);
+		row_dom.attr("data-contingent", this.contingent);
 		return row_dom;
 	}
 
@@ -245,6 +249,9 @@ class MR_calendar_event {
 	}
 
 	get stored_subject() {
+		if (!this.params.patient_name) {
+			return this._subject;
+		}
 		return this.params.patient_name + " (" + this.params.protocol + ")";
 	}
 }

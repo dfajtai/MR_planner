@@ -15,7 +15,7 @@ class MR_schedule_printer {
 
 		this.calendar_data = null;
 
-		this.font = null;
+		this.fonts = null;
 	}
 
 	create_gui() {
@@ -45,24 +45,24 @@ class MR_schedule_printer {
 		form.append(search_date_range_block);
 		this.gui.search_data_range = search_date_range;
 
-		// printed params
-		var params_check_block = $("<div/>").addClass("row mb-2");
-		params_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Printed params"));
-		var params_check_div = $("<div/>").addClass("col-sm-9 d-flex").attr("id", "show_count_block");
+		// printed props
+		var props_check_block = $("<div/>").addClass("row mb-2");
+		props_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Printed properties"));
+		var props_check_div = $("<div/>").addClass("col-sm-9 d-flex flex-wrap mx-auto").attr("id", "show_count_block");
 		var options = [
 			{ value: "patient_name", label: "Név", default: false },
 			{ value: "protocol", label: "Protokol", default: false },
-			{ value: "contingent", label: "Kontingens", default: true },
+			{ value: "contingent", label: "Kontingens", default: false },
 			{ value: "patient_phone", label: "Tel", default: true },
 			{ value: "comment", label: "Megjegyzés", default: true },
 			{ value: "physican", label: "Beutaló orvos", default: false },
 			{ value: "reserved_at", label: "Előjegyzés ideje", default: false },
 			{ value: "reserved_by", label: "Előjegyezte", default: false },
 		];
-		this.gui.params_to_print = params_check_div;
+		this.gui.props_to_print = props_check_div;
 
 		$.each(options, function (idx, option) {
-			var option_container = $("<div/>").addClass("flex-fill");
+			var option_container = $("<div/>").addClass("mb-1");
 			if (idx < options.length - 1) option_container.addClass("pe-1");
 			var _id = "allow_" + option.label;
 
@@ -70,17 +70,17 @@ class MR_schedule_printer {
 				$("<input/>")
 					.attr("type", "checkbox")
 					.addClass("btn-check")
-					.attr("name", "printed_params")
+					.attr("name", "printed_props")
 					.attr("id", _id)
 					.attr("data-value", option.value)
 					.attr("data-label", option.label)
 					.attr("checked", option.default)
 			);
-			option_container.append($("<label/>").addClass("btn btn-outline-dark w-100").attr("for", _id).html(option.label));
-			params_check_div.append(option_container);
+			option_container.append($("<label/>").addClass("btn btn-outline-dark").attr("for", _id).html(option.label).css({ width: "110pt" }));
+			props_check_div.append(option_container);
 		});
-		params_check_block.append(params_check_div);
-		form.append(params_check_block);
+		props_check_block.append(props_check_div);
+		form.append(props_check_block);
 
 		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Print schedules").attr("id", "print_btn").attr("type", "button");
 		form.append($("<div/>").addClass("py-2").append(submit_btn));
@@ -151,7 +151,7 @@ class MR_schedule_printer {
 					params,
 					function () {
 						if (!this.font)
-							this.load_font(
+							this.load_fonts(
 								function () {
 									this.print_schedule(params);
 								}.bind(this)
@@ -179,17 +179,17 @@ class MR_schedule_printer {
 			var end_date = null;
 		}
 
-		var params_to_print = [];
-		$.each($(this.gui.params_to_print).find(":checked"), function (idx, dom) {
-			var _param = { key: $(dom).attr("data-value"), label: $(dom).attr("data-label") };
-			params_to_print.push(_param);
+		var props_to_print = [];
+		$.each($(this.gui.props_to_print).find(":checked"), function (idx, dom) {
+			var _prop = { key: $(dom).attr("data-value"), label: $(dom).attr("data-label") };
+			props_to_print.push(_prop);
 		});
 
 		var params = {
 			start_date: start_date,
 			end_date: end_date,
 			calendar_name: values.calendar_name,
-			params_to_print: params_to_print,
+			props_to_print: props_to_print,
 		};
 
 		return params;
@@ -216,37 +216,50 @@ class MR_schedule_printer {
 		});
 	}
 
-	load_font(success_callback = null) {
-		$.ajax({
-			url: font_path,
-			method: "GET",
-			xhrFields: {
-				responseType: "arraybuffer",
-			},
-			success: function (data) {
-				// Convert the array buffer to Base64
-				var binary = "";
-				var bytes = new Uint8Array(data);
-				var len = bytes.byteLength;
-				for (var i = 0; i < len; i++) {
-					binary += String.fromCharCode(bytes[i]);
-				}
-				var base64String = window.btoa(binary);
+	load_fonts(success_callback = null) {
+		var ajax_calls = [];
+		var fonts = Object();
+		font_paths.forEach((font_info) => {
+			var path = font_info.path;
+			var font_type = font_info.type;
+			var ajax = $.ajax({
+				url: path,
+				method: "GET",
+				xhrFields: {
+					responseType: "arraybuffer",
+				},
+				success: function (data) {
+					// Convert the array buffer to Base64
+					var binary = "";
+					var bytes = new Uint8Array(data);
+					var len = bytes.byteLength;
+					for (var i = 0; i < len; i++) {
+						binary += String.fromCharCode(bytes[i]);
+					}
+					var base64String = window.btoa(binary);
 
-				this.font = base64String;
+					fonts[font_type] = base64String;
+				}.bind(this),
+				error: function (xhr, status, error) {
+					console.error("Error loading TTF file: " + font_path, error);
+				},
+			});
+			ajax_calls.push(ajax);
+		});
+
+		$.when.apply(this, ajax_calls).then(
+			function () {
+				this.fonts = fonts;
 				if (success_callback) {
 					success_callback();
 				}
-			}.bind(this),
-			error: function (xhr, status, error) {
-				console.error("Error loading TTF file:", error);
-			},
-		});
+			}.bind(this)
+		);
 	}
 
 	print_schedule(params) {
 		var events_to_print = this.calendar_data;
-		var params_to_print = params.params_to_print;
+		var props_to_print = params.props_to_print;
 
 		if (events_to_print.length == 0) {
 			bootbox.alert({
@@ -304,7 +317,7 @@ class MR_schedule_printer {
 
 				var rows = [];
 				$.each(daily_events, function (event_index, event) {
-					rows.push(event.to_schedule_row(params_to_print));
+					rows.push(event.to_schedule_row(props_to_print));
 				});
 
 				create_schedule_table($(table_container), rows);
@@ -314,16 +327,21 @@ class MR_schedule_printer {
 				const doc = new jsPDF("p", "mm", [297, 210]);
 				const pageWidth = doc.internal.pageSize.getWidth();
 
-				doc.addFileToVFS("custom.ttf", this.font);
-				doc.addFont("custom.ttf", "CustomFont", "normal");
-				doc.setFont("CustomFont", "normal");
+				if (this.fonts) {
+					for (const [font_type, font_data] of Object.entries(this.fonts)) {
+						doc.addFileToVFS("myfont-" + font_type + ".ttf", font_data);
+						doc.addFont("myfont-" + font_type + ".ttf", "myfont", font_type);
+					}
+				}
 
+				doc.setFont("myfont", "bold");
 				doc.setFontSize(22); // Set font size to 16
 				doc.text("MR előjegyzés (3T)", pageWidth - 18, 20, { align: "right" });
 
 				doc.text(date, 16, 20);
 
-				doc.setFontSize(12); // Reset font size to default
+				doc.setFont("myfont", "normal");
+				doc.setFontSize(14); // Reset font size to default
 				// doc.setFont("helvetica", "normal");
 
 				doc.autoTable({
@@ -333,9 +351,9 @@ class MR_schedule_printer {
 					pageBreak: "auto",
 					rowPageBreak: "avoid",
 					columnStyles: {
-						0: { cellWidth: 30, halign: "center", valign: "middle" },
+						0: { cellWidth: 30, halign: "center", valign: "middle", fontStyle: "bold" },
 						1: { cellWidth: 60, halign: "center", valign: "middle" },
-						2: { cellWidth: 90, halign: "left", valign: "middle", cellPadding: 3 },
+						2: { cellWidth: 90, halign: "left", valign: "middle", cellPadding: 1 },
 					},
 					headStyles: {
 						valign: "middle",
@@ -345,9 +363,28 @@ class MR_schedule_printer {
 						minCellHeight: 10,
 						lineColor: [0, 0, 0],
 						lineWidth: 0.5,
+						font: "myfont",
+						fontStyle: "bold",
 					},
 					bodyStyles: { minCellHeight: 12, lineColor: [0, 0, 0], lineWidth: 0.5 },
-					styles: { font: "CustomFont" },
+					styles: { font: "myfont", fontSize: 12 },
+					willDrawCell: function (data) {
+						if (data.cell.section === "body") {
+							doc.setFillColor(255, 255, 255);
+							try {
+								var row = $(data.row.raw._element);
+								var contingent = row.attr("data-contingent");
+								var matched_contingent = getEntryWhere(contingents, "category", contingent);
+
+								if (matched_contingent) {
+									var c = matched_contingent.color;
+									doc.setFillColor(c[0], c[1], c[2]);
+								}
+							} catch (error) {
+								console.log(error);
+							}
+						}
+					},
 				});
 				doc.save("schedule-" + date.split(".").join("-") + " .pdf");
 			}.bind(this)

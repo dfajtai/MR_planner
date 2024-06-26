@@ -1,7 +1,10 @@
 var protocols_path = "protocols/mr_protocols.csv";
 var protocols = [];
 
-var font_path = "fonts/crimson/TTF/Crimson-Roman.ttf";
+var font_paths = [
+	{ type: "normal", path: "fonts/crimson/TTF/Crimson-Roman.ttf" },
+	{ type: "bold", path: "fonts/crimson/TTF/Crimson-Bold.ttf" },
+];
 
 var start_time = Object();
 var session_max_duration = moment.duration(30, "minutes");
@@ -14,7 +17,13 @@ var modalities = ["MR", "PET/MR"];
 
 var available_calendars = [];
 
-var contingents = ["idegseb.", "3TP", "FIZ", "PET/CT/MR"];
+var contingents = [
+	{ category: "idegseb.", color: [255, 241, 0], label: "idegseb." },
+	{ category: "3TP", color: [254, 203, 111], label: "3TP" },
+	{ category: "FIZ", color: [85, 171, 229], label: "FIZ" },
+	{ category: "PET/CT/MR", color: [255, 140, 0], label: "PET/CT/MR." },
+	{ category: "", color: [255, 255, 255], label: "NA" },
+];
 
 // dom id's
 var modal_container = "#modal_container";
