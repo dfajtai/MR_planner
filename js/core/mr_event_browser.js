@@ -38,7 +38,7 @@ class MR_event_browser {
 		search_date_range_block.append(search_date_range_div);
 		form.append(search_date_range_block);
 		this.gui.search_data_range = search_date_range;
-		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Initialize").attr("id", "print_btn").attr("type", "button");
+		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Query bookings").attr("id", "print_btn").attr("type", "button");
 		form.append($("<div/>").addClass("pt-2").append(submit_btn));
 		this.gui.submit_btn = submit_btn;
 
@@ -69,8 +69,9 @@ class MR_event_browser {
 
 		// event controls
 		var event_controls = $("<div/>").addClass("d-none d-flex pt-2");
-		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100 me-2").html("Edit").attr("id", "edit_selected_event"));
-		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100").html("Remove").attr("id", "delete_selected_event"));
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100  me-2").html("Remove").attr("id", "delete_selected_event"));
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100").html("Edit").attr("id", "edit_selected_event"));
+
 		control_div.append(event_controls);
 
 		this.gui.event_select = event_select;
@@ -105,7 +106,6 @@ class MR_event_browser {
 			plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],
 
 			LockPlugin: {
-				minDate: new Date(),
 				minDays: 1,
 				maxDays: 30,
 			},
@@ -193,7 +193,34 @@ class MR_event_browser {
 
 		$(this.gui.event_controls)
 			.find("#delete_selected_event")
-			.on("click", function () {});
+			.on(
+				"click",
+				function () {
+					var message = "The selected booking will be deleted.";
+					bootbox.confirm({
+						message: message + "<br/>Do you want to proceed?",
+						buttons: {
+							confirm: {
+								label: "Yes",
+								className: "btn-outline-danger",
+							},
+							cancel: {
+								label: "No",
+								className: "btn-outline-dark",
+							},
+						},
+						callback: function (result) {
+							if (result) {
+								this.selected_event.call_event_delete(
+									function () {
+										$(this.form).trigger("submit");
+									}.bind(this)
+								);
+							}
+						}.bind(this),
+					});
+				}.bind(this)
+			);
 	}
 
 	parse_form_to_params() {
