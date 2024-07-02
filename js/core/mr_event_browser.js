@@ -50,7 +50,8 @@ class MR_event_browser {
 		// event select
 		var event_select_block = $("<div/>").addClass("row");
 		event_select_block.append($("<label/>").attr("for", "event_select").addClass("col-sm-3 col-form-label").html("Select examination"));
-		var event_select_div = $("<div/>").addClass("col-sm-9");
+		var event_select_container = $("<div/>").addClass("col-sm-9 d-flex flex-row");
+		var event_select_div = $("<div/>").addClass("w-100");
 		var event_select = $("<input/>")
 			.attr("name", "selected_event_index")
 			.attr("id", "event_select")
@@ -59,7 +60,11 @@ class MR_event_browser {
 			.attr("placeholder", "Select booked examination...")
 			.attr("type", "test");
 		event_select_div.append(event_select);
-		event_select_block.append(event_select_div);
+		event_select_container.append(event_select_div);
+		var clear_select_btn = $("<button/>").addClass("btn btn-outline-dark ms-2").append($("<span/>").addClass("fa-light fa-x"));
+		event_select_container.append(clear_select_btn);
+
+		event_select_block.append(event_select_container);
 		control_div.append(event_select_block);
 
 		// event info
@@ -75,12 +80,43 @@ class MR_event_browser {
 		control_div.append(event_controls);
 
 		this.gui.event_select = event_select;
+		this.gui.clear_select_btn = clear_select_btn;
 		this.gui.control_div = control_div;
 		this.gui.event_controls = event_controls;
 
 		this.container.append(control_div);
 
 		this.gui_logic();
+	}
+
+	parametrize_event_selector() {
+		$(this.gui.event_select).flexdatalist({
+			minLength: 0,
+			selectionRequired: true,
+			searchIn: "_subject",
+			visibleProperties: ["_subject"],
+			valueProperty: "id",
+			textProperty: "[{start_date_string}: {start_to_end_string}] {_subject}",
+			searchContain: true,
+			data: this.calendar_data,
+			limitOfValues: 1,
+		});
+
+		// handle bugged validation popup location
+		var val_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-set")[0]);
+		var list_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-alias")[0]);
+		val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
+
+		$(this.gui.event_select).off("select:flexdatalist");
+		$(this.gui.event_select).on(
+			"select:flexdatalist",
+			function (e, selected, o) {
+				this.selected_event = selected;
+				$(this.gui.event_controls).removeClass("d-none");
+				selected.to_preview_table($(this.gui.event_info));
+				$(this.gui.event_info).removeClass("d-none");
+			}.bind(this)
+		);
 	}
 
 	gui_logic() {
@@ -159,35 +195,19 @@ class MR_event_browser {
 
 						$(this.gui.control_div).removeClass("d-none");
 
-						$(this.gui.event_select).flexdatalist({
-							minLength: 0,
-							selectionRequired: true,
-							searchIn: "_subject",
-							visibleProperties: ["_subject"],
-							valueProperty: "id",
-							textProperty: "[{start_date_string}: {start_to_end_string}] {_subject}",
-							searchContain: true,
-							data: this.calendar_data,
-							limitOfValues: 1,
-						});
-
-						// handle bugged validation popup location
-						var val_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-set")[0]);
-						var list_dummy = $($(this.gui.event_select).parent().find(".flexdatalist-alias")[0]);
-						val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
-
-						$(this.gui.event_select).off("select:flexdatalist");
-						$(this.gui.event_select).on(
-							"select:flexdatalist",
-							function (e, selected, o) {
-								this.selected_event = selected;
-								$(this.gui.event_controls).removeClass("d-none");
-								selected.to_preview_table($(this.gui.event_info));
-								$(this.gui.event_info).removeClass("d-none");
-							}.bind(this)
-						);
+						this.parametrize_event_selector();
 					}.bind(this)
 				);
+			}.bind(this)
+		);
+
+		$(this.gui.clear_select_btn).on(
+			"click",
+			function () {
+				$(this.gui.event_controls).addClass("d-none");
+				$(this.gui.event_info).addClass("d-none");
+				$(this.gui.event_select).flexdatalist("reset");
+				this.parametrize_event_selector();
 			}.bind(this)
 		);
 
