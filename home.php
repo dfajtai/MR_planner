@@ -120,7 +120,7 @@ if (!isset($_SESSION['ews_token'])) {
 
     </nav>
     <container class="d-flex flex-column align-items-center justify-content-center" id="main_container">
-        <div class="d-flex  flex-column  p-5 m-5 col-lg-6 col-sm-9 col-12 align-self-center  justify-content-center">
+        <div class="d-flex  flex-column  p-2 m-2 col-lg-6 col-sm-9 col-12 align-self-center  justify-content-center">
             <div class="accordion accordion-flush" id="main_accordion">
 
                 <div class="accordion-item shadow">
@@ -146,7 +146,7 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Search booked examination</p>
                             </div>
-                            <span class="badge rounded-pill bg-danger ms-auto">Under development</span>
+                            <span class="badge rounded-pill bg-warning ms-auto">Needs review</span>
 
                         </button>
                     </h2>

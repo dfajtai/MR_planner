@@ -107,6 +107,17 @@ class MR_calendar_event {
 		this._calendar_name = calendar_name;
 		this.exists = false;
 		// this.call_event_update();
+
+		if (!params.protocol && stored_subject) {
+			const regex = /\[+([^\]]+)/;
+			const match = stored_subject.match(regex);
+			var protocol_name = match ? match[1] : null;
+
+			var matched_protocol = getEntryWhere(protocols, "protocol_name", protocol_name);
+			if (matched_protocol) {
+				this.params.protocol = matched_protocol.protocol_name;
+			}
+		}
 	}
 
 	update_from_instance(other_event) {
@@ -114,10 +125,13 @@ class MR_calendar_event {
 		this.end = other_event.end;
 		this.params = { ...other_event.params };
 		this.contingent = other_event.contingent;
-		this.id = other_event.id;
+
 		this._subject = other_event._subject;
 		if (other_event._calendar_name) {
 			this._calendar_name = other_event._calendar_name;
+		}
+		if (other_event.id) {
+			this.id = other_event.id;
 		}
 	}
 
@@ -187,11 +201,13 @@ class MR_calendar_event {
 		return html_text;
 	}
 
-	to_preview_table(container) {
+	to_preview_table(container, value_col_label = "Stored value") {
 		$(container).empty();
 		var table = $("<table/>").addClass("w-100 preview-table");
 
 		function to_row(label, value, is_header = false) {
+			if (!value) return null;
+
 			var row = $("<tr/>");
 			if (is_header) {
 				row.append($("<th/>").html(label).addClass("w-25"));
@@ -208,7 +224,7 @@ class MR_calendar_event {
 			return row;
 		}
 
-		table.append(to_row("Property", "Stored data", true));
+		table.append(to_row("Property", value_col_label, true));
 		table.append(to_row("Date", this.start_date_string));
 		table.append(to_row("Duration", this.start_to_end_string));
 		table.append(to_row("Patient name", this.params.patient_name));
@@ -414,6 +430,11 @@ class MR_calendar_event {
 		if (!this.params.patient_name) {
 			return this._subject;
 		}
-		return this.params.patient_name + " (" + this.params.protocol + ")";
+		return this.params.patient_name + " [" + this.params.protocol + "]";
+	}
+
+	get protocol_params() {
+		var matcing_protocol = getEntryWhere(protocols, "protocol_name", this.params.protocol);
+		return matcing_protocol;
 	}
 }

@@ -161,7 +161,7 @@ class MR_timing_slot_browser {
 		container.append(window_count_block);
 	}
 
-	create_gui() {
+	create_gui(call_logic = true, fix_position = true) {
 		this.container.empty();
 		var form = $("<form/>").addClass("form d-flex flex-column needs-validation").attr("id", "window_search_params_form");
 
@@ -181,6 +181,7 @@ class MR_timing_slot_browser {
 		form.append(protocol_select_block);
 
 		this.gui.protocol_select = protocol_select;
+		this.gui.protocol_select_container = protocol_select_div;
 
 		// logic select
 		var logic_select_block = $("<div/>").addClass("row mb-2");
@@ -241,11 +242,12 @@ class MR_timing_slot_browser {
 		this.container.append(form);
 		this.form = form;
 
-		this.gui_logic();
+		if (call_logic) this.gui_logic(fix_position);
 	}
 
-	gui_logic() {
+	gui_logic(fix_position = true) {
 		// protocol select
+		$(this.gui.protocol_select).flexdatalist("destroy");
 		$(this.gui.protocol_select).flexdatalist({
 			minLength: 0,
 			selectionRequired: true,
@@ -260,9 +262,11 @@ class MR_timing_slot_browser {
 		});
 
 		// handle bugged validation popup location
-		var val_dummy = $($(this.gui.protocol_select).parent().find(".flexdatalist-set")[0]);
-		var list_dummy = $($(this.gui.protocol_select).parent().find(".flexdatalist-alias")[0]);
-		val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
+		if (fix_position) {
+			var val_dummy = $(this.gui.protocol_select_container.find(".flexdatalist-set")[0]);
+			var list_dummy = $(this.gui.protocol_select_container.find(".flexdatalist-alias")[0]);
+			val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
+		}
 
 		// search logic
 		contingents.forEach((contingent_def) => {
@@ -322,9 +326,8 @@ class MR_timing_slot_browser {
 
 		// search range
 
-		var picker_id = this.gui.search_data_range.attr("id");
 		var picker = new easepick.create({
-			element: document.getElementById(picker_id),
+			element: $(this.gui.search_data_range)[0],
 			css: ["css/easepicker.css", "libs/css/easepick-index.css"],
 
 			plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],

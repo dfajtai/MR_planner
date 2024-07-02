@@ -25,7 +25,7 @@ class MR_event_creator {
 		this.slider = null;
 	}
 
-	#timing_parameters_gui(container) {
+	timing_parameters_gui(container) {
 		container.empty();
 
 		container.append($("<label/>").addClass("form-label").html("Available time window(s)").attr("for", "#timeWindows"));
@@ -389,7 +389,7 @@ class MR_event_creator {
 		}
 	}
 
-	#administration_parameters_gui(container) {
+	administration_parameters_gui(container) {
 		container.empty();
 
 		// patient n
@@ -436,7 +436,7 @@ class MR_event_creator {
 		var reserved_at_block = $("<div/>").addClass("row pb-2");
 		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at").attr("for", "reserved_at_input"));
 		var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
-		var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at");
+		var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at").attr("required", "true");
 
 		reserved_at_input_block.append(reserved_at_input);
 		reserved_at_block.append(reserved_at_input_block);
@@ -536,12 +536,12 @@ class MR_event_creator {
 
 		// timing
 		var timing_block = $("<div/>").addClass("col-md-6 p-2");
-		this.#timing_parameters_gui(timing_block);
+		this.timing_parameters_gui(timing_block);
 		form_content.append(timing_block);
 
 		// administration
 		var administration_block = $("<div/>").addClass("col-md-6 p-2");
-		this.#administration_parameters_gui(administration_block);
+		this.administration_parameters_gui(administration_block);
 		form_content.append(administration_block);
 
 		form.append(form_content);

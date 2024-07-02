@@ -7,7 +7,7 @@ class MR_event_browser {
 
 		this.search_form = null;
 
-		this.event_editor_form = null;
+		this.event_editor = null;
 
 		this.calendar_data = null;
 		this.selected_event = null;
@@ -239,6 +239,26 @@ class MR_event_browser {
 							}
 						}.bind(this),
 					});
+				}.bind(this)
+			);
+
+		$(this.gui.event_controls)
+			.find("#edit_selected_event")
+			.on(
+				"click",
+				function () {
+					if (!this.event_editor) {
+						this.event_editor = new MR_event_editor(this.selected_event);
+					} else {
+						this.event_editor.set_update_event(this.selected_event);
+					}
+					this.event_editor.create_gui();
+					this.event_editor.show_gui_as_modal(
+						$(modal_container),
+						function () {
+							$(this.form).trigger("submit");
+						}.bind(this)
+					);
 				}.bind(this)
 			);
 	}
