@@ -55,7 +55,7 @@ class MR_schedule_printer {
 			{ value: "contingent", label: "Kontingens", default: false },
 			{ value: "patient_phone", label: "Tel", default: true },
 			{ value: "comment", label: "Megjegyzés", default: true },
-			{ value: "physican", label: "Beutaló orvos", default: false },
+			{ value: "physician", label: "Beutaló orvos", default: false },
 			{ value: "reserved_at", label: "Előjegyzés ideje", default: false },
 			{ value: "reserved_by", label: "Előjegyezte", default: false },
 		];

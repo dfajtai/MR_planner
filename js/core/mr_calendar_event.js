@@ -238,6 +238,46 @@ class MR_calendar_event {
 		container.append(table);
 	}
 
+	to_schedule_row(printed_props) {
+		var row_dom = $("<tr/>");
+		$.each(
+			schedule_table_header,
+			function (idx, col) {
+				var key = col.prop;
+				var val = null;
+				if (key == "duration") val = this.start_to_end_string;
+				if (key == "subject") val = this.stored_subject;
+				if (key == "details") {
+					val = "";
+					// var temp_div = $("<div/>");
+
+					printed_props.forEach((prop) => {
+						var _val = null;
+						if (this[prop.key]) _val = this[prop.key];
+						else if (this.params[prop.key]) _val = this.params[prop.key];
+						if (!_val) return true;
+						_val = _val || "-";
+						var new_details = "<b> " + prop.label + ": </b>" + _val.trim().replace(/\n/g, "<br>");
+						// temp_div.append($("<p/>").html(new_details).attr("data-prop", prop.key).attr("data-value", _val));
+						val += val == "" ? new_details : "<br>" + new_details;
+					});
+
+					// val = temp_div.prop("innerHTML");
+				}
+				var td = $("<td/>")
+					// .html("<pre>" + (val || "-") + "</pre>")
+					.html(val || "-")
+					.addClass("border");
+				if (idx != schedule_table_header.length - 1) {
+					td.addClass("td.fit");
+				}
+				row_dom.append(td);
+			}.bind(this)
+		);
+		row_dom.attr("data-contingent", this.contingent);
+		return row_dom;
+	}
+
 	to_PHP_event_data() {
 		var php_event_data = {
 			start: new Date(this.start).toISOString(),
@@ -353,45 +393,6 @@ class MR_calendar_event {
 		});
 		if (return_ajax) return ajax;
 		$.when(ajax);
-	}
-
-	to_schedule_row(printed_props) {
-		var row_dom = $("<tr/>");
-		$.each(
-			schedule_table_header,
-			function (idx, col) {
-				var key = col.prop;
-				var val = null;
-				if (key == "duration") val = this.start_to_end_string;
-				if (key == "subject") val = this.stored_subject;
-				if (key == "details") {
-					val = "";
-					// var temp_div = $("<div/>");
-
-					printed_props.forEach((prop) => {
-						var _val = null;
-						if (this[prop.key]) _val = this[prop.key];
-						else if (this.params[prop.key]) _val = this.params[prop.key];
-						_val = _val || "-";
-						var new_details = "<b> " + prop.label + ": </b>" + _val.trim().replace(/\n/g, "<br>");
-						// temp_div.append($("<p/>").html(new_details).attr("data-prop", prop.key).attr("data-value", _val));
-						val += val == "" ? new_details : "<br>" + new_details;
-					});
-
-					// val = temp_div.prop("innerHTML");
-				}
-				var td = $("<td/>")
-					// .html("<pre>" + (val || "-") + "</pre>")
-					.html(val || "-")
-					.addClass("border");
-				if (idx != schedule_table_header.length - 1) {
-					td.addClass("td.fit");
-				}
-				row_dom.append(td);
-			}.bind(this)
-		);
-		row_dom.attr("data-contingent", this.contingent);
-		return row_dom;
 	}
 
 	get start_string() {
