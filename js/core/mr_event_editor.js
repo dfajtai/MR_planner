@@ -231,26 +231,29 @@ class MR_event_editor {
 			_select_div.append(select_btn);
 			_select_div.append(select_label);
 			contingent_select.append(_select_div);
-			if (contingent_def.category === event.contingent) select_btn.attr("checked", "true");
+			if (contingent_def.category === event.contingent) select_btn.prop("checked", true);
 			index += 1;
 		});
 
 		contingent_settings.append(contingent_select);
 
-		$(allow_override_input).change(function () {
+		allow_override_input.on("change", function () {
 			if (this.checked) {
-				$(contingent_select).find(".contingent-btn").prop("disabled", false);
+				contingent_settings.find(".contingent-btn").prop("disabled", false);
 			} else {
-				$(contingent_select).find(".contingent-btn").prop("disabled", true);
+				contingent_settings.find(".contingent-btn").prop("disabled", true);
 			}
 		});
 
+		this.gui.allow_contingent_override = allow_override_input;
+		this.gui.contingent_settings = contingent_settings;
+
 		if (!event.contingent) {
 			allow_override_input.prop("checked", true).prop("disabled", true);
-			$(contingent_select).find(".contingent-btn").prop("disabled", false);
+			contingent_settings.find(".contingent-btn").prop("disabled", false);
 		} else {
 			allow_override_input.prop("checked", false);
-			$(contingent_select).find(".contingent-btn").prop("disabled", true);
+			contingent_settings.find(".contingent-btn").prop("disabled", true);
 		}
 
 		form.append(contingent_settings);
@@ -303,6 +306,15 @@ class MR_event_editor {
 				if (matched_protocol) {
 					$(this.slot_browser.gui.protocol_select).flexdatalist("value", matched_protocol.protocol_index);
 				}
+
+				var contingent_settings = this.gui.contingent_settings;
+				this.gui.allow_contingent_override.on("change", function () {
+					if (this.checked) {
+						contingent_settings.find(".contingent-btn").prop("disabled", false);
+					} else {
+						contingent_settings.find(".contingent-btn").prop("disabled", true);
+					}
+				});
 			}.bind(this)
 		);
 

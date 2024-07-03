@@ -505,26 +505,26 @@ class MR_event_creator {
 			_select_div.append(select_btn);
 			_select_div.append(select_label);
 			contingent_select.append(_select_div);
-			if (contingent_def.category === this.contingent) select_btn.attr("checked", "true");
+			if (contingent_def.category === this.contingent) select_btn.prop("checked", true);
 			index += 1;
 		});
 
 		contingent_settings.append(contingent_select);
 
-		$(allow_override_input).change(function () {
+		$(allow_override_input).on("change", function () {
 			if (this.checked) {
-				$(contingent_select).find(".contingent-btn").prop("disabled", false);
+				$(contingent_settings).find(".contingent-btn").prop("disabled", false);
 			} else {
-				$(contingent_select).find(".contingent-btn").prop("disabled", true);
+				$(contingent_settings).find(".contingent-btn").prop("disabled", true);
 			}
 		});
 
 		if (!this.contingent) {
 			allow_override_input.prop("checked", true).prop("disabled", true);
-			$(contingent_select).find(".contingent-btn").prop("disabled", false);
+			$(contingent_settings).find(".contingent-btn").prop("disabled", false);
 		} else {
 			allow_override_input.prop("checked", false);
-			$(contingent_select).find(".contingent-btn").prop("disabled", true);
+			$(contingent_settings).find(".contingent-btn").prop("disabled", true);
 		}
 
 		container.append(contingent_settings);
@@ -588,7 +588,7 @@ class MR_event_creator {
 		}
 
 		var modal_root = $("<div/>").addClass("modal fade").attr("id", modal_id).attr("tabindex", "-1");
-		var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl");
+		var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl modal-fullscreen-lg-down");
 		var modal_content = $("<div/>").addClass("modal-content");
 
 		var modal_header = $("<div/>").addClass("modal-header");

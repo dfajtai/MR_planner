@@ -76,21 +76,8 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/core/mr_event_editor.js"></script>
 
 
-
-    <!-- OPERATION -->
-    <script defer src="js/operation/event_editing.js"></script>
-    <script defer src="js/operation/schedule_printing.js"></script>
-
-
     <!-- GUI -->
-    <script defer src="js/gui/event_search_gui.js"></script>
-    <script defer src="js/gui/schedule_print_gui.js"></script>
     <script defer src="js/gui/time_input.js"></script>
-
-    <!-- MODALS -->
-    <script defer src="js/modals/event_modify_modal.js"></script>
-
-
 
 
 </head>

@@ -70,7 +70,7 @@ class MR_calendar_event {
 
 		if (!contingent) {
 			var contingent_select = $(form).find("#contingent_select");
-			contingent = $(contingent_select[0]).find("[name][checked]").val();
+			contingent = $(contingent_select[0]).find("[name]:checked").val();
 		}
 
 		var event = new MR_calendar_event(params.start, params.end, event_params, contingent);
