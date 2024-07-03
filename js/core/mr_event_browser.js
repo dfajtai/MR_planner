@@ -187,6 +187,7 @@ class MR_event_browser {
 									},
 								},
 							});
+							is_loading(false);
 							$(this.gui.control_div).addClass("d-none");
 							return;
 						}
