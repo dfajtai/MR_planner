@@ -45,7 +45,7 @@ class MR_event_creator {
 
 		// event duration
 		var event_duration_block = $("<div/>").addClass("row pb-2");
-		event_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Event duration [min]").attr("for", "event_duration_input"));
+		event_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Reserved duration [min]").attr("for", "event_duration_input"));
 
 		var event_duration_input_block = $("<div/>").addClass("col-sm-6");
 		var event_duration_input = $("<input/>").addClass("form-control").attr("id", "event_duration_input").attr("type", "number");

@@ -1,7 +1,6 @@
 class MR_calendar_event {
 	static param_keys = ["comment", "patient_name", "patient_phone", "physician", "reserved_at", "reserved_by", "protocol"];
 	static response_keys = ["start", "end", "timezone", "subject", "body", "categories", "id"];
-
 	static parse_from_PHP(response_row) {
 		var start = new Date(response_row["start"]);
 		var end = new Date(response_row["end"]);
@@ -235,6 +234,50 @@ class MR_calendar_event {
 		table.append(to_row("Reserved at", this.params.reserved_at));
 		table.append(to_row("Reserved by", this.params.reserved_by));
 		table.append(to_row("Comment", this.params.comment));
+		container.append(table);
+	}
+
+	to_compare_table(container, other_event, this_col_label = "Old value", other_col_label = "New value") {
+		$(container).empty();
+		var table = $("<table/>").addClass("w-100 preview-table");
+		function to_row(label, value_1, value_2, is_header = false) {
+			var row = $("<tr/>");
+
+			var _v1 = (value_1 || "").trim().replace(/\n/g, "<br>");
+			var _v2 = (value_2 || "").trim().replace(/\n/g, "<br>");
+
+			if (is_header) {
+				row.append($("<th/>").html(label).addClass("w-25"));
+
+				row.append($("<th/>").html(_v1));
+				row.append($("<th/>").html(_v2));
+			} else {
+				var key_cell = $("<td/>").html("<strong><b>" + label.trim() + "</b></strong>");
+				if (_v1 === _v2) {
+					key_cell.css({ "background-color": "lightgray" });
+				}
+				row.append(key_cell);
+				row.append($("<td/>").html(_v1));
+				row.append($("<td/>").html(_v2));
+				if (_v1 !== _v2) {
+					row.addClass("bg-danger bg-gradient text-white");
+				}
+			}
+
+			return row;
+		}
+
+		table.append(to_row("Property", this_col_label, other_col_label, true));
+		table.append(to_row("Date", this.start_date_string, other_event.start_date_string));
+		table.append(to_row("Duration", this.start_to_end_string, other_event.start_to_end_string));
+		table.append(to_row("Patient name", this.params.patient_name, other_event.params.patient_name));
+		table.append(to_row("Protocol", this.params.protocol, other_event.params.protocol));
+		table.append(to_row("Contingent", this.contingent, other_event.contingent));
+		table.append(to_row("Phone number", this.params.patient_phone, other_event.params.patient_phone));
+		table.append(to_row("Referring physician", this.params.physician, other_event.params.physician));
+		table.append(to_row("Reserved at", this.params.reserved_at, other_event.params.reserved_at));
+		table.append(to_row("Reserved by", this.params.reserved_by, other_event.params.reserved_by));
+		table.append(to_row("Comment", this.params.comment, other_event.params.comment));
 		container.append(table);
 	}
 

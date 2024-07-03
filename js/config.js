@@ -21,7 +21,7 @@ var contingents = [
 	{ category: "idegseb.", color: [255, 241, 0], label: "idegseb." },
 	{ category: "3TP", color: [254, 203, 111], label: "3TP" },
 	{ category: "FIZ", color: [85, 171, 229], label: "FIZ" },
-	{ category: "PET/CT/MR", color: [255, 140, 0], label: "PET/CT/MR." },
+	{ category: "PET/CT/MR", color: [255, 140, 0], label: "PET/CT/MR" },
 	{ category: "", color: [255, 255, 255], label: "NA" },
 ];
 

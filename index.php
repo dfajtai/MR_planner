@@ -32,7 +32,7 @@ if (isset($_COOKIE['uname'])) {
 <body>
     <div class="d-flex align-items-center justify-content-center">
 
-        <form class="shadow p-5 needs-validation col-md-6 col-lg-4 col-sm-10 col-12 align-self-center" action=<?php echo "'php/login.php?" . myUrlEncode($_SERVER["QUERY_STRING"]) . "'" ?> method="post">
+        <form class="shadow p-5 needs-validation col-md-6 col-lg-4 col-sm-10 col-12 align-self-center mt-5" action=<?php echo "'php/login.php?" . myUrlEncode($_SERVER["QUERY_STRING"]) . "'" ?> method="post">
             <h4 class="display-4 fs-1">LOGIN</h4><br>
 
             <?php if (isset($_GET['error'])) { ?>

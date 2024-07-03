@@ -281,7 +281,7 @@ class MR_event_editor {
 
 		var modal_footer = $("<div/>").addClass("modal-footer");
 
-		modal_footer.append($("<button/>").addClass("btn btn-outline-dark my-1 w-100").attr("id", "submit").html("Update booking"));
+		modal_footer.append($("<button/>").addClass("btn btn-outline-dark my-1 w-100").attr("id", "submit").html("Submit changes"));
 
 		modal_content.append(modal_header);
 		modal_content.append(modal_body);
@@ -326,7 +326,7 @@ class MR_event_editor {
 				} else {
 					var new_event = MR_calendar_event.parse_from_form(this.gui.administration_form, timing_params);
 					var dummy_container = $("<div/>");
-					new_event.to_preview_table(dummy_container, "New value");
+					this.event.to_compare_table(dummy_container, new_event);
 					var message = "The selected booking will be updated as the following:<br/><br/>";
 					message += dummy_container.prop("innerHTML");
 
