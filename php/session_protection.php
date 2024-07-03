@@ -2,13 +2,32 @@
 
 require_once ('forced_logout.php');
 
+function kill_session_if_invalid_origin($initiate_logout = true)
+{
+    if (($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) || $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
+        $message = "[SERVER MESSAGE] Invalid session origin.";
+        if ($initiate_logout) {
+            initiate_forced_logout($message);
+            exit;
+        } else {
+            return $message;
+        }
+    }
+}
+
 function solve_session_fixation()
 {
     if (!isset($_SESSION['CREATED'])) {
         $_SESSION['CREATED'] = time();
     } else if (time() - $_SESSION['CREATED'] > 1 * 60) {
         // session id updated more than 1 minutes ago
+
+        $session_data = $_SESSION;
+
         session_regenerate_id(true);    // change session ID for the current session and invalidate old session ID
+
+        $_SESSION = $session_data;
+
         $_SESSION['CREATED'] = time();  // update creation time
     }
 }
@@ -49,16 +68,22 @@ function kill_session_if_too_old($initiate_logout = true)
 
 function session_protection($initiate_logout = true)
 {
-    $message = kill_session_if_too_old($initiate_logout);
+    $message = kill_session_if_invalid_origin();
     if ($message) {
         echo json_encode($message);
     } else {
-        $message = kill_session_if_inactive($initiate_logout);
 
+        $message = kill_session_if_too_old($initiate_logout);
         if ($message) {
             echo json_encode($message);
         } else {
-            solve_session_fixation();
+            $message = kill_session_if_inactive($initiate_logout);
+
+            if ($message) {
+                echo json_encode($message);
+            } else {
+                solve_session_fixation();
+            }
         }
     }
 }

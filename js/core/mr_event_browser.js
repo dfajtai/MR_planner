@@ -173,6 +173,7 @@ class MR_event_browser {
 				e.preventDefault();
 
 				var params = this.parse_form_to_params();
+				is_loading(true);
 				this.retrieve_calendars(
 					params,
 					function () {
@@ -196,6 +197,7 @@ class MR_event_browser {
 						$(this.gui.control_div).removeClass("d-none");
 
 						this.parametrize_event_selector();
+						is_loading(false);
 					}.bind(this)
 				);
 			}.bind(this)

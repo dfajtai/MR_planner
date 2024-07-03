@@ -96,6 +96,15 @@ if (!isset($_SESSION['ews_token'])) {
 </head>
 
 <body>
+
+    <!-- Loading Overlay -->
+    <div class="d-flex justify-content-center loading-overlay d-none">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">MR examination planner</a>
@@ -119,6 +128,9 @@ if (!isset($_SESSION['ews_token'])) {
         </div>
 
     </nav>
+
+
+
     <container class="d-flex flex-column align-items-center justify-content-center" id="main_container">
         <div class="d-flex  flex-column  p-2 m-2 col-lg-6 col-sm-9 col-12 align-self-center  justify-content-center">
             <div class="accordion accordion-flush" id="main_accordion">
@@ -185,9 +197,16 @@ if (!isset($_SESSION['ews_token'])) {
 
 </body>
 <script nonce="<?php echo $_SESSION['nonce']; ?>">
+    function is_loading(val) {
+        if (val) $(".loading-overlay").removeClass("d-none");
+        else $(".loading-overlay").addClass("d-none")
+    }
+
+    is_loading(true);
 
     $(document).ready(function () {
         // read protocols from csv
+
         $.get(protocols_path, function (CSVdata) {
             protocols = $.csv.toObjects(CSVdata);
 
@@ -198,6 +217,8 @@ if (!isset($_SESSION['ews_token'])) {
                 dataType: "json",
                 data: {},
                 success: function (calendar_names) {
+
+
                     available_calendars = calendar_names;
 
                     // cerate
@@ -239,7 +260,7 @@ if (!isset($_SESSION['ews_token'])) {
                     CORE.schedule_printer = new MR_schedule_printer($(schedule_print_container));
                     CORE.schedule_printer.create_gui();
 
-
+                    is_loading(false);
 
                 },
             });

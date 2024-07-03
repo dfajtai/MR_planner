@@ -1,4 +1,9 @@
 <?php
+class DestroyedSessionAccessException extends Exception
+{
+}
+
+
 // kill previous session if exists.
 session_start();
 $has_session = session_status() == PHP_SESSION_ACTIVE;
@@ -16,13 +21,23 @@ ini_set('session.gc_maxlifetime', 15 * 60); // Use strict mode for sessions
 
 // Start the session
 session_start();
+// Regenerate session ID to prevent session fixation
+session_regenerate_id(true);
 
 if (!isset($_SESSION['nonce'])) {
-    $_SESSION['nonce'] = base64_encode(random_bytes(16));
+    $_SESSION['nonce'] = md5(microtime(true));
+}
+
+if (!isset($_SESSION['IPaddress']) || $reload) {
+    $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
+}
+
+
+if (!isset($_SESSION['userAgent']) || $reload) {
+    $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 
 $nonce = $_SESSION['nonce'];
-
 
 header("Content-Security-Policy: default-src 'self'; " .
     "script-src 'self' 'nonce-" . $nonce . "' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://code.jquery.com; " .
@@ -31,9 +46,5 @@ header("Content-Security-Policy: default-src 'self'; " .
     "object-src 'none';");
 
 
-
 require 'php_functions.php';
-
-// Regenerate session ID to prevent session fixation
-session_regenerate_id(true);
 ?>

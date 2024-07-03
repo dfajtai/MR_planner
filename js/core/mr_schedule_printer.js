@@ -200,6 +200,7 @@ class MR_schedule_printer {
 		if (!params) {
 			params = default_params;
 		}
+		is_loading(true);
 		$.ajax({
 			type: "GET",
 			url: "php/get_event_list.php",
@@ -212,6 +213,7 @@ class MR_schedule_printer {
 			},
 			success: function (results) {
 				this.calendar_data = MR_calendar_event.parse_from_calendar_data(results).events;
+				is_loading(false);
 				if (success_callback) success_callback();
 			}.bind(this),
 		});

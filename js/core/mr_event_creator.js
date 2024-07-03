@@ -618,7 +618,7 @@ class MR_event_creator {
 
 	create_event(parsed_event, success_callback) {
 		var calendar = this.params.source_calendar;
-
+		is_loading(true);
 		parsed_event.call_event_create(
 			calendar,
 			function () {
@@ -628,6 +628,7 @@ class MR_event_creator {
 				if (success_callback) {
 					success_callback();
 				}
+				is_loading(false);
 			}.bind(this)
 		);
 	}
