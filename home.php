@@ -189,6 +189,13 @@ if (!isset($_SESSION['ews_token'])) {
         else $(".loading-overlay").addClass("d-none")
     }
 
+    $("#main_container").find(".accordion-collapse").on("hide.bs.collapse", function () {
+        $(this).children().addClass('fade');
+    })
+    $("#main_container").find(".accordion-collapse").on("show.bs.collapse", function () {
+        $(this).children().removeClass('fade');
+    })
+
     is_loading(true);
 
     $(document).ready(function () {

@@ -168,8 +168,6 @@
 }
 
 
-
-
 /* Center loading spinner */
 .loading-overlay {
     position: fixed;
@@ -187,4 +185,21 @@
     opacity: 1;
     /* Initially hidden */
     transition: opacity 0.3s ease-in-out;
+}
+
+
+/* Accordion handling */
+.accordion-body {
+    transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -webkit-transition: .3s ease-in-out;
+    opacity: 1;
+}
+
+
+.accordion-body.fade {
+    transition: .3s ease-in-out;
+    -moz-transition: .3s ease-in-out;
+    -webkit-transition: .3s ease-in-out;
+    opacity: 0;
 }

@@ -1,6 +1,6 @@
 const schedule_table_header = [
 	{ label: "Időtartam", prop: "duration" },
-	{ label: "Név (Protokol)", prop: "subject" },
+	{ label: "Név [Protokol]", prop: "subject" },
 	{ label: "Részletek", prop: "details" },
 ];
 
