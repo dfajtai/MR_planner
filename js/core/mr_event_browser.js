@@ -51,7 +51,7 @@ class MR_event_browser {
 		var event_select_block = $("<div/>").addClass("row");
 		event_select_block.append($("<label/>").attr("for", "event_select").addClass("col-sm-3 col-form-label").html("Select examination"));
 		var event_select_container = $("<div/>").addClass("col-sm-9 d-flex flex-row");
-		var event_select_div = $("<div/>").addClass("w-100");
+		var event_select_div = $("<div/>").addClass("w-100 accordion-hideable");
 		var event_select = $("<input/>")
 			.attr("name", "selected_event_index")
 			.attr("id", "event_select")

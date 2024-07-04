@@ -340,6 +340,7 @@ class MR_timing_slot_browser {
 			AmpPlugin: {
 				resetButton: true,
 				darkMode: false,
+				weekNumbers: true,
 			},
 			zIndex: 10000,
 		});

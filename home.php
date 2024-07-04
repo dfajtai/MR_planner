@@ -191,9 +191,13 @@ if (!isset($_SESSION['ews_token'])) {
 
     $("#main_container").find(".accordion-collapse").on("hide.bs.collapse", function () {
         $(this).children().addClass('fade');
+        $(this).find(".accordion-hideable").addClass("fade");
     })
     $("#main_container").find(".accordion-collapse").on("show.bs.collapse", function () {
         $(this).children().removeClass('fade');
+    })
+    $("#main_container").find(".accordion-collapse").on("shown.bs.collapse", function () {
+        $(this).find(".accordion-hideable").removeClass("fade");
     })
 
     is_loading(true);
