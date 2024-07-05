@@ -470,6 +470,18 @@ class MR_event_creator {
 		reserved_by_block.append(reserved_by_input_block);
 		container.append(reserved_by_block);
 
+		// skipped block
+		var skipped_block = $("<div/>").addClass("form-check pb-2");
+		var skipped_input = $("<input/>")
+			.addClass("form-check-input")
+			.attr("type", "checkbox")
+			.attr("id", "isSkipped_input")
+			.prop("checked", false)
+			.attr("name", "isSkipped");
+		skipped_block.append($("<label/>").addClass("form-check-label").html("Is the measurement skipped?").attr("for", "isSkipped_input"));
+		skipped_block.append(skipped_input);
+		container.append(skipped_block);
+
 		// contingent block
 		var contingent_settings = $("<div/>").addClass("card flex-column w-100 p-2");
 

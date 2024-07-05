@@ -6,6 +6,8 @@ function search_free_time_windows_using_masks(events, masks, searched_length, co
 	count = count || 999;
 
 	$.each(masks, function (mask_index, mask) {
+		if (mask.isSkipped) return true;
+
 		var mask_start = mask.start;
 
 		if (contingent) {
@@ -21,6 +23,7 @@ function search_free_time_windows_using_masks(events, masks, searched_length, co
 
 		var window_array = new Array(window_length).fill(0);
 		$.each(events, function (event_index, event) {
+			if (event.isSkipped) return true;
 			var event_start = event.start;
 			var event_end = event.end;
 
@@ -96,6 +99,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 		var day_array = new Array(day_length).fill(0);
 
 		$.each(events, function (event_index, event) {
+			if (event.isSkipped) return true;
 			var event_start = event.start;
 			var event_end = event.end;
 
@@ -112,6 +116,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 		});
 
 		$.each(masks, function (mask_index, mask) {
+			if (mask.isSkipped) return true;
 			var mask_start = mask.start;
 			var mask_end = mask.end;
 
@@ -189,6 +194,8 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 		var day_array = new Array(day_length).fill(0);
 
 		$.each(events, function (event_index, event) {
+			if (event.isSkipped) return true;
+
 			var event_start = event.start;
 			var event_end = event.end;
 

@@ -1,5 +1,5 @@
 class MR_calendar_event {
-	static param_keys = ["comment", "patient_name", "patient_phone", "physician", "reserved_at", "reserved_by", "protocol"];
+	static param_keys = ["comment", "patient_name", "patient_phone", "physician", "reserved_at", "reserved_by", "protocol", "isSkipped"];
 	static response_keys = ["start", "end", "timezone", "subject", "body", "categories", "id"];
 	static parse_from_PHP(response_row) {
 		var start = new Date(response_row["start"]);
@@ -70,8 +70,11 @@ class MR_calendar_event {
 
 		if (!contingent) {
 			var contingent_select = $(form).find("#contingent_select");
-			contingent = $(contingent_select[0]).find("[name]:checked").val();
+			contingent = $(contingent_select[0]).find('[name="contingent"]:checked').val();
 		}
+
+		var isSkipped = $(form).find('[name="isSkipped"]').prop("checked");
+		event_params["isSkipped"] = isSkipped;
 
 		var event = new MR_calendar_event(params.start, params.end, event_params, contingent);
 		return event;
@@ -193,6 +196,7 @@ class MR_calendar_event {
 		table.append(to_row("Reserved at", this.params.reserved_at, "reserved_at"));
 		table.append(to_row("Reserved by", this.params.reserved_by, "reserved_by"));
 		table.append(to_row("Comment", this.params.comment, "comment"));
+		table.append(to_row("Skipped", JSON.stringify(this.isSkipped), "isSkipped"));
 		container.append(table);
 
 		var html_text = template.replace("#CONTENT#", container.prop("outerHTML"));
@@ -205,7 +209,7 @@ class MR_calendar_event {
 		var table = $("<table/>").addClass("w-100 preview-table");
 
 		function to_row(label, value, is_header = false) {
-			if (!value) return null;
+			if (value === null || value == undefined || value === "") return null;
 
 			var row = $("<tr/>");
 			if (is_header) {
@@ -234,6 +238,7 @@ class MR_calendar_event {
 		table.append(to_row("Reserved at", this.params.reserved_at));
 		table.append(to_row("Reserved by", this.params.reserved_by));
 		table.append(to_row("Comment", this.params.comment));
+		table.append(to_row("Skipped", JSON.stringify(this.isSkipped)));
 		container.append(table);
 	}
 
@@ -278,11 +283,13 @@ class MR_calendar_event {
 		table.append(to_row("Reserved at", this.params.reserved_at, other_event.params.reserved_at));
 		table.append(to_row("Reserved by", this.params.reserved_by, other_event.params.reserved_by));
 		table.append(to_row("Comment", this.params.comment, other_event.params.comment));
+		table.append(to_row("Skipped", JSON.stringify(this.isSkipped), JSON.stringify(other_event.isSkipped)));
 		container.append(table);
 	}
 
 	to_schedule_row(printed_props) {
 		var row_dom = $("<tr/>");
+		if (this.isSkipped) return null;
 		$.each(
 			schedule_table_header,
 			function (idx, col) {
@@ -480,5 +487,12 @@ class MR_calendar_event {
 	get protocol_params() {
 		var matcing_protocol = getEntryWhere(protocols, "protocol_name", this.params.protocol);
 		return matcing_protocol;
+	}
+
+	get isSkipped() {
+		if (!this.params) return false;
+		if (this.params.isSkipped === undefined) return false;
+		if (JSON.parse(this.params.isSkipped)) return true;
+		return false;
 	}
 }
