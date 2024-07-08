@@ -129,7 +129,7 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Plan new examination</p>
                             </div>
-                            <span class="badge rounded-pill bg-success ms-auto">Development finished</span>
+                            <!-- <span class="badge rounded-pill bg-success ms-auto">Development finished</span> -->
 
                         </button>
                     </h2>
@@ -145,7 +145,7 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Search booked examination</p>
                             </div>
-                            <span class="badge rounded-pill bg-warning ms-auto">Needs review</span>
+                            <!-- <span class="badge rounded-pill bg-warning ms-auto">Needs review</span> -->
 
                         </button>
                     </h2>
@@ -162,7 +162,7 @@ if (!isset($_SESSION['ews_token'])) {
                             <div class="d-flex align-items-center">
                                 <p id="title" class="fs-3 fw-bold pb-0 mb-0">Print daily schedule</p>
                             </div>
-                            <span class="badge rounded-pill bg-success ms-auto">Development finished</span>
+                            <!-- <span class="badge rounded-pill bg-success ms-auto">Development finished</span> -->
 
                         </button>
                     </h2>
