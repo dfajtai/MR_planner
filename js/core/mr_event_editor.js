@@ -67,9 +67,6 @@ class MR_event_editor {
 			this.slot_browser.container = this.gui.slot_browser;
 			this.slot_browser.create_gui(false);
 		}
-		if (this.event.contingent) {
-			this.slot_browser.gui.logic_select.val(this.event.contingent);
-		}
 
 		// administartion
 		var administration_card = $("<div/>").addClass("card d-flex w-50 m-1");
@@ -327,6 +324,10 @@ class MR_event_editor {
 						contingent_settings.find(".contingent-btn").prop("disabled", true);
 					}
 				});
+
+				if (this.event.contingent) {
+					this.slot_browser.gui.logic_select.val("CONTINGENT#" + this.event.contingent).change();
+				}
 			}.bind(this)
 		);
 
