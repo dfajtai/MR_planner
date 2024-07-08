@@ -13,7 +13,8 @@ use garethp\ews\API\Type\ExchangeImpersonation;
 session_start();
 
 global $ews_address;
-$ews_address = '10.10.1.113/EWS/Exchange.asmx';
+// $ews_address = '10.10.1.113/EWS/Exchange.asmx';
+$ews_address = "webmail.medicopus.hu/EWS/Exchange.asmx";
 
 global $api;
 

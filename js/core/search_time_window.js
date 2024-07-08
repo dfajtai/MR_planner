@@ -87,7 +87,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 	var count = parse_val(count);
 	count = count || 999;
 
-	var date_range = moment(end_date).diff(moment(start_date), "days");
+	var date_range = moment(end_date).diff(moment(start_date), "days") + 1;
 	for (let index = 0; index < date_range; index++) {
 		var day_examined = moment(start_date).add(index, "days");
 		var day_idx = moment(day_examined).day();
@@ -168,7 +168,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 			}
 		});
 		if (free_windows.length >= count) {
-			return false;
+			break;
 		}
 	}
 
@@ -182,7 +182,7 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 	var count = parse_val(count);
 	count = count || 999;
 
-	var date_range = moment(end_date).diff(moment(start_date), "days");
+	var date_range = moment(end_date).diff(moment(start_date), "days") + 1;
 	for (let index = 0; index < date_range; index++) {
 		var day_examined = moment(start_date).add(index, "days");
 		var day_idx = moment(day_examined).day();
@@ -247,7 +247,7 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 			}
 		});
 		if (free_windows.length >= count) {
-			return false;
+			break;
 		}
 	}
 
