@@ -227,7 +227,7 @@ class MR_event_editor {
 			var _select_div = $("<div/>").addClass("flex-fill");
 			if (index + 1 < contingents.length) _select_div.addClass("pe-2");
 
-			var _id = contingent_def.label + "_contingent";
+			var _id = "event_editor_" + contingent_def.label + "_contingent";
 			var select_btn = $("<input>")
 				.attr("id", _id)
 				.addClass("btn-check contingent-btn")
