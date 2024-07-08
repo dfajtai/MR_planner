@@ -243,6 +243,22 @@ class MR_timing_slot_browser {
 		this.form = form;
 
 		if (call_logic) this.gui_logic(fix_position);
+
+		$(form)
+			.find(".accordion-collapse")
+			.on("hide.bs.collapse", function (event) {
+				event.stopPropagation();
+			});
+		$(form)
+			.find(".accordion-collapse")
+			.on("show.bs.collapse", function (event) {
+				event.stopPropagation();
+			});
+		$(form)
+			.find(".accordion-collapse")
+			.on("shown.bs.collapse", function (event) {
+				event.stopPropagation();
+			});
 	}
 
 	gui_logic(fix_position = true) {
