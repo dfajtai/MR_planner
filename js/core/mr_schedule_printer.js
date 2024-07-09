@@ -16,6 +16,9 @@ class MR_schedule_printer {
 		this.calendar_data = null;
 
 		this.fonts = null;
+
+		this.modal = null;
+		this.carousel = null;
 	}
 
 	create_gui() {
@@ -82,9 +85,17 @@ class MR_schedule_printer {
 		props_check_block.append(props_check_div);
 		form.append(props_check_block);
 
-		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Print schedules").attr("id", "print_btn").attr("type", "button");
-		form.append($("<div/>").addClass("py-2").append(submit_btn));
-		this.gui.submit_btn = submit_btn;
+		var btns_div = $("<div/>").addClass("py-2 d-flex flex-row");
+
+		var preview_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Preview schedules").attr("id", "preview_btn").attr("type", "button");
+		btns_div.append($("<div/>").addClass("pe-2 w-100").append(preview_btn));
+		this.gui.preview_btn = preview_btn;
+
+		var print_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Print schedules").attr("id", "print_btn").attr("type", "button");
+		btns_div.append($("<div/>").addClass("w-100").append(print_btn));
+		this.gui.print_btn = print_btn;
+
+		form.append(btns_div);
 
 		this.container.append(form);
 		this.form = form;
@@ -129,13 +140,24 @@ class MR_schedule_printer {
 		picker.setEndDate(moment().add(4, "days").format("YYYY-MM-DD"));
 
 		// submit btn
-		this.gui.submit_btn.on(
+		this.gui.print_btn.on(
 			"click",
 			function () {
 				if (!$(this.form)[0].checkValidity()) {
 					$(this.form)[0].reportValidity();
 				} else {
 					this.form.trigger("submit", true);
+				}
+			}.bind(this)
+		);
+
+		this.gui.preview_btn.on(
+			"click",
+			function () {
+				if (!$(this.form)[0].checkValidity()) {
+					$(this.form)[0].reportValidity();
+				} else {
+					this.form.trigger("preview", true);
 				}
 			}.bind(this)
 		);
@@ -158,6 +180,21 @@ class MR_schedule_printer {
 						else {
 							this.print_schedule(params);
 						}
+					}.bind(this)
+				);
+			}.bind(this)
+		);
+
+		this.form.on(
+			"preview",
+			function (e) {
+				e.preventDefault();
+
+				var params = this.parse_form_to_params();
+				this.retrieve_calendars(
+					params,
+					function () {
+						this.preview_schedule(params);
 					}.bind(this)
 				);
 			}.bind(this)
@@ -391,5 +428,179 @@ class MR_schedule_printer {
 				doc.save("schedule-" + date.split(".").join("-") + " .pdf");
 			}.bind(this)
 		);
+	}
+
+	schedule_preview_modal(container) {
+		var modal_id = "schedule_preview_modal";
+		var modal = container.find("#" + modal_id);
+		if (modal) {
+			container.find("#" + modal_id).remove();
+		}
+
+		var modal_root = $("<div/>").addClass("modal fade").attr("id", modal_id).attr("tabindex", "-1");
+		var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl");
+		var modal_content = $("<div/>").addClass("modal-content");
+
+		var modal_header = $("<div/>").addClass("modal-header");
+		modal_header.append($("<h5/>").addClass("modal-title display-5 fs-5").html("Schedule preview"));
+		modal_header.append($("<button/>").addClass("btn-close").attr("data-bs-dismiss", "modal").attr("aria-label", "Close"));
+
+		var modal_body = $("<div/>").addClass("modal-body").css({ "overflow-y": "auto" });
+
+		var modal_footer = $("<div/>").addClass("modal-footer");
+
+		modal_content.append(modal_header);
+		modal_content.append(modal_body);
+		modal_content.append(modal_footer);
+
+		modal_dialog.append(modal_content);
+		modal_root.append(modal_dialog);
+
+		this.modal = modal_root;
+		this.gui.modal_body = modal_body;
+	}
+
+	preview_schedule(params) {
+		var events_to_print = this.calendar_data;
+		var props_to_print = params.props_to_print;
+
+		if (events_to_print.length == 0) {
+			bootbox.alert({
+				message: "There are no scheduled events to print within the selected date range.",
+				buttons: {
+					ok: {
+						label: "Ok",
+						className: "btn-outline-dark",
+					},
+				},
+			});
+			return;
+		}
+
+		var dates = [];
+
+		$.each(events_to_print, function (event_index, event) {
+			if (!dates.includes(event.start_date_string)) dates.push(event.start_date_string);
+		});
+
+		function create_schedule_table(container, rows) {
+			container.empty();
+
+			var table = $("<table/>").addClass("w-100 table table-bordered align-middle").attr("id", "schedule_table").css({ "border-collapse": "collapse" });
+			var header_row = $("<tr/>");
+
+			schedule_table_header;
+			$.each(schedule_table_header, function (idx, col) {
+				var th = $("<th/>").html(col.label).attr("scope", "col").addClass("text-center");
+				if (idx != schedule_table_header.length - 1) {
+					th.addClass("th.fit");
+				}
+				header_row.append(th);
+			});
+			table.append($("<thead/>").addClass("table-light").append(header_row));
+
+			var table_body = $("<tbody/>");
+			$.each(rows, function (row_index, row) {
+				table_body.append(row);
+			});
+
+			table.append(table_body);
+
+			$(container).append($("<div/>").addClass("table-responsive text-nowrap").append(table));
+		}
+
+		var carousel = $("<div/>").addClass("carousel slide carousel-dark").attr("data-bs-ride", "carousel").attr("id", "preview_carousel");
+		var carousel_inner = $("<div/>").addClass("carousel-inner");
+		carousel.append(carousel_inner);
+		var carousel_prev_btn = $("<button/>")
+			.addClass("carousel-control-prev")
+			.attr("type", "button")
+			.attr("data-bs-target", "#preview_carousel")
+			.attr("data-bs-slide", "prev");
+
+		carousel_prev_btn.append($("<span/>").addClass("carousel-control-prev-icon").attr("aria-hidden", true));
+		carousel_prev_btn.append($("<span/>").addClass("visually-hidden").html("Previous"));
+
+		var carousel_next_btn = $("<button/>")
+			.addClass("carousel-control-next")
+			.attr("type", "button")
+			.attr("data-bs-target", "#preview_carousel")
+			.attr("data-bs-slide", "next");
+
+		carousel_next_btn.append($("<span/>").addClass("carousel-control-next-icon").attr("aria-hidden", true));
+		carousel_next_btn.append($("<span/>").addClass("visually-hidden").html("Next"));
+
+		carousel.append(carousel_prev_btn);
+		carousel.append(carousel_next_btn);
+
+		this.gui.carousel = carousel;
+
+		$.each(
+			dates,
+			function (date_index, date) {
+				var container = $("<div/>").addClass("card shadow d-block flex-column p-2");
+
+				container.append($("<h5/>").html(date));
+				var _table_container = $("<div/>");
+
+				var daily_events = [];
+				$.each(events_to_print, function (event_idx, event) {
+					if (event.start_date_string == date) daily_events.push(event);
+				});
+				// console.log(daily_events);
+
+				var rows = [];
+				$.each(daily_events, function (event_index, event) {
+					var row = event.to_schedule_row(props_to_print);
+					if (!row) return true;
+					var matched_contingent = getEntryWhere(contingents, "category", event.contingent);
+					if (matched_contingent) {
+						var c = matched_contingent.color;
+						row.css("background-color", "rgb(" + c.join(", ") + ")");
+						row.find("td").css("background-color", "rgb(" + c.join(", ") + ")");
+					}
+					rows.push(row);
+				});
+
+				create_schedule_table(_table_container, rows);
+				container.append(_table_container);
+
+				var carousel_item = $("<div/>").addClass("carousel-item");
+				if (date_index == 0) carousel_item.addClass("active");
+				carousel_item.append(container);
+
+				carousel_inner.append(carousel_item);
+			}.bind(this)
+		);
+
+		this.schedule_preview_modal(this.container);
+
+		this.modal.on(
+			"shown.bs.modal",
+			function () {
+				this.gui.modal_body.empty();
+
+				this.gui.modal_body.append(this.gui.carousel);
+				$(this.gui.carousel).carousel();
+
+				const myCarouselElement = $(this.gui.carousel)[0];
+
+				this.carousel = new bootstrap.Carousel(myCarouselElement, {
+					interval: 2000,
+					touch: false,
+					rude: true,
+				});
+			}.bind(this)
+		);
+
+		this.modal.on(
+			"hide.bs.modal",
+			function () {
+				this.carousel.dispose();
+				this.gui.modal_body.empty();
+			}.bind(this)
+		);
+
+		$(this.modal).modal("show");
 	}
 }
