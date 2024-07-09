@@ -115,9 +115,8 @@ class MR_schedule_printer {
 			plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],
 
 			LockPlugin: {
-				minDate: new Date(),
 				minDays: 1,
-				maxDays: 30,
+				maxDays: 5,
 			},
 			AmpPlugin: {
 				resetButton: true,
@@ -126,8 +125,8 @@ class MR_schedule_printer {
 			zIndex: 10000,
 		});
 
-		picker.setStartDate(moment().add(1, "days").format("YYYY-MM-DD"));
-		picker.setEndDate(moment().add(14, "days").format("YYYY-MM-DD"));
+		picker.setStartDate(moment().format("YYYY-MM-DD"));
+		picker.setEndDate(moment().add(4, "days").format("YYYY-MM-DD"));
 
 		// submit btn
 		this.gui.submit_btn.on(

@@ -361,8 +361,8 @@ class MR_timing_slot_browser {
 			zIndex: 10000,
 		});
 
-		picker.setStartDate(moment().add(1, "days").format("YYYY-MM-DD"));
-		picker.setEndDate(moment().add(14, "days").format("YYYY-MM-DD"));
+		picker.setStartDate(moment().format("YYYY-MM-DD"));
+		picker.setEndDate(moment().add(13, "days").format("YYYY-MM-DD"));
 
 		// submit btn
 		this.gui.submit_btn.on(
