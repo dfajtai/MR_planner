@@ -128,7 +128,10 @@ class MR_calendar_event {
 			}
 		}
 		if (!params.patient_name) {
-			this.params.patient_name = this._subject.replace(this.params.protocol, "");
+			this.params.patient_name = this._subject
+				.replace(this.params.protocol, "")
+				.replace(/[\[\]]+/, "")
+				.trim();
 		}
 	}
 
@@ -485,6 +488,10 @@ class MR_calendar_event {
 
 	get formatted_timing_string() {
 		return "[" + this.start_date_string + ": " + this.start_to_end_string + "]";
+	}
+
+	get timing_string() {
+		return this.start_date_string + ": " + this.start_to_end_string;
 	}
 
 	get end_date_string() {

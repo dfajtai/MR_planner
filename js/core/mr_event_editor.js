@@ -168,6 +168,8 @@ class MR_event_editor {
 
 		var form = $("<form/>").attr("id", "event_edit_form").addClass("needs-validation").addClass("d-flex flex-column");
 
+		// booking subject
+
 		var booking_subject_block = $("<div/>").addClass("row pb-2");
 		booking_subject_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Booking").attr("for", "event_subject"));
 		var subject_text = $("<input/>")
@@ -179,7 +181,19 @@ class MR_event_editor {
 		booking_subject_block.append($("<div/>").addClass("col-sm-9").append(subject_text));
 		form.append(booking_subject_block);
 
-		// protocol - if missing
+		// timing
+		var timing_block = $("<div/>").addClass("row pb-2");
+		timing_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Timing").attr("for", "event_subject"));
+		var timing_text = $("<input/>")
+			.addClass("form-control ps-4")
+			.attr("value", this.event.timing_string)
+			.attr("id", "event_subject")
+			.attr("disabled", true)
+			.attr("readonly", true);
+		timing_block.append($("<div/>").addClass("col-sm-9").append(timing_text));
+		form.append(timing_block);
+
+		// protocol indicator / input - if missing
 
 		if (this.event.params.protocol) {
 			var protocol_select_block = $("<div/>").addClass("row pb-2");
@@ -198,7 +212,7 @@ class MR_event_editor {
 
 		form.append(protocol_select_block);
 
-		// patient n
+		// patient name
 		var patient_name_block = $("<div/>").addClass("row pb-2");
 		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name").attr("for", "patient_name_input"));
 		var patient_name_input_block = $("<div/>").addClass("col-sm-9");
