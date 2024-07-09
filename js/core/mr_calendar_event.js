@@ -62,11 +62,18 @@ class MR_calendar_event {
 	static parse_from_form(form, params) {
 		var event_params = {};
 		var contingent = null;
-		$.each($(form).serializeArray(), function (index, field) {
+		var serialized_form = $(form).serializeArray();
+
+		var protocol = null;
+		$.each(serialized_form, function (index, field) {
 			if (MR_calendar_event.param_keys.includes(field.name)) event_params[field.name] = field.value;
 			if (field.name == "contingent") contingent = field.value;
+			if (field.name == "protocol_index") {
+				var protocol_index = field.value;
+				protocol = getEntryWhere(protocols, "protocol_index", protocol_index);
+			}
 		});
-		event_params["protocol"] = params.protocol.protocol_name;
+		event_params["protocol"] = protocol ? protocol.protocol_name : params.protocol.protocol_name || "";
 
 		if (!contingent) {
 			var contingent_select = $(form).find("#contingent_select");
@@ -104,7 +111,7 @@ class MR_calendar_event {
 		this.params = params;
 		this.contingent = contingent;
 		this.id = id;
-		this._subject = stored_subject;
+		this._subject = stored_subject ? stored_subject.trim() : null;
 
 		this._calendar_name = calendar_name;
 		this.exists = false;
@@ -119,6 +126,9 @@ class MR_calendar_event {
 			if (matched_protocol) {
 				this.params.protocol = matched_protocol.protocol_name;
 			}
+		}
+		if (!params.patient_name) {
+			this.params.patient_name = this._subject.replace(this.params.protocol, "");
 		}
 	}
 

@@ -101,12 +101,102 @@ class MR_event_editor {
 		this.timing_handler.set_update_windows(windows);
 	}
 
+	add_protocol_selector(container, fix_position = true) {
+		container.empty();
+
+		// protocol select
+		var protocol_select_block = $("<div/>").addClass("row mb-2");
+		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Examination protocol"));
+		var protocol_select_div = $("<div/>").addClass("col-sm-9 d-flex flex-row");
+		var protocol_select = $("<input/>")
+			.attr("name", "protocol_index")
+			.attr("id", "protocol_select")
+			.addClass("form-control flexdatalist")
+			.attr("required", true)
+			.attr("placeholder", "Select examination protocol...")
+			.attr("type", "test");
+		protocol_select_div.append(protocol_select);
+		protocol_select_block.append(protocol_select_div);
+		container.append(protocol_select_block);
+
+		var clear_select_btn = $("<button/>").addClass("btn btn-outline-dark ms-2").append($("<span/>").addClass("fa-light fa-x")).attr("type", "button");
+		protocol_select_div.append(clear_select_btn);
+
+		this.gui.protocol_clear_btn = clear_select_btn;
+		this.gui.protocol_select = protocol_select;
+		this.gui.protocol_select_container = protocol_select_div;
+
+		$(this.gui.protocol_clear_btn).on(
+			"click",
+			function () {
+				$(this.gui.protocol_select).flexdatalist("reset");
+				this.parametrize_protocol_selector(fix_position);
+			}.bind(this)
+		);
+	}
+
+	parametrize_protocol_selector(fix_position = true) {
+		if (!this.gui.protocol_select) return;
+
+		// protocol select
+		$(this.gui.protocol_select).flexdatalist("destroy");
+		$(this.gui.protocol_select).flexdatalist({
+			minLength: 0,
+			selectionRequired: true,
+			toggleSelected: true,
+			searchIn: ["protocol_name", "modality"],
+			visibleProperties: ["protocol_name"],
+			valueProperty: "protocol_index",
+			textProperty: "[{modality}] {protocol_name} ({protocol_duration} min)",
+			searchContain: true,
+			data: protocols,
+			limitOfValues: 1,
+		});
+
+		// handle bugged validation popup location
+		if (fix_position) {
+			var val_dummy = $(this.gui.protocol_select_container.find(".flexdatalist-set")[0]);
+			var list_dummy = $(this.gui.protocol_select_container.find(".flexdatalist-alias")[0]);
+			val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
+		}
+	}
+
 	administration_gui(container, event = null) {
 		event = event || this.event;
 
 		container.empty();
 
 		var form = $("<form/>").attr("id", "event_edit_form").addClass("needs-validation").addClass("d-flex flex-column");
+
+		var booking_subject_block = $("<div/>").addClass("row pb-2");
+		booking_subject_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Booking").attr("for", "event_subject"));
+		var subject_text = $("<input/>")
+			.addClass("form-control ps-4")
+			.attr("value", this.event._subject)
+			.attr("id", "event_subject")
+			.attr("disabled", true)
+			.attr("readonly", true);
+		booking_subject_block.append($("<div/>").addClass("col-sm-9").append(subject_text));
+		form.append(booking_subject_block);
+
+		// protocol - if missing
+
+		if (this.event.params.protocol) {
+			var protocol_select_block = $("<div/>").addClass("row pb-2");
+			protocol_select_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Protocol").attr("for", "event_protocol"));
+			var protocol_div = $("<input/>")
+				.addClass("form-control ps-4")
+				.attr("value", this.event.params.protocol)
+				.attr("id", "event_subject")
+				.attr("disabled", true)
+				.attr("readonly", true);
+			protocol_select_block.append($("<div/>").addClass("col-sm-9 d-flex flex-row").append(protocol_div));
+		} else {
+			var protocol_select_block = $("<div/>");
+			this.add_protocol_selector(protocol_select_block);
+		}
+
+		form.append(protocol_select_block);
 
 		// patient n
 		var patient_name_block = $("<div/>").addClass("row pb-2");
@@ -328,6 +418,8 @@ class MR_event_editor {
 				if (this.event.contingent) {
 					this.slot_browser.gui.logic_select.val("CONTINGENT#" + this.event.contingent).change();
 				}
+
+				this.parametrize_protocol_selector();
 			}.bind(this)
 		);
 
