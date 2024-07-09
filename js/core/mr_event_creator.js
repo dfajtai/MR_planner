@@ -1,4 +1,5 @@
 class MR_event_creator {
+	static instance_id = 0;
 	constructor(search_params, contingent = null) {
 		this.params = search_params;
 		this.protocol = this.params.protocol;
@@ -21,8 +22,12 @@ class MR_event_creator {
 		this.event_end = null;
 		this.event_duration = null;
 
-		this.slider_name = "event_timing_slider";
 		this.slider = null;
+
+		this.instance_id = MR_event_creator.instance_id;
+		MR_event_creator.instance_id += 1;
+
+		this.slider_name = "event_timing_slider_" + this.instance_id;
 	}
 
 	timing_parameters_gui(container) {
@@ -76,6 +81,7 @@ class MR_event_creator {
 		slider_container.append($("<div/>").append(slider_element).css("height", "68pt"));
 
 		this.gui.slider_container = slider_container;
+		this.gui.slider = slider_element;
 
 		container.append(slider_block);
 
@@ -150,6 +156,8 @@ class MR_event_creator {
 		var end = this.gui.end_time_block;
 		var duration = this.gui.event_duration_input;
 
+		var creator_id = this.instance_id;
+
 		$.each(windows, function (index, window) {
 			var start_date_string = moment(window[0]).format("YYYY.MM.DD");
 			var end_date_string = moment(window[1]).format("YYYY.MM.DD");
@@ -164,15 +172,11 @@ class MR_event_creator {
 
 			var time_window_list_item = $("<li/>").addClass("list-group-item p-1");
 			var time_window_element = $("<div/>").addClass("flex-fill");
-			var btn_input = $("<input/>")
-				.addClass("window-select-btn btn-check")
-				.attr("id", "time_window" + index);
+			var _id = "event_creator_" + creator_id + "_time_window" + index;
+			var btn_input = $("<input/>").addClass("window-select-btn btn-check").attr("id", _id);
 			btn_input.attr("type", "radio").attr("name", "timeWindow").attr("value", index).attr("autocomplete", "off").attr("required", "true");
 
-			var btn_label = $("<label/>")
-				.addClass("btn btn-outline-dark w-100")
-				.attr("for", "time_window" + index)
-				.html(btn_text);
+			var btn_label = $("<label/>").addClass("btn btn-outline-dark w-100").attr("for", _id).html(btn_text);
 
 			time_window_element.append(btn_input);
 			time_window_element.append(btn_label);
@@ -182,14 +186,14 @@ class MR_event_creator {
 			container.append(time_window_list_item);
 		});
 
-		$(container)
+		$(this.gui.time_windows)
 			.find(".window-select-btn")
 			.on("change", function () {
 				var selected_index = $(this).val();
 				$(container).trigger("window-selected", [selected_index]);
 			});
 
-		$(container).on(
+		$(this.gui.time_windows).on(
 			"window-selected",
 			function (e, selected_index) {
 				var window = this.windows[selected_index];
@@ -266,8 +270,13 @@ class MR_event_creator {
 			}
 		}
 
+		if (this.slider) {
+			noUiSlider.destroy(this.slider);
+			this.slider = null;
+		}
+
 		if (!this.slider) {
-			this.slider = document.getElementById(this.slider_name);
+			this.slider = $(this.gui.slider)[0];
 
 			noUiSlider.create(this.slider, {
 				start: [event_start_diff, event_end_diff],
@@ -500,11 +509,12 @@ class MR_event_creator {
 		var contingent_select = $("<div/>").attr("id", "contingent_select").addClass("d-flex");
 
 		var index = 0;
+		var creator_id = this.instance_id;
 		contingents.forEach((contingent_def) => {
 			var _select_div = $("<div/>").addClass("flex-fill");
 			if (index + 1 < contingents.length) _select_div.addClass("pe-2");
 
-			var _id = "event_creator_" + contingent_def.label + "_contingent";
+			var _id = "event_creator_" + creator_id + "_" + contingent_def.label + "_contingent";
 			var select_btn = $("<input>")
 				.attr("id", _id)
 				.addClass("btn-check contingent-btn")
