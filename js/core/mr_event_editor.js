@@ -59,7 +59,8 @@ class MR_event_editor {
 							},
 						});
 					}
-				}.bind(this)
+				}.bind(this),
+				this.event.id
 			);
 			this.slot_browser.create_gui(false);
 		} else {

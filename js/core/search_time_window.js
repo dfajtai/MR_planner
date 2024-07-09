@@ -1,4 +1,4 @@
-function search_free_time_windows_using_masks(events, masks, searched_length, contingent = null, count = null) {
+function search_free_time_windows_using_masks(events, masks, searched_length, contingent = null, count = null, ignored_event_id = null) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
@@ -24,6 +24,7 @@ function search_free_time_windows_using_masks(events, masks, searched_length, co
 		var window_array = new Array(window_length).fill(0);
 		$.each(events, function (event_index, event) {
 			if (event.isSkipped) return true;
+			if (event.id === ignored_event_id) return true;
 			var event_start = event.start;
 			var event_end = event.end;
 
@@ -80,7 +81,18 @@ function search_free_time_windows_using_masks(events, masks, searched_length, co
 	return free_windows;
 }
 
-function search_free_time_windows_outside_masks(events, masks, start_date, end_date, day_start, day_end, allowed_days, searched_length, count = null) {
+function search_free_time_windows_outside_masks(
+	events,
+	masks,
+	start_date,
+	end_date,
+	day_start,
+	day_end,
+	allowed_days,
+	searched_length,
+	count = null,
+	ignored_event_id = null
+) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
@@ -100,6 +112,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 
 		$.each(events, function (event_index, event) {
 			if (event.isSkipped) return true;
+			if (event.id === ignored_event_id) return true;
 			var event_start = event.start;
 			var event_end = event.end;
 
@@ -175,7 +188,7 @@ function search_free_time_windows_outside_masks(events, masks, start_date, end_d
 	return free_windows;
 }
 
-function search_free_time_windows(events, start_date, end_date, day_start, day_end, allowed_days, searched_length, count = null) {
+function search_free_time_windows(events, start_date, end_date, day_start, day_end, allowed_days, searched_length, count = null, ignored_event_id = null) {
 	var free_windows = [];
 
 	var searched_length = parseInt(searched_length);
@@ -195,6 +208,7 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 
 		$.each(events, function (event_index, event) {
 			if (event.isSkipped) return true;
+			if (event.id === ignored_event_id) return true;
 
 			var event_start = event.start;
 			var event_end = event.end;

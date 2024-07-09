@@ -9,7 +9,7 @@ class MR_timing_slot_browser {
 		mask_calendar: default_mask_calendar_name,
 	};
 
-	constructor(container, success_callback = null) {
+	constructor(container, success_callback = null, ignored_event_id = null) {
 		this.container = container;
 
 		this.success_callback = success_callback;
@@ -22,6 +22,8 @@ class MR_timing_slot_browser {
 		this.params = Object();
 
 		this.calendar_data = {};
+
+		this.ignored_event_id = ignored_event_id;
 	}
 
 	#additional_window_search_options_gui(container) {
@@ -515,13 +517,21 @@ class MR_timing_slot_browser {
 				masks,
 				params.protocol.protocol_duration,
 				window_parameters.contingent,
-				window_parameters.show_count
+				window_parameters.show_count,
+				this.ignored_event_id
 			);
 			continget = window_parameters.contingent;
 		} else {
 			// search inside all
 			if (window_parameters.logic == window_search_logic_options.inside_any_mask) {
-				var windows = search_free_time_windows_using_masks(events, masks, params.protocol.protocol_duration, null, window_parameters.show_count);
+				var windows = search_free_time_windows_using_masks(
+					events,
+					masks,
+					params.protocol.protocol_duration,
+					null,
+					window_parameters.show_count,
+					this.ignored_event_id
+				);
 			}
 			// search outside all
 			if (window_parameters.logic == window_search_logic_options.outside_all_mask) {
@@ -534,7 +544,8 @@ class MR_timing_slot_browser {
 					window_parameters.day_end,
 					window_parameters.days,
 					params.protocol.protocol_duration,
-					window_parameters.show_count
+					window_parameters.show_count,
+					this.ignored_event_id
 				);
 			}
 			// any free time
@@ -547,7 +558,8 @@ class MR_timing_slot_browser {
 					window_parameters.day_end,
 					window_parameters.days,
 					params.protocol.protocol_duration,
-					window_parameters.show_count
+					window_parameters.show_count,
+					this.ignored_event_id
 				);
 			}
 		}
