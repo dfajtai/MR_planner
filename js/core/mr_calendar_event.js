@@ -473,6 +473,10 @@ class MR_calendar_event {
 		return moment(this.start).format("YYYY.MM.DD");
 	}
 
+	get formatted_timing_string() {
+		return "[" + this.start_date_string + ": " + this.start_to_end_string + "]";
+	}
+
 	get end_date_string() {
 		return moment(this.end).format("YYYY.MM.DD");
 	}

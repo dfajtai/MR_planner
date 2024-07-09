@@ -168,7 +168,7 @@ class MR_timing_slot_browser {
 		// protocol select
 		var protocol_select_block = $("<div/>").addClass("row mb-2");
 		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Examination protocol"));
-		var protocol_select_div = $("<div/>").addClass("col-sm-9");
+		var protocol_select_div = $("<div/>").addClass("col-sm-9 d-flex flex-row");
 		var protocol_select = $("<input/>")
 			.attr("name", "protocol_index")
 			.attr("id", "protocol_select")
@@ -180,6 +180,10 @@ class MR_timing_slot_browser {
 		protocol_select_block.append(protocol_select_div);
 		form.append(protocol_select_block);
 
+		var clear_select_btn = $("<button/>").addClass("btn btn-outline-dark ms-2").append($("<span/>").addClass("fa-light fa-x")).attr("type", "button");
+		protocol_select_div.append(clear_select_btn);
+
+		this.gui.clear_select_btn = clear_select_btn;
 		this.gui.protocol_select = protocol_select;
 		this.gui.protocol_select_container = protocol_select_div;
 
@@ -261,7 +265,7 @@ class MR_timing_slot_browser {
 			});
 	}
 
-	gui_logic(fix_position = true) {
+	parametrize_protocol_selector(fix_position = true) {
 		// protocol select
 		$(this.gui.protocol_select).flexdatalist("destroy");
 		$(this.gui.protocol_select).flexdatalist({
@@ -283,6 +287,18 @@ class MR_timing_slot_browser {
 			var list_dummy = $(this.gui.protocol_select_container.find(".flexdatalist-alias")[0]);
 			val_dummy.css({ position: "absolute", top: "", left: "", zIndex: -1000 }).width(list_dummy.width()).position(list_dummy.position());
 		}
+	}
+
+	gui_logic(fix_position = true) {
+		this.parametrize_protocol_selector(fix_position);
+
+		$(this.gui.clear_select_btn).on(
+			"click",
+			function () {
+				$(this.gui.protocol_select).flexdatalist("reset");
+				this.parametrize_protocol_selector(fix_position);
+			}.bind(this)
+		);
 
 		// search logic
 		contingents.forEach((contingent_def) => {

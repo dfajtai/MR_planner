@@ -94,7 +94,7 @@ class MR_event_browser {
 			minLength: 0,
 			selectionRequired: true,
 			searchIn: "_subject",
-			visibleProperties: ["_subject"],
+			visibleProperties: ["formatted_timing_string", "_subject"],
 			valueProperty: "id",
 			textProperty: "[{start_date_string}: {start_to_end_string}] {_subject}",
 			searchContain: true,

@@ -438,11 +438,11 @@ class MR_schedule_printer {
 		}
 
 		var modal_root = $("<div/>").addClass("modal fade").attr("id", modal_id).attr("tabindex", "-1");
-		var modal_dialog = $("<div/>").addClass("modal-dialog modal-xl");
+		var modal_dialog = $("<div/>").addClass("modal-dialog modal-fullscreen");
 		var modal_content = $("<div/>").addClass("modal-content");
 
 		var modal_header = $("<div/>").addClass("modal-header");
-		modal_header.append($("<h5/>").addClass("modal-title display-5 fs-5").html("Schedule preview"));
+		modal_header.append($("<h5/>").addClass("modal-title display-5 fs-5").html("Schedule previews"));
 		modal_header.append($("<button/>").addClass("btn-close").attr("data-bs-dismiss", "modal").attr("aria-label", "Close"));
 
 		var modal_body = $("<div/>").addClass("modal-body").css({ "overflow-y": "auto" });
