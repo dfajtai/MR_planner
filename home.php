@@ -220,7 +220,7 @@ if (!isset($_SESSION['ews_token'])) {
                     available_calendars = calendar_names;
 
                     // cerate
-                    var event_creator = null;
+                    CORE.event_creator = null;
                     CORE.window_browser = new MR_timing_slot_browser($(main_window_search_container), function (results) {
                         var success = results.success;
                         var search_params = results.search_params;
@@ -230,9 +230,9 @@ if (!isset($_SESSION['ews_token'])) {
                         var masks = results.masks;
 
                         if (windows.length > 0) {
-                            event_creator = new MR_event_creator(search_params, contingent);
-                            event_creator.create_gui(windows);
-                            event_creator.show_gui_as_modal($(modal_container));
+                            CORE.event_creator = new MR_event_creator(search_params, contingent);
+                            CORE.event_creator.create_gui(windows);
+                            CORE.event_creator.show_gui_as_modal($(modal_container));
                         }
                         else {
                             bootbox.alert({

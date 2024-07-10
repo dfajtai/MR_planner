@@ -270,10 +270,10 @@ class MR_event_creator {
 			}
 		}
 
-		if (this.slider) {
-			noUiSlider.destroy(this.slider);
-			this.slider = null;
-		}
+		// if (this.slider) {
+		// 	noUiSlider.destroy(this.slider);
+		// 	this.slider = null;
+		// }
 
 		if (!this.slider) {
 			this.slider = $(this.gui.slider)[0];
