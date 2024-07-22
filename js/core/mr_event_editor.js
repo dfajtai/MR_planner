@@ -24,7 +24,7 @@ class MR_event_editor {
 
 		// slot & timing
 		var slot_and_timing_card = $("<div/>").addClass("card d-flex w-50 m-1");
-		var slot_and_timing_card_header = $("<h5/>").addClass("card-header bg-dark text-white").html("Re-schedule");
+		var slot_and_timing_card_header = $("<h5/>").addClass("card-header bg-dark text-white").html("Újraütemezés");
 		slot_and_timing_card.append(slot_and_timing_card_header);
 		var slot_browser_block = $("<div/>").addClass("w-100 p-2");
 		var timing_params_block = $("<div/>").addClass("w-100 p-2 d-none");
@@ -50,7 +50,7 @@ class MR_event_editor {
 						this.gui.timing_params.empty();
 						this.gui.timing_params.addClass("d-none");
 						bootbox.alert({
-							message: "There is no free time window matching the search parameters.",
+							message: "Nem található a keresési paramétereknek megfelelő szabad időablak.",
 							buttons: {
 								ok: {
 									label: "Ok",
@@ -71,7 +71,7 @@ class MR_event_editor {
 
 		// administartion
 		var administration_card = $("<div/>").addClass("card d-flex w-50 m-1");
-		var administration_card_header = $("<h5/>").addClass("card-header bg-dark text-white").html("Administartion parameters");
+		var administration_card_header = $("<h5/>").addClass("card-header bg-dark text-white").html("Adminisztrációs paraméterek:");
 		administration_card.append(administration_card_header);
 
 		var administration_block = $("<div/>").addClass("w-100 p-2");
@@ -107,14 +107,14 @@ class MR_event_editor {
 
 		// protocol select
 		var protocol_select_block = $("<div/>").addClass("row mb-2");
-		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Examination protocol"));
+		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Vizsgálati protokol"));
 		var protocol_select_div = $("<div/>").addClass("col-sm-9 d-flex flex-row");
 		var protocol_select = $("<input/>")
 			.attr("name", "protocol_index")
 			.attr("id", "protocol_select")
 			.addClass("form-control flexdatalist")
 			.attr("required", true)
-			.attr("placeholder", "Select examination protocol...")
+			.attr("placeholder", "Válasszon vizsgálati protokolt...")
 			.attr("type", "test");
 		protocol_select_div.append(protocol_select);
 		protocol_select_block.append(protocol_select_div);
@@ -172,7 +172,7 @@ class MR_event_editor {
 		// booking subject
 
 		var booking_subject_block = $("<div/>").addClass("row pb-2");
-		booking_subject_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Booking").attr("for", "event_subject"));
+		booking_subject_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Előjegyzett esemény").attr("for", "event_subject"));
 		var subject_text = $("<input/>")
 			.addClass("form-control ps-4")
 			.attr("value", this.event._subject)
@@ -184,7 +184,7 @@ class MR_event_editor {
 
 		// timing
 		var timing_block = $("<div/>").addClass("row pb-2");
-		timing_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Timing").attr("for", "event_subject"));
+		timing_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Előjegyzett időpont").attr("for", "event_subject"));
 		var timing_text = $("<input/>")
 			.addClass("form-control ps-4")
 			.attr("value", this.event.timing_string)
@@ -198,7 +198,7 @@ class MR_event_editor {
 
 		if (this.event.params.protocol) {
 			var protocol_select_block = $("<div/>").addClass("row pb-2");
-			protocol_select_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Protocol").attr("for", "event_protocol"));
+			protocol_select_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Előjegyzett protokol").attr("for", "event_protocol"));
 			var protocol_div = $("<input/>")
 				.addClass("form-control ps-4")
 				.attr("value", this.event.params.protocol)
@@ -215,7 +215,7 @@ class MR_event_editor {
 
 		// patient name
 		var patient_name_block = $("<div/>").addClass("row pb-2");
-		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name").attr("for", "patient_name_input"));
+		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Név").attr("for", "patient_name_input"));
 		var patient_name_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_name_input = $("<input/>").addClass("form-control").attr("id", "patient_name_input").attr("required", "true").attr("name", "patient_name");
 		if (event.params.patient_name) patient_name_input.attr("value", event.params.patient_name);
@@ -226,7 +226,7 @@ class MR_event_editor {
 
 		// phone
 		var patient_phone_block = $("<div/>").addClass("row pb-2");
-		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone").attr("for", "patient_phone_input"));
+		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Tel.").attr("for", "patient_phone_input"));
 		var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_phone_input = $("<input/>").addClass("form-control").attr("id", "patient_phone_input").attr("name", "patient_phone");
 		if (event.params.patient_phone) patient_phone_input.attr("value", event.params.patient_phone);
@@ -237,7 +237,7 @@ class MR_event_editor {
 
 		// comment
 		var comment_block = $("<div/>").addClass("row pb-2");
-		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment").attr("for", "comment_input"));
+		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Megjegyzés").attr("for", "comment_input"));
 		var comment_input_block = $("<div/>").addClass("col-sm-9");
 		var comment_input = $("<textarea/>").addClass("form-control").attr("id", "comment_input").attr("name", "comment").attr("rows", 5).css("resize", "none");
 		if (event.params.comment) comment_input.text(event.params.comment.toString().trim());
@@ -248,7 +248,7 @@ class MR_event_editor {
 
 		// physician
 		var physician_block = $("<div/>").addClass("row pb-2");
-		physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Physician").attr("for", "physician_input"));
+		physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Beutaló orvos").attr("for", "physician_input"));
 		var physician_input_block = $("<div/>").addClass("col-sm-9");
 		var physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physician");
 		if (event.params.physician) physician_input.attr("value", event.params.physician);
@@ -259,7 +259,7 @@ class MR_event_editor {
 
 		// reserved at
 		var reserved_at_block = $("<div/>").addClass("row pb-2");
-		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at").attr("for", "reserved_at_input"));
+		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Lefoglalva").attr("for", "reserved_at_input"));
 		var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at").attr("required", "true");
 		if (event.params.reserved_at) reserved_at_input.attr("value", event.params.reserved_at);
@@ -285,11 +285,11 @@ class MR_event_editor {
 			},
 			zIndex: 10000,
 		});
-		picker.setDate(moment().format("YYYY-MM-DD"));
+		// picker.setDate(moment().format("YYYY-MM-DD"));
 
 		// reserved by
 		var reserved_by_block = $("<div/>").addClass("row pb-2");
-		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved by").attr("for", "reserved_by_input"));
+		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Lefoglalta").attr("for", "reserved_by_input"));
 		var reserved_by_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_by_input = $("<input/>").addClass("form-control").attr("id", "reserved_by_input").attr("name", "reserved_by").attr("required", "true");
 		if (event.params.reserved_by) reserved_by_input.attr("value", event.params.reserved_by);
@@ -306,7 +306,7 @@ class MR_event_editor {
 			.attr("id", "isSkipped_input")
 			.prop("checked", event.isSkipped)
 			.attr("name", "isSkipped");
-		skipped_block.append($("<label/>").addClass("form-check-label").html("Is the measurement skipped?").attr("for", "isSkipped_input"));
+		skipped_block.append($("<label/>").addClass("form-check-label").html("Kihagyott?").attr("for", "isSkipped_input"));
 		skipped_block.append(skipped_input);
 		form.append(skipped_block);
 
@@ -320,7 +320,7 @@ class MR_event_editor {
 			.attr("type", "checkbox")
 			.attr("id", "allow_override_input")
 			.attr("checked", false);
-		allow_override_block.append($("<label/>").addClass("form-check-label").html("Set/override contingent").attr("for", "allow_override_input"));
+		allow_override_block.append($("<label/>").addClass("form-check-label").html("Kontingens megadás/felülbírálása").attr("for", "allow_override_input"));
 		allow_override_block.append(allow_override_input);
 		contingent_settings.append(allow_override_block);
 
@@ -377,7 +377,7 @@ class MR_event_editor {
 		this.gui.administration_form = form;
 	}
 
-	show_gui_as_modal(container, success_callback = null, content = null, title = "Edit booked examination") {
+	show_gui_as_modal(container, success_callback = null, content = null, title = "Előjegyzett időpont módosítása") {
 		content = content || this.content;
 		var modal_id = "event_edit_modal";
 		var modal = container.find("#" + modal_id);
@@ -398,7 +398,7 @@ class MR_event_editor {
 
 		var modal_footer = $("<div/>").addClass("modal-footer");
 
-		modal_footer.append($("<button/>").addClass("btn btn-outline-dark my-1 w-100").attr("id", "submit").html("Submit changes"));
+		modal_footer.append($("<button/>").addClass("btn btn-outline-dark my-1 w-100").attr("id", "submit").html("Módosítások jóváhagyása"));
 
 		modal_content.append(modal_header);
 		modal_content.append(modal_body);
@@ -459,12 +459,12 @@ class MR_event_editor {
 					var new_event = MR_calendar_event.parse_from_form(this.gui.administration_form, timing_params);
 					var dummy_container = $("<div/>");
 					this.event.to_compare_table(dummy_container, new_event);
-					var message = "The selected booking will be updated as the following:<br/><br/>";
+					var message = "A kiválasztott esemény a következők szerint fog módosulni:<br/><br/>";
 					message += dummy_container.prop("innerHTML");
 
 					bootbox.confirm({
 						size: "xl",
-						message: message + "<br/>Do you want to proceed?",
+						message: message + "<br/>Folytatja? FIGYELEM! A művelet nem visszavonható.",
 						buttons: {
 							confirm: {
 								label: "Yes",

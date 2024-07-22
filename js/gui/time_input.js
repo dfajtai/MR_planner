@@ -1,14 +1,17 @@
 function simple_dynamic_input_time(container, name, label, interval = 10, min_time = null, max_time = null, default_time = null, on_change = null) {
 	container.empty();
 
-	var _time_label = $("<small/>").addClass("col-md-6 col-form-label").attr("for", "pet_start").html(label);
+	var _time_label = $("<small/>")
+		.addClass("col-md-7 col-form-label")
+		.attr("for", name + "_input")
+		.html(label);
 	var _time_input = $("<input/>")
-		.addClass("form-control ")
+		.addClass("form-control w-100")
 		.attr("id", name + "_input")
 		.attr("name", name);
 
 	container.append(_time_label);
-	container.append($("<div/>").append(_time_input).addClass("col-md-6"));
+	container.append($("<div/>").append(_time_input).addClass("col-md-5"));
 
 	_time_input.timepicker({
 		timeFormat: "HH:mm",

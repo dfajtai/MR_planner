@@ -18,10 +18,10 @@ class MR_event_browser {
 
 		// source calendar
 		var source_select_block = $("<div/>").addClass("row mb-2");
-		source_select_block.append($("<label/>").attr("for", "calendar_select").addClass("col-sm-3 col-form-label").html("Source calendar"));
+		source_select_block.append($("<label/>").attr("for", "calendar_select").addClass("col-sm-3 col-form-label").html("Forrás naptár"));
 		var source_select_div = $("<div/>").addClass("col-sm-9");
 		var source_select = $("<select/>").attr("name", "calendar_name").attr("id", "calendar_select").addClass("form-select").attr("required", true);
-		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Select source calendar..."));
+		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Válasszon forrás naptárt..."));
 
 		source_select_div.append(source_select);
 		source_select_block.append(source_select_div);
@@ -30,7 +30,7 @@ class MR_event_browser {
 
 		// search date range
 		var search_date_range_block = $("<div/>").addClass("row mb-2");
-		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Search range"));
+		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Időintervalum"));
 		var search_date_range_div = $("<div/>").addClass("col-sm-9");
 		var search_date_range = $("<input/>").attr("name", "search_date_range").attr("id", "search_date_range").addClass("form-control");
 
@@ -38,7 +38,7 @@ class MR_event_browser {
 		search_date_range_block.append(search_date_range_div);
 		form.append(search_date_range_block);
 		this.gui.search_data_range = search_date_range;
-		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Query bookings").attr("id", "print_btn").attr("type", "button");
+		var submit_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Lekérdezés").attr("id", "print_btn").attr("type", "button");
 		form.append($("<div/>").addClass("pt-2").append(submit_btn));
 		this.gui.submit_btn = submit_btn;
 
@@ -49,7 +49,7 @@ class MR_event_browser {
 
 		// event select
 		var event_select_block = $("<div/>").addClass("row");
-		event_select_block.append($("<label/>").attr("for", "event_select").addClass("col-sm-3 col-form-label").html("Select examination"));
+		event_select_block.append($("<label/>").attr("for", "event_select").addClass("col-sm-3 col-form-label").html("Időpont(ok)"));
 		var event_select_container = $("<div/>").addClass("col-sm-9 d-flex flex-row");
 		var event_select_div = $("<div/>").addClass("w-100 accordion-hideable");
 		var event_select = $("<input/>")
@@ -57,7 +57,7 @@ class MR_event_browser {
 			.attr("id", "event_select")
 			.addClass("form-control flexdatalist")
 			.attr("required", true)
-			.attr("placeholder", "Select booked examination...")
+			.attr("placeholder", "Válasszon egy időpontot a listából...")
 			.attr("type", "test");
 		event_select_div.append(event_select);
 		event_select_container.append(event_select_div);
@@ -74,8 +74,8 @@ class MR_event_browser {
 
 		// event controls
 		var event_controls = $("<div/>").addClass("d-none d-flex pt-2");
-		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100  me-2").html("Remove").attr("id", "delete_selected_event"));
-		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100").html("Edit").attr("id", "edit_selected_event"));
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100  me-2").html("Időpont törlése").attr("id", "delete_selected_event"));
+		event_controls.append($("<button/>").addClass("btn btn-outline-dark w-100").html("Időpont szerkesztése").attr("id", "edit_selected_event"));
 
 		control_div.append(event_controls);
 
@@ -179,7 +179,7 @@ class MR_event_browser {
 					function () {
 						if (this.calendar_data.length == 0) {
 							bootbox.alert({
-								message: "There is no booked event matching the search parameters.",
+								message: "Nem található a keresési paramétereknek megfelelő előjegyzett időpont.",
 								buttons: {
 									ok: {
 										label: "Ok",
@@ -219,9 +219,9 @@ class MR_event_browser {
 			.on(
 				"click",
 				function () {
-					var message = "The selected booking will be deleted.";
+					var message = "A kiválasztott időpont törlésére készül.";
 					bootbox.confirm({
-						message: message + "<br/>Do you want to proceed?",
+						message: message + "<br/>Folytatja?<br/>FIGYELEM! A művelet nem visszavonható.",
 						buttons: {
 							confirm: {
 								label: "Yes",

@@ -33,7 +33,7 @@ class MR_event_creator {
 	timing_parameters_gui(container) {
 		container.empty();
 
-		container.append($("<label/>").addClass("form-label").html("Available time window(s)").attr("for", "#timeWindows"));
+		container.append($("<label/>").addClass("form-label").html("Szabad időablak(ok)").attr("for", "#timeWindows"));
 		var time_windows_listbox_container = $("<div/>").attr("id", "timeWindows").addClass("listbox-custom card");
 		var time_windows_listbox = $("<ul/>").addClass("list-group list-group-flush");
 
@@ -44,13 +44,15 @@ class MR_event_creator {
 
 		// protocol duration
 		var protocol_duration_block = $("<div/>").addClass("row pb-2");
-		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Protocol duration [min]"));
+		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Protokol időtartama [perc]"));
 		protocol_duration_block.append($("<label/>").addClass("col-form-label col-sm-6 ps-4").html(parseInt(this.protocol.protocol_duration)));
 		container.append(protocol_duration_block);
 
 		// event duration
 		var event_duration_block = $("<div/>").addClass("row pb-2");
-		event_duration_block.append($("<label/>").addClass("col-form-label col-sm-6").html("Reserved duration [min]").attr("for", "event_duration_input"));
+		event_duration_block.append(
+			$("<label/>").addClass("col-form-label col-sm-6").html("Lefoglalni készült időtartam [perc]").attr("for", "event_duration_input")
+		);
 
 		var event_duration_input_block = $("<div/>").addClass("col-sm-6");
 		var event_duration_input = $("<input/>").addClass("form-control").attr("id", "event_duration_input").attr("type", "number");
@@ -62,13 +64,13 @@ class MR_event_creator {
 
 		// time slider
 		var slider_block = $("<div/>").addClass("card");
-		var slider_header_block = $("<div/>").addClass("row px-2");
+		var slider_header_block = $("<div/>").addClass("d-flex flex-row px-2");
 
-		var start_time_block = $("<div/>").addClass("col-md-6 row my-1").attr("id", "start_time_div");
+		var start_time_block = $("<div/>").addClass("d-flex me-2 my-1 w-50").attr("id", "start_time_div");
 		this.gui.start_time_block = start_time_block;
 		slider_header_block.append(start_time_block);
 
-		var end_time_block = $("<div/>").addClass("col-md-6 row my-1").attr("id", "end_time_div");
+		var end_time_block = $("<div/>").addClass("d-flex my-1 w-50").attr("id", "end_time_div");
 		this.gui.end_time_block = end_time_block;
 		slider_header_block.append(end_time_block);
 
@@ -88,7 +90,7 @@ class MR_event_creator {
 		simple_dynamic_input_time(
 			start_time_block,
 			"start_time",
-			"Start time",
+			"Időpont kezdete",
 			10,
 			"05:00",
 			"22:00",
@@ -108,7 +110,7 @@ class MR_event_creator {
 		simple_dynamic_input_time(
 			end_time_block,
 			"end_time",
-			"End time",
+			"Időpont vége",
 			10,
 			"05:00",
 			"22:00",
@@ -403,7 +405,7 @@ class MR_event_creator {
 
 		// patient n
 		var patient_name_block = $("<div/>").addClass("row pb-2");
-		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Patient name").attr("for", "patient_name_input"));
+		patient_name_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Név").attr("for", "patient_name_input"));
 		var patient_name_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_name_input = $("<input/>").addClass("form-control").attr("id", "patient_name_input").attr("required", "true").attr("name", "patient_name");
 
@@ -413,7 +415,7 @@ class MR_event_creator {
 
 		// phone
 		var patient_phone_block = $("<div/>").addClass("row pb-2");
-		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Phone").attr("for", "patient_phone_input"));
+		patient_phone_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Tel.").attr("for", "patient_phone_input"));
 		var patient_phone_input_block = $("<div/>").addClass("col-sm-9");
 		var patient_phone_input = $("<input/>").addClass("form-control").attr("id", "patient_phone_input").attr("name", "patient_phone");
 
@@ -423,7 +425,7 @@ class MR_event_creator {
 
 		// comment
 		var comment_block = $("<div/>").addClass("row pb-2");
-		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Comment").attr("for", "comment_input"));
+		comment_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Megjegyzés").attr("for", "comment_input"));
 		var comment_input_block = $("<div/>").addClass("col-sm-9");
 		var comment_input = $("<textarea/>").addClass("form-control").attr("id", "comment_input").attr("name", "comment").attr("rows", 5).css("resize", "none");
 
@@ -433,7 +435,7 @@ class MR_event_creator {
 
 		// physician
 		var physician_block = $("<div/>").addClass("row pb-2");
-		physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Physician").attr("for", "physician_input"));
+		physician_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Beutaló orovos").attr("for", "physician_input"));
 		var physician_input_block = $("<div/>").addClass("col-sm-9");
 		var physician_input = $("<input/>").addClass("form-control").attr("id", "physician_input").attr("name", "physician");
 
@@ -443,7 +445,7 @@ class MR_event_creator {
 
 		// reserved at
 		var reserved_at_block = $("<div/>").addClass("row pb-2");
-		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved at").attr("for", "reserved_at_input"));
+		reserved_at_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Létrehozva").attr("for", "reserved_at_input"));
 		var reserved_at_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_at_input = $("<input/>").addClass("form-control").attr("id", "reserved_at_input").attr("name", "reserved_at").attr("required", "true");
 
@@ -471,7 +473,7 @@ class MR_event_creator {
 
 		// reserved by
 		var reserved_by_block = $("<div/>").addClass("row pb-2");
-		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Reserved by").attr("for", "reserved_by_input"));
+		reserved_by_block.append($("<label/>").addClass("col-form-label col-sm-3").html("Létrehozta").attr("for", "reserved_by_input"));
 		var reserved_by_input_block = $("<div/>").addClass("col-sm-9");
 		var reserved_by_input = $("<input/>").addClass("form-control").attr("id", "reserved_by_input").attr("name", "reserved_by").attr("required", "true");
 
@@ -487,7 +489,7 @@ class MR_event_creator {
 			.attr("id", "isSkipped_input")
 			.prop("checked", false)
 			.attr("name", "isSkipped");
-		skipped_block.append($("<label/>").addClass("form-check-label").html("Is the measurement skipped?").attr("for", "isSkipped_input"));
+		skipped_block.append($("<label/>").addClass("form-check-label").html("Kihagyott?").attr("for", "isSkipped_input"));
 		skipped_block.append(skipped_input);
 		container.append(skipped_block);
 
@@ -501,7 +503,7 @@ class MR_event_creator {
 			.attr("type", "checkbox")
 			.attr("id", "allow_override_input")
 			.attr("checked", false);
-		allow_override_block.append($("<label/>").addClass("form-check-label").html("Set/override contingent").attr("for", "allow_override_input"));
+		allow_override_block.append($("<label/>").addClass("form-check-label").html("Kontingens megadás/felülbírálása").attr("for", "allow_override_input"));
 		allow_override_block.append(allow_override_input);
 		contingent_settings.append(allow_override_block);
 
@@ -552,7 +554,7 @@ class MR_event_creator {
 		container.append(contingent_settings);
 	}
 
-	create_gui(windows = null, create_on_subit = true, success_callback = null, submit_btn_text = "Book new examination") {
+	create_gui(windows = null, create_on_subit = true, success_callback = null, submit_btn_text = "Új időpont létrehozása") {
 		var form = $("<form/>").attr("id", "event_creation_form").addClass("needs-validation").addClass("d-flex flex-column");
 		var form_content = $("<div/>").addClass("row pb-2");
 
@@ -589,7 +591,29 @@ class MR_event_creator {
 				var event = MR_calendar_event.parse_from_form(form, { start: this.event_start, end: this.event_end, protocol: this.protocol });
 
 				if (create_on_subit) {
-					this.create_event(event, success_callback);
+					var dummy_container = $("<div/>");
+					event.to_preview_table(dummy_container);
+					var message = "Egy új vizsgálat előjegyzésére készül az alábbi paraméterekkel:<br/><br/>";
+					message += dummy_container.prop("innerHTML");
+
+					bootbox.confirm({
+						message: message + "<br/>Folytatja?",
+						buttons: {
+							confirm: {
+								label: "Yes",
+								className: "btn-outline-danger",
+							},
+							cancel: {
+								label: "No",
+								className: "btn-outline-dark",
+							},
+						},
+						callback: function (result) {
+							if (result) {
+								this.create_event(event, success_callback);
+							}
+						}.bind(this),
+					});
 				}
 			}.bind(this)
 		);
@@ -601,7 +625,7 @@ class MR_event_creator {
 		return this.form;
 	}
 
-	show_gui_as_modal(container, form = null, title = "Define new examination") {
+	show_gui_as_modal(container, form = null, title = "Új időpont létrehozása") {
 		form = form || this.form;
 		var modal_id = "event_creation_modal";
 		var modal = container.find("#" + modal_id);

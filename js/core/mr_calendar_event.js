@@ -200,16 +200,16 @@ class MR_calendar_event {
 			return row;
 		}
 
-		table.append(to_row("Property", "Value", "", true));
-		table.append(to_row("Patient name", this.params.patient_name, "patient_name"));
-		table.append(to_row("Protocol", this.params.protocol, "protocol"));
-		table.append(to_row("Contingent", this.contingent, "contingent"));
-		table.append(to_row("Phone number", this.params.patient_phone, "patient_phone"));
-		table.append(to_row("Referring physician", this.params.physician, "physician"));
-		table.append(to_row("Reserved at", this.params.reserved_at, "reserved_at"));
-		table.append(to_row("Reserved by", this.params.reserved_by, "reserved_by"));
-		table.append(to_row("Comment", this.params.comment, "comment"));
-		table.append(to_row("Skipped", JSON.stringify(this.isSkipped), "isSkipped"));
+		table.append(to_row("Adatmező", "Érték", "", true));
+		table.append(to_row("Név", this.params.patient_name, "patient_name"));
+		table.append(to_row("Protokol", this.params.protocol, "protocol"));
+		table.append(to_row("Kontingens", this.contingent, "contingent"));
+		table.append(to_row("Tel.", this.params.patient_phone, "patient_phone"));
+		table.append(to_row("Beutaló orovos", this.params.physician, "physician"));
+		table.append(to_row("Létrehozás dátuma", this.params.reserved_at, "reserved_at"));
+		table.append(to_row("Létrehozta", this.params.reserved_by, "reserved_by"));
+		table.append(to_row("Megjezés", this.params.comment, "comment"));
+		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped), "isSkipped"));
 		container.append(table);
 
 		var html_text = template.replace("#CONTENT#", container.prop("outerHTML"));
@@ -217,7 +217,7 @@ class MR_calendar_event {
 		return html_text;
 	}
 
-	to_preview_table(container, value_col_label = "Stored value") {
+	to_preview_table(container, value_col_label = "Tárolt érték") {
 		$(container).empty();
 		var table = $("<table/>").addClass("w-100 preview-table");
 
@@ -240,22 +240,22 @@ class MR_calendar_event {
 			return row;
 		}
 
-		table.append(to_row("Property", value_col_label, true));
-		table.append(to_row("Date", this.start_date_string));
-		table.append(to_row("Duration", this.start_to_end_string));
-		table.append(to_row("Patient name", this.params.patient_name));
-		table.append(to_row("Protocol", this.params.protocol));
-		table.append(to_row("Contingent", this.contingent));
-		table.append(to_row("Phone number", this.params.patient_phone));
-		table.append(to_row("Referring physician", this.params.physician));
-		table.append(to_row("Reserved at", this.params.reserved_at));
-		table.append(to_row("Reserved by", this.params.reserved_by));
-		table.append(to_row("Comment", this.params.comment));
-		table.append(to_row("Skipped", JSON.stringify(this.isSkipped)));
+		table.append(to_row("Adatmező", value_col_label, true));
+		table.append(to_row("Dátum", this.start_date_string));
+		table.append(to_row("Időtartam (perc)", this.start_to_end_string));
+		table.append(to_row("Név", this.params.patient_name));
+		table.append(to_row("Protokol", this.params.protocol));
+		table.append(to_row("Kontingens", this.contingent));
+		table.append(to_row("Tel.", this.params.patient_phone));
+		table.append(to_row("Beutaló orovos", this.params.physician));
+		table.append(to_row("Létrehozás dátuma", this.params.reserved_at));
+		table.append(to_row("Létrehozta", this.params.reserved_by));
+		table.append(to_row("Megjegyzés", this.params.comment));
+		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped)));
 		container.append(table);
 	}
 
-	to_compare_table(container, other_event, this_col_label = "Old value", other_col_label = "New value") {
+	to_compare_table(container, other_event, this_col_label = "Tárolt érték", other_col_label = "Új érték") {
 		$(container).empty();
 		var table = $("<table/>").addClass("w-100 preview-table");
 		function to_row(label, value_1, value_2, is_header = false) {
@@ -285,18 +285,18 @@ class MR_calendar_event {
 			return row;
 		}
 
-		table.append(to_row("Property", this_col_label, other_col_label, true));
-		table.append(to_row("Date", this.start_date_string, other_event.start_date_string));
-		table.append(to_row("Duration", this.start_to_end_string, other_event.start_to_end_string));
-		table.append(to_row("Patient name", this.params.patient_name, other_event.params.patient_name));
-		table.append(to_row("Protocol", this.params.protocol, other_event.params.protocol));
-		table.append(to_row("Contingent", this.contingent, other_event.contingent));
-		table.append(to_row("Phone number", this.params.patient_phone, other_event.params.patient_phone));
-		table.append(to_row("Referring physician", this.params.physician, other_event.params.physician));
-		table.append(to_row("Reserved at", this.params.reserved_at, other_event.params.reserved_at));
-		table.append(to_row("Reserved by", this.params.reserved_by, other_event.params.reserved_by));
-		table.append(to_row("Comment", this.params.comment, other_event.params.comment));
-		table.append(to_row("Skipped", JSON.stringify(this.isSkipped), JSON.stringify(other_event.isSkipped)));
+		table.append(to_row("Adatmező", this_col_label, other_col_label, true));
+		table.append(to_row("Dátum", this.start_date_string, other_event.start_date_string));
+		table.append(to_row("Időtartam (perc)", this.start_to_end_string, other_event.start_to_end_string));
+		table.append(to_row("Név", this.params.patient_name, other_event.params.patient_name));
+		table.append(to_row("Protokol", this.params.protocol, other_event.params.protocol));
+		table.append(to_row("Kontingens", this.contingent, other_event.contingent));
+		table.append(to_row("Tel.", this.params.patient_phone, other_event.params.patient_phone));
+		table.append(to_row("Beutaló orvos", this.params.physician, other_event.params.physician));
+		table.append(to_row("Létrehozás dátuma", this.params.reserved_at, other_event.params.reserved_at));
+		table.append(to_row("Létrehozta", this.params.reserved_by, other_event.params.reserved_by));
+		table.append(to_row("Megjegyzés", this.params.comment, other_event.params.comment));
+		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped), JSON.stringify(other_event.isSkipped)));
 		container.append(table);
 	}
 

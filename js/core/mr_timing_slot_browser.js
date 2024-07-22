@@ -31,10 +31,10 @@ class MR_timing_slot_browser {
 
 		// source calendar
 		var source_select_block = $("<div/>").addClass("row mb-2");
-		source_select_block.append($("<label/>").attr("for", "source_calendar_select").addClass("col-sm-3 col-form-label").html("Source calendar"));
+		source_select_block.append($("<label/>").attr("for", "source_calendar_select").addClass("col-sm-3 col-form-label").html("Forrás naptár"));
 		var source_select_div = $("<div/>").addClass("col-sm-9");
 		var source_select = $("<select/>").attr("name", "source_calendar").attr("id", "source_calendar_select").addClass("form-select").attr("required", true);
-		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Select source calendar..."));
+		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Válasszon forrás naptárt..."));
 
 		source_select_div.append(source_select);
 		source_select_block.append(source_select_div);
@@ -44,10 +44,10 @@ class MR_timing_slot_browser {
 
 		// mask calendar
 		var mask_select_block = $("<div/>").addClass("row mb-2");
-		mask_select_block.append($("<label/>").attr("for", "mask_calendar_select").addClass("col-sm-3 col-form-label").html("Mask calendar"));
+		mask_select_block.append($("<label/>").attr("for", "mask_calendar_select").addClass("col-sm-3 col-form-label").html("Maszk naptár"));
 		var mask_select_div = $("<div/>").addClass("col-sm-9");
 		var mask_select = $("<select/>").attr("name", "mask_calendar").attr("id", "mask_calendar_select").addClass("form-select").attr("required", true);
-		mask_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Select mask calendar..."));
+		mask_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Válasszon maszk naptárt..."));
 
 		mask_select_div.append(mask_select);
 		mask_select_block.append(mask_select_div);
@@ -57,7 +57,7 @@ class MR_timing_slot_browser {
 
 		// day start select
 		var day_start_block = $("<div/>").addClass("row mb-2");
-		day_start_block.append($("<label/>").attr("for", "day_start").addClass("col-sm-3 col-form-label").html("Day staring hour"));
+		day_start_block.append($("<label/>").attr("for", "day_start").addClass("col-sm-3 col-form-label").html("Munkaidő kezdete"));
 		var day_start_input_div = $("<div/>").addClass("col-sm-9");
 		var day_start_input = $("<input/>")
 			.attr("name", "day_start")
@@ -74,7 +74,7 @@ class MR_timing_slot_browser {
 		container.append(day_start_block);
 
 		var day_end_block = $("<div/>").addClass("row mb-2");
-		day_end_block.append($("<label/>").attr("for", "day_end").addClass("col-sm-3 col-form-label").html("Day ending hour"));
+		day_end_block.append($("<label/>").attr("for", "day_end").addClass("col-sm-3 col-form-label").html("Munkaidő vége"));
 		var day_end_input_div = $("<div/>").addClass("col-sm-9");
 		var day_end_input = $("<input/>")
 			.attr("name", "day_end")
@@ -100,16 +100,16 @@ class MR_timing_slot_browser {
 
 		// days
 		var day_check_block = $("<div/>").addClass("row mb-2");
-		day_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Search on days"));
+		day_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Napok"));
 		var day_check_div = $("<div/>").addClass("col-sm-9 d-flex").attr("id", "show_count_block");
 		var options = [
-			{ value: 1, label: "Mon", default: true },
-			{ value: 2, label: "Tue", default: true },
-			{ value: 3, label: "Wed", default: true },
-			{ value: 4, label: "Thu", default: true },
-			{ value: 5, label: "Fri", default: true },
-			{ value: 6, label: "Sat", default: false },
-			{ value: 7, label: "Sun", default: false },
+			{ value: 1, label: "Hét", default: true },
+			{ value: 2, label: "Kedd", default: true },
+			{ value: 3, label: "Szer", default: true },
+			{ value: 4, label: "Csüt", default: true },
+			{ value: 5, label: "Pén", default: true },
+			{ value: 6, label: "Szom", default: false },
+			{ value: 7, label: "Vas", default: false },
 		];
 		this.gui.days = day_check_div;
 
@@ -135,12 +135,12 @@ class MR_timing_slot_browser {
 
 		// window count
 		var window_count_block = $("<div/>").addClass("row");
-		window_count_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "show_count_block").html("Number of results"));
+		window_count_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "show_count_block").html("Megjelenített találatok"));
 		var window_count_div = $("<div/>").addClass("col-sm-9 d-flex").attr("id", "show_count_block");
 		var options = [
-			{ value: 5, label: "First 5", default: false },
-			{ value: 10, label: "First 10", default: true },
-			{ value: "All", label: "All", default: false },
+			{ value: 5, label: "Első 5", default: false },
+			{ value: 10, label: "Első 10", default: true },
+			{ value: "All", label: "Mind", default: false },
 		];
 		$.each(options, function (idx, option) {
 			var option_container = $("<div/>").addClass("flex-fill");
@@ -169,14 +169,14 @@ class MR_timing_slot_browser {
 
 		// protocol select
 		var protocol_select_block = $("<div/>").addClass("row mb-2");
-		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Examination protocol"));
+		protocol_select_block.append($("<label/>").attr("for", "protocol_select").addClass("col-sm-3 col-form-label").html("Vizsgálati protokol"));
 		var protocol_select_div = $("<div/>").addClass("col-sm-9 d-flex flex-row");
 		var protocol_select = $("<input/>")
 			.attr("name", "protocol_index")
 			.attr("id", "protocol_select")
 			.addClass("form-control flexdatalist")
 			.attr("required", true)
-			.attr("placeholder", "Select examination protocol...")
+			.attr("placeholder", "Válasszon vizsgálai protokolt...")
 			.attr("type", "test");
 		protocol_select_div.append(protocol_select);
 		protocol_select_block.append(protocol_select_div);
@@ -191,10 +191,12 @@ class MR_timing_slot_browser {
 
 		// logic select
 		var logic_select_block = $("<div/>").addClass("row mb-2");
-		logic_select_block.append($("<label/>").attr("for", "search_logic_select").addClass("col-sm-3 col-form-label").html("Contingent/Logic"));
+		logic_select_block.append($("<label/>").attr("for", "search_logic_select").addClass("col-sm-3 col-form-label").html("Kontingens/LOGIKA"));
 		var logic_select_div = $("<div/>").addClass("col-sm-9");
 		var logic_select = $("<select/>").attr("name", "search_logic").attr("id", "search_logic_select").addClass("form-select").attr("required", true);
-		logic_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Select contingent or search logic..."));
+		logic_select.append(
+			$("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Válasszon kontingenst vagy keresési logikát...")
+		);
 
 		logic_select_div.append(logic_select);
 		logic_select_block.append(logic_select_div);
@@ -204,7 +206,7 @@ class MR_timing_slot_browser {
 
 		// search date range
 		var search_date_range_block = $("<div/>").addClass("row mb-2");
-		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Search range"));
+		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Időintervalum"));
 		var search_date_range_div = $("<div/>").addClass("col-sm-9");
 		var search_date_range = $("<input/>").attr("name", "search_date_range").attr("id", "search_date_range").addClass("form-control");
 
@@ -221,7 +223,7 @@ class MR_timing_slot_browser {
 		var params_accordion_header = $("<h2/>").addClass("accordion-header").attr("id", "additional_params_accordion_header");
 		var params_accordion_header_btn = $("<button/>").addClass("accordion-button collapsed").attr("type", "button").attr("data-bs-toggle", "collapse");
 		params_accordion_header_btn.attr("data-bs-target", "#search_params").attr("aria-expanded", "false");
-		params_accordion_header_btn.html("Adjust search parameters");
+		params_accordion_header_btn.html("Keresési beállítások");
 		params_accordion_header.append(params_accordion_header_btn);
 
 		var params_accordion_content_container = $("<div/>").addClass("accordion-collapse collapse");
@@ -239,7 +241,7 @@ class MR_timing_slot_browser {
 		// submit btn
 		var submit_btn = $("<button/>")
 			.addClass("btn btn-outline-dark w-100")
-			.html("Search free time windows")
+			.html("Szabad időablakok keresése")
 			.attr("id", "search_time_windows_btn")
 			.attr("type", "button");
 		form.append($("<div/>").addClass("py-2").append(submit_btn));
@@ -314,25 +316,25 @@ class MR_timing_slot_browser {
 			}
 		});
 
-		this.gui.logic_select.append($("<option/>").html("-------------------- [LOGIC] --------------------").attr("value", "").attr("disabled", true));
+		this.gui.logic_select.append($("<option/>").html("-------------------- [LOGIKA] --------------------").attr("value", "").attr("disabled", true));
 
 		this.gui.logic_select.append(
 			$("<option/>")
-				.html("Inside any contingent time window")
+				.html("Keresés - bármelyik kontingensen BELÜL")
 				.attr("value", "LOGIC#all")
 				.attr("data-value", window_search_logic_options.inside_any_mask)
 				.attr("data-type", "logic")
 		);
 		this.gui.logic_select.append(
 			$("<option/>")
-				.html("Outside all contingent time window")
+				.html("Keresés - bármelyik kontingensen KÍVÜL")
 				.attr("value", "LOGIC#none")
 				.attr("data-value", window_search_logic_options.outside_all_mask)
 				.attr("data-type", "logic")
 		);
 		this.gui.logic_select.append(
 			$("<option/>")
-				.html("Any free time")
+				.html("Keresés - kontingensek FIGYELMBEVÉTELE NÉLKÜL")
 				.attr("value", "LOGIC#any")
 				.attr("data-value", window_search_logic_options.any_free_time)
 				.attr("data-type", "logic")

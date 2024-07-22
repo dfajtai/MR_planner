@@ -17,7 +17,7 @@ if (isset($_COOKIE['uname'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>MR elojegyzes</title>
+    <title>3T MR előjegyzés</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -33,7 +33,7 @@ if (isset($_COOKIE['uname'])) {
     <div class="d-flex align-items-center justify-content-center">
 
         <form class="shadow p-5 needs-validation col-md-6 col-lg-4 col-sm-10 col-12 align-self-center mt-5" action=<?php echo "'php/login.php?" . myUrlEncode($_SERVER["QUERY_STRING"]) . "'" ?> method="post">
-            <h4 class="display-4 fs-1">LOGIN</h4><br>
+            <h4 class="display-4 fs-1">BEJELENTKEZÉS</h4><br>
 
             <?php if (isset($_GET['error'])) { ?>
                 <div class="alert alert-danger" role="alert">
@@ -48,8 +48,8 @@ if (isset($_COOKIE['uname'])) {
             <?php } ?>
 
             <div class="form-group mb-2">
-                <label for="usernameInput">User name</label>
-                <input type="text" class="form-control" id="uname" placeholder="User Name with 'mc\'" name="uname"
+                <label for="usernameInput">Felhasználónév</label>
+                <input type="text" class="form-control" id="uname" placeholder="Felhasználónév 'mc\...'" name="uname"
                     value="<?php echo (isset($_GET['uname'])) ? $_GET['uname'] : "" ?>" required>
             </div>
 
@@ -59,12 +59,12 @@ if (isset($_COOKIE['uname'])) {
                     value="<?php echo (isset($_GET['email'])) ? $_GET['email'] : "" ?>" required>
             </div> -->
             <div class="form-group mb-3">
-                <label for="passwordInput">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password" name="pass">
+                <label for="passwordInput">Jelszó</label>
+                <input type="password" class="form-control" id="password" name="pass">
             </div>
 
             <div class="flex-row">
-                <button type="submit" class="btn btn-dark md-me-2 w-100">Login</button>
+                <button type="submit" class="btn btn-dark md-me-2 w-100">Bejelentkezés</button>
             </div>
         </form>
 

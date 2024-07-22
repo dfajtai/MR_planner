@@ -14,7 +14,7 @@ if (!isset($_SESSION['ews_token'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>MR elojegyzes</title>
+    <title>3T MR előjegyzés</title>
 
 
     <link rel="stylesheet" href="libs/css/font-awesome-all.min.css">
@@ -94,7 +94,7 @@ if (!isset($_SESSION['ews_token'])) {
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">MR examination planner</a>
+            <a class="navbar-brand" href="#">3T MR előjegyzés</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -107,7 +107,7 @@ if (!isset($_SESSION['ews_token'])) {
                     </li>
 
                     <li class="nav-item me-3">
-                        <a class="nav-link active" href="php/logout.php">Logout</a>
+                        <a class="nav-link active" href="php/logout.php">Kijelentkezés</a>
                     </li>
 
                 </ul>
@@ -127,7 +127,7 @@ if (!isset($_SESSION['ews_token'])) {
                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
                             data-bs-target="#plan_content">
                             <div class="d-flex align-items-center">
-                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Plan new examination</p>
+                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Új időpont létrehozása</p>
                             </div>
                             <!-- <span class="badge rounded-pill bg-success ms-auto">Development finished</span> -->
 
@@ -143,7 +143,7 @@ if (!isset($_SESSION['ews_token'])) {
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#event_search_content">
                             <div class="d-flex align-items-center">
-                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Search booked examination</p>
+                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Előjegyzett időpont keresése</p>
                             </div>
                             <!-- <span class="badge rounded-pill bg-warning ms-auto">Needs review</span> -->
 
@@ -160,7 +160,7 @@ if (!isset($_SESSION['ews_token'])) {
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#print_schedule_content">
                             <div class="d-flex align-items-center">
-                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Print daily schedule</p>
+                                <p id="title" class="fs-3 fw-bold pb-0 mb-0">Napi előjegyzés nyomtatása</p>
                             </div>
                             <!-- <span class="badge rounded-pill bg-success ms-auto">Development finished</span> -->
 
@@ -236,7 +236,7 @@ if (!isset($_SESSION['ews_token'])) {
                         }
                         else {
                             bootbox.alert({
-                                message: "There is no free time window matching the search parameters.",
+                                message: "Nem található a keresési paramétereknek megfelelő szabad időablak.",
                                 buttons: {
                                     ok: {
                                         label: "Ok",
@@ -275,7 +275,7 @@ if (!isset($_SESSION['ews_token'])) {
 
         setInterval(function () {
             var diff = moment.duration(session_max_duration - moment.duration((moment() - start_time), 'milliseconds'), "milliseconds");
-            session_countdown.html("Session expiring in " + (diff.minutes() + "").padStart(2, "0") + ":" + (diff.seconds() + "").padStart(2, "0"));
+            session_countdown.html("Munkamentből fennmaradó időtartam:  " + (diff.minutes() + "").padStart(2, "0") + ":" + (diff.seconds() + "").padStart(2, "0"));
         }, 1000);
     });
 

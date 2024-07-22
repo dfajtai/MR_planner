@@ -27,10 +27,10 @@ class MR_schedule_printer {
 
 		// source calendar
 		var source_select_block = $("<div/>").addClass("row mb-2");
-		source_select_block.append($("<label/>").attr("for", "calendar_select").addClass("col-sm-3 col-form-label").html("Source calendar"));
+		source_select_block.append($("<label/>").attr("for", "calendar_select").addClass("col-sm-3 col-form-label").html("Forrás naptár"));
 		var source_select_div = $("<div/>").addClass("col-sm-9");
 		var source_select = $("<select/>").attr("name", "calendar_name").attr("id", "calendar_select").addClass("form-select").attr("required", true);
-		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Select source calendar..."));
+		source_select.append($("<option/>").attr("selected", true).attr("disabled", true).attr("value", "").html("Válasszon forrás naptárt..."));
 
 		source_select_div.append(source_select);
 		source_select_block.append(source_select_div);
@@ -39,7 +39,7 @@ class MR_schedule_printer {
 
 		// search date range
 		var search_date_range_block = $("<div/>").addClass("row mb-2");
-		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Search range"));
+		search_date_range_block.append($("<label/>").attr("for", "search_date_range").addClass("col-sm-3 col-form-label").html("Időintervalum"));
 		var search_date_range_div = $("<div/>").addClass("col-sm-9");
 		var search_date_range = $("<input/>").attr("name", "search_date_range").attr("id", "search_date_range").addClass("form-control");
 
@@ -50,7 +50,7 @@ class MR_schedule_printer {
 
 		// printed props
 		var props_check_block = $("<div/>").addClass("row mb-2");
-		props_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Printed properties"));
+		props_check_block.append($("<label/>").addClass("col-form-label col-sm-3").attr("for", "day_check").html("Megjelenített adatmezők"));
 		var props_check_div = $("<div/>").addClass("col-sm-9 d-flex flex-wrap mx-auto").attr("id", "show_count_block");
 		var options = [
 			{ value: "patient_name", label: "Név", default: false },
@@ -87,11 +87,11 @@ class MR_schedule_printer {
 
 		var btns_div = $("<div/>").addClass("py-2 d-flex flex-row");
 
-		var preview_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Preview schedules").attr("id", "preview_btn").attr("type", "button");
+		var preview_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Előnézet").attr("id", "preview_btn").attr("type", "button");
 		btns_div.append($("<div/>").addClass("pe-2 w-100").append(preview_btn));
 		this.gui.preview_btn = preview_btn;
 
-		var print_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Print schedules").attr("id", "print_btn").attr("type", "button");
+		var print_btn = $("<button/>").addClass("btn btn-outline-dark w-100").html("Nyomtatás").attr("id", "print_btn").attr("type", "button");
 		btns_div.append($("<div/>").addClass("w-100").append(print_btn));
 		this.gui.print_btn = print_btn;
 
@@ -302,7 +302,7 @@ class MR_schedule_printer {
 
 		if (events_to_print.length == 0) {
 			bootbox.alert({
-				message: "There are no scheduled events to print within the selected date range.",
+				message: "Nem található a keresési paramétereknek megfelelő előjegyzett időpont.",
 				buttons: {
 					ok: {
 						label: "Ok",
@@ -442,7 +442,7 @@ class MR_schedule_printer {
 		var modal_content = $("<div/>").addClass("modal-content");
 
 		var modal_header = $("<div/>").addClass("modal-header");
-		modal_header.append($("<h5/>").addClass("modal-title display-5 fs-5").html("Schedule previews"));
+		modal_header.append($("<h5/>").addClass("modal-title display-5 fs-5").html("Előnézet"));
 		modal_header.append($("<button/>").addClass("btn-close").attr("data-bs-dismiss", "modal").attr("aria-label", "Close"));
 
 		var modal_body = $("<div/>").addClass("modal-body").css({ "overflow-y": "auto" });
@@ -466,7 +466,7 @@ class MR_schedule_printer {
 
 		if (events_to_print.length == 0) {
 			bootbox.alert({
-				message: "There are no scheduled events to print within the selected date range.",
+				message: "Nem található a keresési paramétereknek megfelelő előjegyzett időpont.",
 				buttons: {
 					ok: {
 						label: "Ok",
@@ -519,7 +519,7 @@ class MR_schedule_printer {
 			.attr("data-bs-slide", "prev");
 
 		carousel_prev_btn.append($("<span/>").addClass("carousel-control-prev-icon").attr("aria-hidden", true));
-		carousel_prev_btn.append($("<span/>").addClass("visually-hidden").html("Previous"));
+		carousel_prev_btn.append($("<span/>").addClass("visually-hidden").html("Előző nap"));
 
 		var carousel_next_btn = $("<button/>")
 			.addClass("carousel-control-next")
@@ -528,7 +528,7 @@ class MR_schedule_printer {
 			.attr("data-bs-slide", "next");
 
 		carousel_next_btn.append($("<span/>").addClass("carousel-control-next-icon").attr("aria-hidden", true));
-		carousel_next_btn.append($("<span/>").addClass("visually-hidden").html("Next"));
+		carousel_next_btn.append($("<span/>").addClass("visually-hidden").html("Következő nap"));
 
 		carousel.append(carousel_prev_btn);
 		carousel.append(carousel_next_btn);
