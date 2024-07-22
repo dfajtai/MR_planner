@@ -242,7 +242,7 @@ class MR_calendar_event {
 
 		table.append(to_row("Adatmező", value_col_label, true));
 		table.append(to_row("Dátum", this.start_date_string));
-		table.append(to_row("Időtartam (perc)", this.start_to_end_string));
+		table.append(to_row("Időpont", this.start_to_end_string));
 		table.append(to_row("Név", this.params.patient_name));
 		table.append(to_row("Protokol", this.params.protocol));
 		table.append(to_row("Kontingens", this.contingent));
@@ -287,7 +287,7 @@ class MR_calendar_event {
 
 		table.append(to_row("Adatmező", this_col_label, other_col_label, true));
 		table.append(to_row("Dátum", this.start_date_string, other_event.start_date_string));
-		table.append(to_row("Időtartam (perc)", this.start_to_end_string, other_event.start_to_end_string));
+		table.append(to_row("Időpont", this.start_to_end_string, other_event.start_to_end_string));
 		table.append(to_row("Név", this.params.patient_name, other_event.params.patient_name));
 		table.append(to_row("Protokol", this.params.protocol, other_event.params.protocol));
 		table.append(to_row("Kontingens", this.contingent, other_event.contingent));
