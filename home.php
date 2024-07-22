@@ -275,7 +275,7 @@ if (!isset($_SESSION['ews_token'])) {
 
         setInterval(function () {
             var diff = moment.duration(session_max_duration - moment.duration((moment() - start_time), 'milliseconds'), "milliseconds");
-            session_countdown.html("Munkamentből fennmaradó időtartam:  " + (diff.minutes() + "").padStart(2, "0") + ":" + (diff.seconds() + "").padStart(2, "0"));
+            session_countdown.html("Munkament lejár:  " + (diff.minutes() + "").padStart(2, "0") + ":" + (diff.seconds() + "").padStart(2, "0"));
         }, 1000);
     });
 
