@@ -23,8 +23,8 @@ function solve_session_fixation()
 {
     if (!isset($_SESSION['CREATED'])) {
         $_SESSION['CREATED'] = time();
-    } else if (time() - $_SESSION['CREATED'] > 1 * 60) {
-        // session id updated more than 1 minutes ago
+    } else if (time() - $_SESSION['CREATED'] > 5 * 60) {
+        // session id updated more than 5 minutes ago
 
         $session_data = $_SESSION;
 
