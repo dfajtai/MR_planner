@@ -186,6 +186,17 @@ if (!isset($_SESSION['ews_token'])) {
 </body>
 <script nonce="<?php echo $_SESSION['nonce']; ?>">
 
+    function loadScript(url) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = url;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+
+
 
     $("#main_container").find(".accordion-collapse").on("hide.bs.collapse", function () {
         $(this).children().addClass('fade');
@@ -198,10 +209,12 @@ if (!isset($_SESSION['ews_token'])) {
         $(this).find(".accordion-hideable").removeClass("fade");
     })
 
-    is_loading(true);
+
 
     $(document).ready(function () {
         // read protocols from csv
+
+        is_loading(true);
 
         $.get(protocols_path, function (CSVdata) {
             protocols = $.csv.toObjects(CSVdata);
