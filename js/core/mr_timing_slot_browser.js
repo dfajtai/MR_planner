@@ -405,6 +405,7 @@ class MR_timing_slot_browser {
 				this.retrieve_calendars(
 					params,
 					function () {
+						is_loading(true, "Searching for windows", false);
 						this.search_open_slot(
 							params,
 							this.calendar_data,
@@ -412,6 +413,7 @@ class MR_timing_slot_browser {
 								if (this.success_callback) {
 									this.success_callback(results);
 								}
+								is_loading(false, "Searching for windows", false);
 							}.bind(this)
 						);
 					}.bind(this)
@@ -478,7 +480,7 @@ class MR_timing_slot_browser {
 		if (!params) {
 			params = default_params;
 		}
-		is_loading(true);
+		is_loading(true, "Retrieving calendars");
 		$.ajax({
 			type: "GET",
 			url: "php/get_calendar_data.php",
@@ -491,9 +493,9 @@ class MR_timing_slot_browser {
 				retrieve_body: false,
 			},
 			success: function (results) {
+				is_loading(false, "Retrieving calendars");
 				this.calendar_data = MR_calendar_event.parse_from_calendar_data(results);
 				if (success_callback) success_callback();
-				is_loading(false);
 			}.bind(this),
 		});
 	}

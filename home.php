@@ -214,7 +214,7 @@ if (!isset($_SESSION['ews_token'])) {
     $(document).ready(function () {
         // read protocols from csv
 
-        is_loading(true);
+        is_loading(true, "Initialization");
 
         $.get(protocols_path, function (CSVdata) {
             protocols = $.csv.toObjects(CSVdata);
@@ -269,7 +269,7 @@ if (!isset($_SESSION['ews_token'])) {
                     CORE.schedule_printer = new MR_schedule_printer($(schedule_print_container));
                     CORE.schedule_printer.create_gui();
 
-                    is_loading(false);
+                    is_loading(false, "Initialization");
 
                 },
             });

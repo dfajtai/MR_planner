@@ -173,7 +173,7 @@ class MR_event_browser {
 				e.preventDefault();
 
 				var params = this.parse_form_to_params();
-				is_loading(true);
+				is_loading(true, "Retrieving calendars for search");
 				this.retrieve_calendars(
 					params,
 					function () {
@@ -187,7 +187,7 @@ class MR_event_browser {
 									},
 								},
 							});
-							is_loading(false);
+							is_loading(false, "Retrieving calendars for search");
 							$(this.gui.control_div).addClass("d-none");
 							return;
 						}
@@ -198,7 +198,7 @@ class MR_event_browser {
 						$(this.gui.control_div).removeClass("d-none");
 
 						this.parametrize_event_selector();
-						is_loading(false);
+						is_loading(false, "Retrieving calendars for search");
 					}.bind(this)
 				);
 			}.bind(this)

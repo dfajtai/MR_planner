@@ -477,14 +477,14 @@ class MR_event_editor {
 						},
 						callback: function (result) {
 							if (result) {
-								is_loading(true);
+								is_loading(true, "Updating event");
 								this.event.update_from_instance(new_event);
 								this.event.call_event_update(
 									function () {
 										if (success_callback) {
 											success_callback();
 										}
-										is_loading(false);
+										is_loading(false, "Updating event");
 										modal.modal("hide");
 									}.bind(this)
 								);
