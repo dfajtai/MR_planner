@@ -17,7 +17,7 @@ ini_set('session.cookie_secure', 1);  // Ensure cookies are sent over HTTPS only
 ini_set('session.cookie_httponly', 1); // Prevent JavaScript access to session cookie
 ini_set('session.use_strict_mode', 1); // Use strict mode for sessions
 ini_set('session.cookie_samesite', "Strict"); // Use strict mode for sessions
-ini_set('session.gc_maxlifetime', 15 * 60); // Use strict mode for sessions
+ini_set('session.gc_maxlifetime', 60 * 60); // Use strict mode for sessions
 
 // Start the session
 session_start();
@@ -28,12 +28,12 @@ if (!isset($_SESSION['nonce'])) {
     $_SESSION['nonce'] = md5(microtime(true));
 }
 
-if (!isset($_SESSION['IPaddress']) || $reload) {
+if (!isset($_SESSION['IPaddress'])) {
     $_SESSION['IPaddress'] = $_SERVER['REMOTE_ADDR'];
 }
 
 
-if (!isset($_SESSION['userAgent']) || $reload) {
+if (!isset($_SESSION['userAgent'])) {
     $_SESSION['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
 }
 

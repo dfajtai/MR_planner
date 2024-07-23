@@ -4,15 +4,19 @@ require_once ('forced_logout.php');
 
 function kill_session_if_invalid_origin($initiate_logout = true)
 {
-    if (($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) || $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
-        $message = "[SERVER MESSAGE] Invalid session origin.";
-        if ($initiate_logout) {
-            initiate_forced_logout($message);
-            exit;
-        } else {
-            return $message;
+    if (isset($_SESSION['IPadress']) && isset($_SESSION['userAgent'])) {
+        if (($_SESSION['IPaddress'] != $_SERVER['REMOTE_ADDR']) || $_SESSION['userAgent'] != $_SERVER['HTTP_USER_AGENT']) {
+            $message = "[SERVER MESSAGE] Invalid session origin.";
+            if ($initiate_logout) {
+                initiate_forced_logout($message);
+                exit;
+            } else {
+                return $message;
+            }
         }
     }
+    return false;
+
 }
 
 function solve_session_fixation()
@@ -30,6 +34,7 @@ function solve_session_fixation()
 
         $_SESSION['CREATED'] = time();  // update creation time
     }
+
 }
 
 function kill_session_if_inactive($initiate_logout = true)
@@ -46,6 +51,7 @@ function kill_session_if_inactive($initiate_logout = true)
         }
     }
     $_SESSION['LAST_ACTIVITY'] = time(); // update last activity time stamp
+    return false;
 }
 
 
@@ -64,6 +70,7 @@ function kill_session_if_too_old($initiate_logout = true)
             return $message;
         }
     }
+    return false;
 }
 
 function session_protection($initiate_logout = true)
