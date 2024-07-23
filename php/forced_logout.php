@@ -2,10 +2,12 @@
 
 function initiate_forced_logout($logout_message)
 {
-    $uname = $_SESSION['ews_api']['uname'];
-    // $email =$_SESSION['ews_api']['email'];
-    setcookie('uname', $uname, time() + 3600, '/');
-    // setcookie('email', $email, time()+3600,'/');
+    if (isset($_SESSION['ews_api'])) {
+        $uname = $_SESSION['ews_api']['uname'];
+        // $email =$_SESSION['ews_api']['email'];
+        setcookie('uname', $uname, time() + 3600, '/');
+        // setcookie('email', $email, time()+3600,'/');
+    }
 
     session_unset();
     session_destroy();

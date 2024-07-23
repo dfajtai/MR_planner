@@ -81,9 +81,14 @@ function server_response_message_parser(result) {
 			}
 		}
 	}
+	return false;
 }
 
 function logout_with_message(message) {
+	clearInterval(serversideProtectionInterval);
+	clearInterval(idleInterval);
+	is_loading_timeout(false);
+
 	bootbox.alert({
 		message: message,
 		buttons: {
