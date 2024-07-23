@@ -20,8 +20,8 @@ function startIncativityTimer() {
 
 function inactivityLogout() {
 	idleConter = idleConter + 1;
-	if (idleConter > 120) {
-		// 10 minutes
+	if (idleConter > 120 * 3) {
+		// 3 * 10 minutes
 		clearInterval(idleInterval);
 
 		$.ajax({
