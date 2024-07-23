@@ -206,7 +206,7 @@ class MR_calendar_event {
 		table.append(to_row("Kontingens", this.contingent, "contingent"));
 		table.append(to_row("Tel.", this.params.patient_phone, "patient_phone"));
 		table.append(to_row("Beutaló orovos", this.params.physician, "physician"));
-		table.append(to_row("Létrehozás dátuma", this.params.reserved_at, "reserved_at"));
+		table.append(to_row("Létrehozva", this.params.reserved_at, "reserved_at"));
 		table.append(to_row("Létrehozta", this.params.reserved_by, "reserved_by"));
 		table.append(to_row("Megjezés", this.params.comment, "comment"));
 		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped), "isSkipped"));
@@ -248,7 +248,7 @@ class MR_calendar_event {
 		table.append(to_row("Kontingens", this.contingent));
 		table.append(to_row("Tel.", this.params.patient_phone));
 		table.append(to_row("Beutaló orovos", this.params.physician));
-		table.append(to_row("Létrehozás dátuma", this.params.reserved_at));
+		table.append(to_row("Létrehozva", this.params.reserved_at));
 		table.append(to_row("Létrehozta", this.params.reserved_by));
 		table.append(to_row("Megjegyzés", this.params.comment));
 		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped)));
@@ -293,7 +293,7 @@ class MR_calendar_event {
 		table.append(to_row("Kontingens", this.contingent, other_event.contingent));
 		table.append(to_row("Tel.", this.params.patient_phone, other_event.params.patient_phone));
 		table.append(to_row("Beutaló orvos", this.params.physician, other_event.params.physician));
-		table.append(to_row("Létrehozás dátuma", this.params.reserved_at, other_event.params.reserved_at));
+		table.append(to_row("Létrehozva", this.params.reserved_at, other_event.params.reserved_at));
 		table.append(to_row("Létrehozta", this.params.reserved_by, other_event.params.reserved_by));
 		table.append(to_row("Megjegyzés", this.params.comment, other_event.params.comment));
 		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped), JSON.stringify(other_event.isSkipped)));
