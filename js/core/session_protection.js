@@ -7,7 +7,7 @@ function startIncativityTimer() {
 	idleConter = 0;
 	if (idleInterval != null) clearInterval(idleInterval);
 
-	idleInterval = setInterval(inactivityLogout, 5 * 1000); // 5 second
+	idleInterval = setInterval(inactivityLogout, 10 * 1000); // 10 second
 
 	// Zero the idle timer on mouse movement.
 	$(this).mousemove(function (e) {
@@ -20,7 +20,7 @@ function startIncativityTimer() {
 
 function inactivityLogout() {
 	idleConter = idleConter + 1;
-	if (idleConter > 120 * 3) {
+	if (idleConter > 6 * 10 * 3) {
 		// 3 * 10 minutes
 		clearInterval(idleInterval);
 
