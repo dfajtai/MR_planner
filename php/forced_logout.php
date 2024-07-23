@@ -22,7 +22,7 @@ if (isset($_GET["logout"])) {
         $logout_message = $_GET["logout_message"];
         unset($_GET["logout_message"]);
     } else {
-        $logout_message = 'Logged out due to inactivity.';
+        $logout_message = '[SERVER MESSAGE] Session expired due to inactivity.';
     }
     initiate_forced_logout($logout_message);
     unset($_GET["logout"]);
