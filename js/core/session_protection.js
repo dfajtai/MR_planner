@@ -77,7 +77,10 @@ function server_response_message_parser(result) {
 			var valid_server_messages = ["[SERVER MESSAGE] Session expired due to inactivity.", "[SERVER MESSAGE] Session expired."];
 
 			if (valid_server_messages.includes(result)) {
-				return result.replace("[SERVER MESSAGE] ", "");
+				var formatted_response = result.replace("[SERVER MESSAGE] ", "");
+
+				if (formatted_response.includes("inactivity")) return "A munkamenet felhasználói inaktivitás miatt lejárt.";
+				else return "A munkamenet lejárt.";
 			}
 		}
 	}
@@ -87,7 +90,7 @@ function server_response_message_parser(result) {
 function logout_with_message(message) {
 	clearInterval(serversideProtectionInterval);
 	clearInterval(idleInterval);
-	is_loading_timeout(false);
+	is_loading(false);
 
 	bootbox.alert({
 		message: message,
