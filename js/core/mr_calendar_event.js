@@ -111,7 +111,7 @@ class MR_calendar_event {
 		this.params = params;
 		this.contingent = contingent;
 		this.id = id;
-		this._subject = stored_subject ? stored_subject.trim() : null;
+		this._subject = stored_subject ? stored_subject.trim() : "";
 
 		this._calendar_name = calendar_name;
 		this.exists = false;
