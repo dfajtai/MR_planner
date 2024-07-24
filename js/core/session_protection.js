@@ -30,8 +30,13 @@ function inactivityLogout() {
 			dataType: "json",
 			data: { logout: true },
 			success: function (result) {
+				var server_message = server_response_message_parser(result);
+				if (server_message) {
+					clearInterval(serversideProtectionInterval);
+					logout_with_message(server_message);
+				}
 				bootbox.alert({
-					message: result,
+					message: server_message,
 					buttons: {
 						ok: {
 							label: "Ok",
@@ -90,7 +95,7 @@ function server_response_message_parser(result) {
 function logout_with_message(message) {
 	clearInterval(serversideProtectionInterval);
 	clearInterval(idleInterval);
-	is_loading(false, "");
+	is_loading(false, null);
 
 	bootbox.alert({
 		message: message,
