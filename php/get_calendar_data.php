@@ -37,7 +37,7 @@ if (isset($_SESSION['ews_token'])) {
         }
         $retrieve_body = false;
         if (isset($_GET['retrieve_body']))
-            $retrieve_body = true;
+            $retrieve_body = $_GET['retrieve_body'];
 
         $source_events = get_parsed_events_within_range($api, $source_name, $start, $end, $retrieve_body);
 
