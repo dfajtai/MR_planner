@@ -160,16 +160,29 @@ class MR_event_creator {
 
 		var creator_id = this.instance_id;
 
+		var options = {
+			1: "Hét",
+			2: "Kedd",
+			3: "Szer",
+			4: "Csüt",
+			5: "Pén",
+			6: "Szom",
+			7: "Vas",
+		};
+
 		$.each(windows, function (index, window) {
 			var start_date_string = moment(window[0]).format("YYYY.MM.DD");
+
 			var end_date_string = moment(window[1]).format("YYYY.MM.DD");
 			var start_string = moment(window[0]).format("HH:mm");
 			var end_string = moment(window[1]).format("HH:mm");
 
+			var day_string = "[" + options[moment(window[0]).day()] + "]";
+
 			if (end_date_string != start_date_string) {
 				var btn_text = start_date_string;
 			} else {
-				var btn_text = "[" + start_date_string + "] " + start_string + " - " + end_string;
+				var btn_text = "[" + start_date_string + "] " + day_string + start_string + " - " + end_string;
 			}
 
 			var time_window_list_item = $("<li/>").addClass("list-group-item p-1");
