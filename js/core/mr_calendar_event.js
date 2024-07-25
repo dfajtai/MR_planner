@@ -494,7 +494,16 @@ class MR_calendar_event {
 	}
 
 	get start_date_string() {
-		return moment(this.start).format("YYYY.MM.DD");
+		var options = {
+			1: "Hét",
+			2: "Kedd",
+			3: "Szer",
+			4: "Csüt",
+			5: "Pén",
+			6: "Szom",
+			7: "Vas",
+		};
+		return moment(this.start).format("YYYY.MM.DD") + " - " + options[moment(window[0]).day()];
 	}
 
 	get formatted_timing_string() {
