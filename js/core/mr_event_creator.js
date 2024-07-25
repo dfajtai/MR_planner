@@ -177,12 +177,12 @@ class MR_event_creator {
 			var start_string = moment(window[0]).format("HH:mm");
 			var end_string = moment(window[1]).format("HH:mm");
 
-			var day_string = "[" + options[moment(window[0]).day()] + "]";
+			var day_string = options[moment(window[0]).day()];
 
 			if (end_date_string != start_date_string) {
-				var btn_text = start_date_string;
+				var btn_text = "[" + start_date_string + " - " + day_string + "]";
 			} else {
-				var btn_text = "[" + start_date_string + "] " + day_string + start_string + " - " + end_string;
+				var btn_text = "[" + start_date_string + " - " + day_string + "] " + start_string + " - " + end_string;
 			}
 
 			var time_window_list_item = $("<li/>").addClass("list-group-item p-1");
