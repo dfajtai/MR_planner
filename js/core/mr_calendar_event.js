@@ -163,29 +163,40 @@ class MR_calendar_event {
 			if (is_header) {
 				row.append(
 					$("<th/>")
+						.html("<strong><b>" + key + "</b></strong>")
+						.css({ width: "20%" })
+				);
+				row.append(
+					$("<th/>")
 						.html("<strong><b>" + label + "</b></strong>")
 						.css({ width: "20%" })
-						.attr("colspan", "2")
 				);
 
 				row.append($("<th/>").html("<strong><b>" + value + "</b></strong>"));
 			} else {
 				// hidden key
 				row.append(
-					$("<td/>").html(key).css({
+					$("<td/>").html(key.trim()).css({
 						"background-color": "lightgray",
-						"font-size": "0%",
-						color: "lightgray",
+						// "font-size": "0%",
+						// color: "lightgray",
 						border: "1px solid black",
-						"border-right": "none",
+						// "border-right": "none",
 						"white-space": "nowrap",
+						width: "20%",
 					})
 				);
 				// visible label
 				row.append(
 					$("<td/>")
 						.html("<strong><b>" + label.trim() + "</b></strong>")
-						.css({ "background-color": "lightgray", border: "1px solid black", "border-left": "none", "white-space": "nowrap" })
+						.css({
+							"background-color": "lightgray",
+							border: "1px solid black",
+							// "border-left": "none",
+							"white-space": "nowrap",
+							width: "20%",
+						})
 					// .attr("data-key", key)
 				);
 				// stored value
@@ -200,7 +211,7 @@ class MR_calendar_event {
 			return row;
 		}
 
-		table.append(to_row("Adatmező", "Érték", "", true));
+		table.append(to_row("Adatmező", "Érték", "Prop", true));
 		table.append(to_row("Név", this.params.patient_name, "patient_name"));
 		table.append(to_row("Protokol", this.params.protocol, "protocol"));
 		table.append(to_row("Kontingens", this.contingent, "contingent"));
