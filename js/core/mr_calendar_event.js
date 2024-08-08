@@ -503,7 +503,7 @@ class MR_calendar_event {
 			6: "Szom",
 			7: "Vas",
 		};
-		return moment(this.start).format("YYYY.MM.DD") + " - " + options[moment(window[0]).day()];
+		return moment(this.start).format("YYYY.MM.DD") + " - " + options[moment(this.start).day()];
 	}
 
 	get formatted_timing_string() {
