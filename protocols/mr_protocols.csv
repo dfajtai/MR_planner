@@ -31,6 +31,7 @@ protocol_index,protocol_name,protocol_duration,modality
 29,MRCP (natív + kontrasztos),45,MR
 30,Vese MR (natív + kontrasztos),40,MR
 31,MR urográfia (natív + kontrasztos),45,MR
+66,Kismedence MR (natív),25,MR
 32,Kismedence MR (natív + kontrasztos),25,MR
 33,Rectum MR,25,MR
 34,3TP (natív prostata),25,MR
