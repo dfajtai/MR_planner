@@ -213,13 +213,13 @@ class MR_calendar_event {
 
 		table.append(to_row("Adatmező", "Érték", "Prop", true));
 		table.append(to_row("Név", this.params.patient_name, "patient_name"));
-		table.append(to_row("Protokol", this.params.protocol, "protocol"));
+		table.append(to_row("Protokoll", this.params.protocol, "protocol"));
 		table.append(to_row("Kontingens", this.contingent, "contingent"));
 		table.append(to_row("Tel.", this.params.patient_phone, "patient_phone"));
 		table.append(to_row("Beutaló orovos", this.params.physician, "physician"));
 		table.append(to_row("Létrehozva", this.params.reserved_at, "reserved_at"));
 		table.append(to_row("Létrehozta", this.params.reserved_by, "reserved_by"));
-		table.append(to_row("Megjezés", this.params.comment, "comment"));
+		table.append(to_row("Megjegyzés", this.params.comment, "comment"));
 		table.append(to_row("Kihagyott?", JSON.stringify(this.isSkipped), "isSkipped"));
 		container.append(table);
 
@@ -255,7 +255,7 @@ class MR_calendar_event {
 		table.append(to_row("Dátum", this.start_date_string));
 		table.append(to_row("Időpont", this.start_to_end_string));
 		table.append(to_row("Név", this.params.patient_name));
-		table.append(to_row("Protokol", this.params.protocol));
+		table.append(to_row("Protokoll", this.params.protocol));
 		table.append(to_row("Kontingens", this.contingent));
 		table.append(to_row("Tel.", this.params.patient_phone));
 		table.append(to_row("Beutaló orovos", this.params.physician));
@@ -300,7 +300,7 @@ class MR_calendar_event {
 		table.append(to_row("Dátum", this.start_date_string, other_event.start_date_string));
 		table.append(to_row("Időpont", this.start_to_end_string, other_event.start_to_end_string));
 		table.append(to_row("Név", this.params.patient_name, other_event.params.patient_name));
-		table.append(to_row("Protokol", this.params.protocol, other_event.params.protocol));
+		table.append(to_row("Protokoll", this.params.protocol, other_event.params.protocol));
 		table.append(to_row("Kontingens", this.contingent, other_event.contingent));
 		table.append(to_row("Tel.", this.params.patient_phone, other_event.params.patient_phone));
 		table.append(to_row("Beutaló orvos", this.params.physician, other_event.params.physician));
