@@ -124,13 +124,21 @@ class MR_schedule_printer {
 			css: ["css/easepicker.css", "libs/css/easepick-index.css"],
 
 			plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],
-
+			lang: "hu-HU",
+			RangePlugin: {
+				locale: {
+					one: "nap",
+					other: "nap",
+				},
+			},
 			LockPlugin: {
 				minDays: 1,
 				maxDays: 5,
 			},
 			AmpPlugin: {
 				dropdown: {
+					minYear: moment().year() - 5,
+					maxYear: moment().year() + 5,
 					months: true,
 					years: true,
 				},

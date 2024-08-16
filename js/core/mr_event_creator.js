@@ -499,14 +499,28 @@ class MR_event_creator {
 			LockPlugin: {
 				minDate: new Date(),
 			},
+			lang: "hu-HU",
+			RangePlugin: {
+				locale: {
+					one: "nap",
+					other: "nap",
+				},
+			},
 			AmpPlugin: {
 				dropdown: {
+					minYear: moment().year() - 5,
+					maxYear: moment().year() + 5,
 					months: true,
 					years: true,
 				},
 				resetButton: true,
 			},
 			zIndex: 10000,
+			setup(picker) {
+				picker.on("clear", (e) => {
+					picker.setDate(moment().format("YYYY-MM-DD"));
+				});
+			},
 		});
 		picker.setDate(moment().format("YYYY-MM-DD"));
 

@@ -253,8 +253,11 @@ class MR_event_editor {
 			// LockPlugin: {
 			// 	minDate: new Date(),
 			// },
+			lang: "hu-HU",
 			AmpPlugin: {
 				dropdown: {
+					minYear: moment().year() - 5,
+					maxYear: moment().year() + 5,
 					months: true,
 					years: true,
 				},

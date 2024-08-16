@@ -140,19 +140,34 @@ class MR_event_browser {
 			css: ["css/easepicker.css", "libs/css/easepick-index.css"],
 
 			plugins: ["LockPlugin", "AmpPlugin", "RangePlugin"],
-
+			RangePlugin: {
+				locale: {
+					one: "nap",
+					other: "nap",
+				},
+			},
 			LockPlugin: {
 				minDays: 1,
 				maxDays: 90,
 			},
+			lang: "hu-HU",
 			AmpPlugin: {
 				dropdown: {
+					minYear: moment().year() - 5,
+					maxYear: moment().year() + 5,
 					months: true,
 					years: true,
 				},
 				resetButton: true,
 			},
+
 			zIndex: 10000,
+			setup(picker) {
+				picker.on("clear", (e) => {
+					picker.setStartDate(moment().format("YYYY-MM-DD"));
+					picker.setEndDate(moment().add(13, "days").format("YYYY-MM-DD"));
+				});
+			},
 		});
 
 		picker.setStartDate(moment().format("YYYY-MM-DD"));
