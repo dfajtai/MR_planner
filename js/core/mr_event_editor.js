@@ -254,8 +254,11 @@ class MR_event_editor {
 			// 	minDate: new Date(),
 			// },
 			AmpPlugin: {
+				dropdown: {
+					months: true,
+					years: true,
+				},
 				resetButton: true,
-				darkMode: false,
 			},
 			zIndex: 10000,
 		});

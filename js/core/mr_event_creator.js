@@ -505,7 +505,6 @@ class MR_event_creator {
 					years: true,
 				},
 				resetButton: true,
-				darkMode: false,
 			},
 			zIndex: 10000,
 		});
