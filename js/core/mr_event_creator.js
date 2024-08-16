@@ -127,20 +127,36 @@ class MR_event_creator {
 		$(end_time_block).find("input").addClass("d-none");
 		this.gui.end_time_block = end_time_block;
 
-		$(event_duration_input).on(
-			"change",
-			function () {
-				var duration = parse_val($(event_duration_input).val());
+		var event_duration_input_change = function () {
+			var duration = parse_val($(event_duration_input).val());
+			if (duration >= this.protocol.protocol_duration) {
 				this.event_duration = duration;
 				this.event_end = moment(this.event_start).add(this.event_duration, "minutes");
 
 				this.update_slider();
+			} else {
+				$(event_duration_input).val(this.protocol.protocol_duration).trigger("change");
+			}
 
-				if (duration != this.protocol.protocol_duration) {
-					$(event_duration_input).addClass("bg-danger text-dark");
-				} else {
-					$(event_duration_input).removeClass("bg-danger text-dark");
-				}
+			if (duration != this.protocol.protocol_duration) {
+				$(event_duration_input).addClass("bg-danger text-dark");
+			} else {
+				$(event_duration_input).removeClass("bg-danger text-dark");
+			}
+		}.bind(this);
+
+		$(event_duration_input).on("change", event_duration_input_change);
+		$(event_duration_input).on(
+			"focusin",
+			function () {
+				this.set_slider_enabled(false);
+			}.bind(this)
+		);
+		$(event_duration_input).on(
+			"focusout",
+			function () {
+				this.set_slider_enabled(true);
+				event_duration_input_change();
 			}.bind(this)
 		);
 	}
@@ -413,6 +429,13 @@ class MR_event_creator {
 		}
 	}
 
+	set_slider_enabled(is_enabled = true) {
+		if (this.slider) {
+			if (is_enabled) this.slider.noUiSlider.enable();
+			else this.slider.noUiSlider.disable();
+		}
+	}
+
 	administration_parameters_gui(container) {
 		container.empty();
 
@@ -477,6 +500,10 @@ class MR_event_creator {
 				minDate: new Date(),
 			},
 			AmpPlugin: {
+				dropdown: {
+					months: true,
+					years: true,
+				},
 				resetButton: true,
 				darkMode: false,
 			},

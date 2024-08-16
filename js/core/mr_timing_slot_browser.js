@@ -374,9 +374,11 @@ class MR_timing_slot_browser {
 				maxDays: 30,
 			},
 			AmpPlugin: {
+				dropdown: {
+					months: true,
+					years: true,
+				},
 				resetButton: true,
-				darkMode: false,
-				weekNumbers: true,
 			},
 			zIndex: 10000,
 		});

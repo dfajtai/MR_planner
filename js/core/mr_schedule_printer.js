@@ -130,8 +130,11 @@ class MR_schedule_printer {
 				maxDays: 5,
 			},
 			AmpPlugin: {
+				dropdown: {
+					months: true,
+					years: true,
+				},
 				resetButton: true,
-				darkMode: false,
 			},
 			zIndex: 10000,
 		});

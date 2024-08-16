@@ -146,8 +146,11 @@ class MR_event_browser {
 				maxDays: 90,
 			},
 			AmpPlugin: {
+				dropdown: {
+					months: true,
+					years: true,
+				},
 				resetButton: true,
-				darkMode: false,
 			},
 			zIndex: 10000,
 		});

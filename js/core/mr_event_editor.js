@@ -3,16 +3,20 @@ class MR_event_editor {
 		this.content = null;
 
 		this.event = event;
+		this.event_original_status = MR_calendar_event.copy_instance(event);
 
 		this.gui = Object();
 
 		this.slot_browser = null;
 
 		this.timing_handler = null;
+
+		this.exit_status = false;
 	}
 
 	set_update_event(event) {
 		this.event = event;
+		this.event_original_status = MR_calendar_event.copy_instance(event);
 	}
 
 	create_gui() {
@@ -37,37 +41,7 @@ class MR_event_editor {
 		this.gui.slot_browser = slot_browser_block;
 		this.gui.timing_params = timing_params_block;
 
-		if (!this.slot_browser) {
-			this.slot_browser = new MR_timing_slot_browser(
-				$(slot_browser_block),
-				function (results) {
-					var windows = results.windows;
-
-					if (windows.length > 0) {
-						// TODO show timing block...
-						this.timing_gui(this.gui.timing_params, results);
-					} else {
-						this.gui.timing_params.empty();
-						this.gui.timing_params.addClass("d-none");
-						bootbox.alert({
-							message: "Nem található a keresési paramétereknek megfelelő szabad időablak.",
-							buttons: {
-								ok: {
-									label: "Ok",
-									className: "btn-outline-dark",
-								},
-							},
-						});
-					}
-				}.bind(this),
-				this.event.id
-			);
-			this.slot_browser.create_gui(false);
-		} else {
-			this.gui.slot_browser.empty();
-			this.slot_browser.container = this.gui.slot_browser;
-			this.slot_browser.create_gui(false);
-		}
+		this.slot_browser = null;
 
 		// administartion
 		var administration_card = $("<div/>").addClass("card d-flex w-50 m-1");
@@ -276,9 +250,9 @@ class MR_event_editor {
 
 			plugins: ["LockPlugin", "AmpPlugin"],
 
-			LockPlugin: {
-				minDate: new Date(),
-			},
+			// LockPlugin: {
+			// 	minDate: new Date(),
+			// },
 			AmpPlugin: {
 				resetButton: true,
 				darkMode: false,
@@ -345,7 +319,7 @@ class MR_event_editor {
 			_select_div.append(select_btn);
 			_select_div.append(select_label);
 			contingent_select.append(_select_div);
-			if (contingent_def.category === event.contingent) select_btn.prop("checked", true);
+			if (parse_val(contingent_def.category) === parse_val(event.contingent)) select_btn.prop("checked", true);
 			index += 1;
 		});
 
@@ -413,6 +387,37 @@ class MR_event_editor {
 		var modal = container.find("#" + modal_id);
 
 		modal.on(
+			"show.bs.modal",
+			function () {
+				this.slot_browser = new MR_timing_slot_browser(
+					$(this.gui.slot_browser),
+					function (results) {
+						var windows = results.windows;
+
+						if (windows.length > 0) {
+							// TODO show timing block...
+							this.timing_gui(this.gui.timing_params, results);
+						} else {
+							this.gui.timing_params.empty();
+							this.gui.timing_params.addClass("d-none");
+							bootbox.alert({
+								message: "Nem található a keresési paramétereknek megfelelő szabad időablak.",
+								buttons: {
+									ok: {
+										label: "Ok",
+										className: "btn-outline-dark",
+									},
+								},
+							});
+						}
+					}.bind(this),
+					this.event.id
+				);
+				this.slot_browser.create_gui(false);
+			}.bind(this)
+		);
+
+		modal.on(
 			"shown.bs.modal",
 			function () {
 				this.slot_browser.gui_logic(true);
@@ -438,10 +443,20 @@ class MR_event_editor {
 			}.bind(this)
 		);
 
-		modal.on("hidden.bs.modal", function () {
-			modal.modal("dispose");
-			content.empty();
-		});
+		modal.on(
+			"hidden.bs.modal",
+			function () {
+				this.slot_browser = null;
+				this.timing_handler = null;
+
+				modal.modal("dispose");
+				content.empty();
+
+				if (!this.exit_status) {
+					this.event.update_from_instance(this.event_original_status);
+				}
+			}.bind(this)
+		);
 
 		modal_footer.find("#submit").on(
 			"click",
@@ -457,6 +472,7 @@ class MR_event_editor {
 					$(this.gui.administration_form)[0].reportValidity();
 				} else {
 					var new_event = MR_calendar_event.parse_from_form(this.gui.administration_form, timing_params);
+
 					var dummy_container = $("<div/>");
 					this.event.to_compare_table(dummy_container, new_event);
 					var message = "A kiválasztott esemény a következők szerint fog módosulni:<br/><br/>";
@@ -479,12 +495,15 @@ class MR_event_editor {
 							if (result) {
 								is_loading(true, "Updating event");
 								this.event.update_from_instance(new_event);
+
 								this.event.call_event_update(
 									function () {
 										if (success_callback) {
 											success_callback();
 										}
 										is_loading(false, "Updating event");
+										this.event_original_status.update_from_instance(this.event);
+										this.exit_status = true;
 										modal.modal("hide");
 									}.bind(this)
 								);

@@ -135,6 +135,12 @@ class MR_calendar_event {
 		}
 	}
 
+	static copy_instance(other_event) {
+		var event_copy = new MR_calendar_event(other_event.start, other_event.end, { ...other_event.params });
+		event_copy.update_from_instance(other_event);
+		return other_event;
+	}
+
 	update_from_instance(other_event) {
 		this.start = other_event.start;
 		this.end = other_event.end;
