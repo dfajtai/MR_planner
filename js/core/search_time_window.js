@@ -107,8 +107,13 @@ function search_free_time_windows_outside_masks(
 
 		var daily_start = moment(day_examined).hours(day_start);
 		var daily_end = moment(day_examined).hours(day_end);
-		var day_length = moment(daily_end).diff(daily_start, "minutes");
-		var day_array = new Array(day_length).fill(0);
+
+		var whole_day_length = moment.duration(1, "days").asMinutes();
+		var whole_day_start = moment(daily_start).startOf("day");
+		var day_array = new Array(whole_day_length).fill(0);
+
+		day_array.fill(1, 0, moment(daily_start).diff(whole_day_start, "minutes"));
+		day_array.fill(1, moment(daily_end).diff(whole_day_start, "minutes"), day_array.length);
 
 		$.each(events, function (event_index, event) {
 			if (event.isSkipped) return true;
@@ -116,8 +121,8 @@ function search_free_time_windows_outside_masks(
 			var event_start = event.start;
 			var event_end = event.end;
 
-			var event_start_index = moment(event_start).diff(moment(daily_start), "minutes");
-			var event_end_index = moment(event_end).diff(moment(daily_start), "minutes");
+			var event_start_index = moment(event_start).diff(moment(whole_day_start), "minutes");
+			var event_end_index = moment(event_end).diff(moment(whole_day_start), "minutes");
 
 			if (event_start_index > day_array.length) return true;
 
@@ -133,8 +138,8 @@ function search_free_time_windows_outside_masks(
 			var mask_start = mask.start;
 			var mask_end = mask.end;
 
-			var mask_start_index = moment(mask_start).diff(moment(daily_start), "minutes");
-			var mask_end_index = moment(mask_end).diff(moment(daily_start), "minutes");
+			var mask_start_index = moment(mask_start).diff(moment(whole_day_start), "minutes");
+			var mask_end_index = moment(mask_end).diff(moment(whole_day_start), "minutes");
 
 			if (mask_start_index > day_array.length) return true;
 
@@ -172,8 +177,8 @@ function search_free_time_windows_outside_masks(
 		}
 
 		$.each(blocks, function (block_index, block) {
-			var window_start = new Date(moment(daily_start).add(block[0], "minutes"));
-			var window_end = new Date(moment(daily_start).add(block[1] + 1, "minutes"));
+			var window_start = new Date(moment(whole_day_start).add(block[0], "minutes"));
+			var window_end = new Date(moment(whole_day_start).add(block[1] + 1, "minutes"));
 
 			free_windows.push([window_start, window_end]);
 			if (free_windows.length >= count) {
@@ -203,8 +208,16 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 
 		var daily_start = moment(day_examined).hours(day_start);
 		var daily_end = moment(day_examined).hours(day_end);
-		var day_length = moment(daily_end).diff(daily_start, "minutes");
-		var day_array = new Array(day_length).fill(0);
+
+		// var day_length = moment(daily_end).diff(daily_start, "minutes");
+		// var day_array = new Array(day_length).fill(0);
+
+		var whole_day_length = moment.duration(1, "days").asMinutes();
+		var whole_day_start = moment(daily_start).startOf("day");
+		var day_array = new Array(whole_day_length).fill(0);
+
+		day_array.fill(1, 0, moment(daily_start).diff(whole_day_start, "minutes"));
+		day_array.fill(1, moment(daily_end).diff(whole_day_start, "minutes"), day_array.length);
 
 		$.each(events, function (event_index, event) {
 			if (event.isSkipped) return true;
@@ -213,8 +226,8 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 			var event_start = event.start;
 			var event_end = event.end;
 
-			var event_start_index = moment(event_start).diff(moment(daily_start), "minutes");
-			var event_end_index = moment(event_end).diff(moment(daily_start), "minutes");
+			var event_start_index = moment(event_start).diff(moment(whole_day_start), "minutes");
+			var event_end_index = moment(event_end).diff(moment(whole_day_start), "minutes");
 
 			if (event_start_index > day_array.length) return true;
 
@@ -252,8 +265,8 @@ function search_free_time_windows(events, start_date, end_date, day_start, day_e
 		}
 
 		$.each(blocks, function (block_index, block) {
-			var window_start = new Date(moment(daily_start).add(block[0], "minutes"));
-			var window_end = new Date(moment(daily_start).add(block[1] + 1, "minutes"));
+			var window_start = new Date(moment(whole_day_start).add(block[0], "minutes"));
+			var window_end = new Date(moment(whole_day_start).add(block[1] + 1, "minutes"));
 
 			free_windows.push([window_start, window_end]);
 			if (free_windows.length >= count) {
