@@ -264,6 +264,11 @@ class MR_event_editor {
 				resetButton: true,
 			},
 			zIndex: 10000,
+			setup(picker) {
+				picker.on("clear", (e) => {
+					picker.setDate(moment().format("YYYY-MM-DD"));
+				});
+			},
 		});
 		// picker.setDate(moment().format("YYYY-MM-DD"));
 

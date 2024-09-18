@@ -145,6 +145,12 @@ class MR_schedule_printer {
 				resetButton: true,
 			},
 			zIndex: 10000,
+			setup(picker) {
+				picker.on("clear", (e) => {
+					picker.setStartDate(moment().format("YYYY-MM-DD"));
+					picker.setEndDate(moment().add(4, "days").format("YYYY-MM-DD"));
+				});
+			},
 		});
 
 		picker.setStartDate(moment().format("YYYY-MM-DD"));
