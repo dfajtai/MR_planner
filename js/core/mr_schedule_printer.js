@@ -448,6 +448,7 @@ class MR_schedule_printer {
 							} catch (error) {
 								console.log(error);
 							}
+							doc.setTextColor(0, 0, 0);
 						}
 					},
 				});
