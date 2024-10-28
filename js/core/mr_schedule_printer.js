@@ -342,7 +342,6 @@ class MR_schedule_printer {
 			var table = $("<table/>").addClass("w-100 table table-bordered align-middle").attr("id", "schedule_table");
 			var header_row = $("<tr/>");
 
-			schedule_table_header;
 			$.each(schedule_table_header, function (idx, col) {
 				var th = $("<th/>").html(col.label).attr("scope", "col").addClass("text-center");
 				if (idx != schedule_table_header.length - 1) {
@@ -434,7 +433,17 @@ class MR_schedule_printer {
 
 								if (matched_contingent) {
 									var c = matched_contingent.color;
-									doc.setFillColor(c[0], c[1], c[2]);
+
+									// Convert RGB to CMYK
+									let cmykColor = rgbToCmyk(c[0], c[1], c[2]);
+
+									// Desaturate the color by 30%
+									let desaturatedCmyk = desaturateCmyk(cmykColor, 0.3);
+
+									// Convert back to RGB
+									let fadedRgb = cmykToRgb(desaturatedCmyk.c, desaturatedCmyk.m, desaturatedCmyk.y, desaturatedCmyk.k);
+
+									doc.setFillColor(fadedRgb.r, fadedRgb.g, fadedRgb.b);
 								}
 							} catch (error) {
 								console.log(error);

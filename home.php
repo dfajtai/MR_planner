@@ -1,5 +1,5 @@
 <?php
-require_once ('vendor/autoload.php');
+require_once('vendor/autoload.php');
 require_once 'php/php_functions.php';
 
 
@@ -64,6 +64,9 @@ if (!isset($_SESSION['ews_token'])) {
     <!-- FONT -->
     <!-- <script defer src="libs/my_fonts/Crimson-Roman-normal.js"></script> -->
 
+    <script defer src="js/utils/color_functions.js"></script>
+
+
     <!-- CORE -->
     <script defer src="js/core/additional_functions.js"></script>
     <script defer src="js/core/session_protection.js"></script>
@@ -75,6 +78,7 @@ if (!isset($_SESSION['ews_token'])) {
     <script defer src="js/core/mr_schedule_printer.js"></script>
     <script defer src="js/core/mr_event_browser.js"></script>
     <script defer src="js/core/mr_event_editor.js"></script>
+
 
 
     <!-- GUI -->
