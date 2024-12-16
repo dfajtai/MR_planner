@@ -2,12 +2,20 @@
 require_once('vendor/autoload.php');
 require_once 'php/php_functions.php';
 
-
 session_start();
 if (!isset($_SESSION['ews_token'])) {
     header('Location: index.php?' . myUrlEncode($_SERVER["QUERY_STRING"]));
     exit();
-} ?>
+}
+
+
+if (!isset($_SESSION['nonce'])) {
+    // Redirect to index.php if the session is invalid or expired
+    header('Location: index.php');
+    exit();
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">

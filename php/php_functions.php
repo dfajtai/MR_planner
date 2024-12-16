@@ -1,9 +1,9 @@
 <?php
 
-require_once (__DIR__ . '/../vendor/autoload.php');
+require_once(__DIR__ . '/../vendor/autoload.php');
 use garethp\ews\API;
 
-require_once ('session_protection.php');
+require_once('session_protection.php');
 require_once 'ews_api_extension.php';
 
 function myUrlEncode($string)
